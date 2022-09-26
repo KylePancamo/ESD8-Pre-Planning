@@ -1,5 +1,5 @@
 import React, { useState }from 'react'
-import { GoogleMap, useJsApiLoader, InfoWindow, Marker, DrawingManager } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, InfoWindow, Marker, DrawingManager, StandaloneSearchBox } from '@react-google-maps/api';
 
 const containerStyle = {
   width: '100vw',
@@ -45,6 +45,8 @@ function MyComponent() {
     setActiveMarker(true)
   }
 
+  const onPlacesChanged = () => console.log(this.searchBox.getPlaces());
+
   return isLoaded ? (
       <GoogleMap
         mapContainerStyle={containerStyle}
@@ -66,7 +68,14 @@ function MyComponent() {
                 
             }}
         >
-
+          <StandaloneSearchBox>
+            <input 
+              type="text"
+              placeholder="Search for a location"
+              ref={ref => this.searchBox = ref}
+              onChange={onPlacesChanged}
+              />
+          </StandaloneSearchBox>
 
         {activeMarker === true ? (
             <InfoWindow 
