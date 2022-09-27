@@ -1,6 +1,8 @@
 import React, { useState }from 'react'
 import { GoogleMap, useJsApiLoader, InfoWindow, Marker, DrawingManager, StandaloneSearchBox } from '@react-google-maps/api';
 
+
+
 const containerStyle = {
   width: '100vw',
   height: '100vh'
@@ -21,11 +23,12 @@ function MyComponent() {
   const [activeMarker, setActiveMarker] = useState(false);
   const [markerLoc, setMarkerLoc] = useState({lat: 29.715106009353045, lng: -98.78537740890328});
   const [markers, setMarkers] = useState([{lat: 0, lng: 0},{lat: 0, lng: 0},{lat: 0, lng: 0}]);
+  
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries: ['drawing'],
+    libraries: ['drawing', 'places'],
   })
 
   const [map, setMap] = React.useState(null)
@@ -45,7 +48,6 @@ function MyComponent() {
     setActiveMarker(true)
   }
 
-  const onPlacesChanged = () => console.log(this.searchBox.getPlaces());
 
   return isLoaded ? (
       <GoogleMap
@@ -58,6 +60,7 @@ function MyComponent() {
           setActiveMarker(false)
         }}
       >
+            
         <Marker
             position={center}
             onClick={ () => handleOnClick()}
@@ -68,14 +71,7 @@ function MyComponent() {
                 
             }}
         >
-          <StandaloneSearchBox>
-            <input 
-              type="text"
-              placeholder="Search for a location"
-              ref={ref => this.searchBox = ref}
-              onChange={onPlacesChanged}
-              />
-          </StandaloneSearchBox>
+        
 
         {activeMarker === true ? (
             <InfoWindow 
@@ -89,6 +85,7 @@ function MyComponent() {
             </InfoWindow>
             ) : null }
         </Marker>
+        
         <DrawingManager
             drawingMode={window.google.maps.drawing.OverlayType.POLYGON}
             onPolygonComplete={(e) => {
@@ -106,15 +103,47 @@ function MyComponent() {
             }
           }
         />
+       
+
         {markers.map((marker, index) => (
           <Marker
             key={index}
             position={marker}
           >
+            
           </Marker>
+          
         ))}
+        
+        <StandaloneSearchBox>
+          <input 
+            type="text"
+            placeholder="Search for a location"
+            style={{
+              boxSizing: `border-box`,
+              border: `1px solid transparent`,
+              width: `240px`,
+              height: `32px`,
+              padding: `0 12px`,
+              borderRadius: `3px`,
+              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+              fontSize: `14px`,
+              outline: `none`,
+              textOverflow: `ellipses`,
+              position: `absolute`,
+              left: `50%`,
+              marginLeft: `-120px`,
+              top: `10px`
+
+            }}
+          />
+        </StandaloneSearchBox>
+
       </GoogleMap>
+      
   ) : <></>
+  
 }
 
 export default React.memo(MyComponent)
+
