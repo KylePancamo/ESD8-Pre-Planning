@@ -122,7 +122,7 @@ function MyComponent() {
             style={{
               boxSizing: `border-box`,
               border: `1px solid transparent`,
-              width: `240px`,
+              width: `480px`,
               height: `32px`,
               padding: `0 12px`,
               borderRadius: `3px`,
@@ -131,9 +131,9 @@ function MyComponent() {
               outline: `none`,
               textOverflow: `ellipses`,
               position: `absolute`,
-              left: `50%`,
+              left: `30%`,
               marginLeft: `-120px`,
-              top: `10px`
+              top: `0px`
 
             }}
           />
