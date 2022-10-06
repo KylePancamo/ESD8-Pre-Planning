@@ -37,22 +37,21 @@ code {
 }
 
 .sidebar-close {
-  position: fixed;
-  left: 14vw;
+  position: absolute;
+  right: 0px;
 }
 
 .close-button {
   background-color: inherit;
-  position: fixed;
   border-style: solid;
   border-width: 1px;
   border-radius: 25px 0px 0px 25px;
   border-color: lightgrey;
-  height: 70px;
-  z-index: inherit;
+  height: 50px;
 }
 
 .sidebar-menu {
+  position: relative;
   width: 15vw;
   height: 100vh;
   background-color: inherit;
