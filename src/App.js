@@ -12,25 +12,27 @@ function Sidebar() {
     <div className="sidebar-wrapper">
       {sideBarValue === false ? (
         <button className="sidebar-button" onClick={toggleSideBar}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="48"
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            height="48" 
             width="48"
             id="sidebar-button"
-          >
-            <path d="M20 44 0 24 20 4l2.8 2.85L5.65 24 22.8 41.15Z" />
+            >
+            <path d="m15.2 43.9-2.8-2.85L29.55 23.9 12.4 6.75l2.8-2.85 20 20Z" />
           </svg>
         </button>
       ) : null}
       {sideBarValue === true ? (
         <div class="sidebar-menu" id="sidebar-menu">
-          <button
-            class="close-button"
-            id="close-button"
-            onClick={toggleSideBar}
-          >
-            X
-          </button>
+          <div className="sidebar-close">
+            <button
+              class="close-button"
+              id="close-button"
+              onClick={toggleSideBar}
+            >
+              X
+            </button>
+          </div>
           <div class="sidebar-data-wrapper">
             <div class="sidebar-data">Some pre-plan data</div>
             <div class="sidebar-data">Some more pre-plan data</div>
@@ -50,7 +52,7 @@ function Sidebar() {
 
 function App() {
   return (
-    <div>
+    <div className="webpage">
       <Sidebar />
       <MapContainer />
     </div>

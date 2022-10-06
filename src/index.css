@@ -18,6 +18,30 @@ code {
 }
 
 .sidebar-button {
+  position: fixed;
+  background-color: inherit;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 0px 25px 25px 0px;
+  border-color: lightgrey;
+  height: 70px;
+  top: 50%;
+}
+
+.sidebar-button svg {
+  fill: lightgrey;
+}
+
+.webpage {
+  display: flex;
+}
+
+.sidebar-close {
+  position: fixed;
+  left: 14vw;
+}
+
+.close-button {
   background-color: inherit;
   position: fixed;
   border-style: solid;
@@ -25,46 +49,22 @@ code {
   border-radius: 25px 0px 0px 25px;
   border-color: lightgrey;
   height: 70px;
-  top: 50%;
-  right: 0px;
   z-index: inherit;
-}
-
-.sidebar-button svg {
-  fill: lightgrey;
-  margin: 2px;
-  margin-left: 18px;
-  margin-top: 10px;
-}
-
-.close-button {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: lightgrey;
-  border-radius: 25px;
-  padding-left: 10px;
-  padding-right: 10px
 }
 
 .sidebar-menu {
   width: 15vw;
-  height: 90vh;
+  height: 100vh;
   background-color: inherit;
   border-style: solid;
   border-width: 1px;
-  border-radius: 25px;
   border-color: lightgrey;
-  position: fixed;
-  top: 0;
-  right: 0;
   z-index: inherit;
   overflow: auto;
 }
 
 .sidebar-data-wrapper {
+  
   margin: 5px;
   margin-top: 70px;
 }
