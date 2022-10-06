@@ -9,8 +9,8 @@ function Sidebar() {
   };
 
   return (
-      <div className="sidebar-wrapper">
-        {sideBarValue === false ? (
+    <div className="sidebar-wrapper">
+      {sideBarValue === false ? (
         <button className="sidebar-button" onClick={toggleSideBar}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -21,10 +21,14 @@ function Sidebar() {
             <path d="M20 44 0 24 20 4l2.8 2.85L5.65 24 22.8 41.15Z" />
           </svg>
         </button>
-        ) : null }
-        {sideBarValue === true ? (
+      ) : null}
+      {sideBarValue === true ? (
         <div class="sidebar-menu" id="sidebar-menu">
-          <button class="close-button" id="close-button" onClick={toggleSideBar}>
+          <button
+            class="close-button"
+            id="close-button"
+            onClick={toggleSideBar}
+          >
             X
           </button>
           <div class="sidebar-data-wrapper">
@@ -32,23 +36,22 @@ function Sidebar() {
             <div class="sidebar-data">Some more pre-plan data</div>
             <div class="sidebar-data">Even more pre-plan data</div>
             <div class="sidebar-data">
-              Here's a lot of pre-plan data. Here's a lot of pre-plan data. Here's
-              a lot of pre-plan data. Here's a lot of pre-plan data. Here's a lot
-              of pre-plan data. Here's a lot of pre-plan data. Here's a lot of
-              pre-plan data.
+              Here's a lot of pre-plan data. Here's a lot of pre-plan data.
+              Here's a lot of pre-plan data. Here's a lot of pre-plan data.
+              Here's a lot of pre-plan data. Here's a lot of pre-plan data.
+              Here's a lot of pre-plan data.
             </div>
           </div>
         </div>
-        ) : null }
-      </div>
-      
+      ) : null}
+    </div>
   );
 }
 
 function App() {
   return (
     <div>
-      <Sidebar/>
+      <Sidebar />
       <MapContainer />
     </div>
   );
