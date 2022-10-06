@@ -21,9 +21,37 @@ const divStyle = {
 
 function MyComponent() {
   const [activeMarker, setActiveMarker] = useState(false);
-  const [markerLoc, setMarkerLoc] = useState({lat: 29.715106009353045, lng: -98.78537740890328});
+  const [markerLoc, setMarkerLoc] = useState();
   const [markers, setMarkers] = useState([{lat: 0, lng: 0},{lat: 0, lng: 0},{lat: 0, lng: 0}]);
-  
+  const [center, setCenter] = useState({lat: 29.615106009353045, lng: -98.68537740890328});
+
+  const [searchBox, setSearchBox] = useState(null);
+  const [bounds, setBounds] = useState(null);
+
+  const onPlacesChanged = () => {
+    const places = searchBox.getPlaces();
+    const bounds = new window.google.maps.LatLngBounds();
+
+    places.forEach((place) => {
+      if (place.geometry.viewport) {
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+
+    const nextMarkers = places.map((place) => ({
+      position: place.geometry.location,
+    }));
+    const nextCenter = nextMarkers.length > 0 ? nextMarkers[0].position : center;
+
+    setCenter(nextCenter);
+
+  }
+
+  const onSBLoad = ref => {
+    setSearchBox(ref);
+  }
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -62,7 +90,6 @@ function MyComponent() {
       >
             
         <Marker
-            position={center}
             onClick={ () => handleOnClick()}
             draggable={true}
             label={window.google.maps.MarkerLabel = {
@@ -115,7 +142,11 @@ function MyComponent() {
           
         ))}
         
-        <StandaloneSearchBox>
+        <StandaloneSearchBox
+          bounds={bounds}
+          onPlacesChanged={onPlacesChanged}
+          onLoad={onSBLoad}
+        >
           <input 
             type="text"
             placeholder="Search for a location"
@@ -145,5 +176,4 @@ function MyComponent() {
   
 }
 
-export default React.memo(MyComponent)
-
+export default React.memo(MyComponent);
