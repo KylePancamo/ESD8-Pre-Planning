@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+/**********************************************************/
+/*********************** SIDE BAR *************************/
+/**********************************************************/
+
 .sidebar-wrapper {
   background-color: white;
   z-index: 2;
@@ -28,9 +32,15 @@ code {
   top: 50%;
 }
 
+.sidebar-button:hover {
+  border-width: 3px;
+  border-color: lightgreen
+}
+
 .sidebar-button svg {
   fill: lightgrey;
 }
+
 
 .webpage {
   display: flex;
@@ -46,8 +56,13 @@ code {
   border-style: solid;
   border-width: 1px;
   border-radius: 25px 0px 0px 25px;
-  border-color: lightgrey;
+  border-color: lightgray;
   height: 50px;
+}
+
+.close-button:hover {
+  border-width: 3px;
+  border-color: red;
 }
 
 .sidebar-menu {
