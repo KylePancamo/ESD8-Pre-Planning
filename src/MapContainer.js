@@ -154,19 +154,16 @@ function MyComponent(props) {
             style={{
               boxSizing: `border-box`,
               border: `1px solid transparent`,
-              width: `480px`,
-              height: `32px`,
+              minWidth: `15vw`,
+              height: `3vh`,
               padding: `0 12px`,
               borderRadius: `3px`,
               boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
               fontSize: `14px`,
-              outline: `none`,
               textOverflow: `ellipses`,
               position: `absolute`,
-              left: `30%`,
-              marginLeft: `-120px`,
-              top: `0px`
-
+              left: `40vw`,
+              top: `5%`,
             }}
           />
         </StandaloneSearchBox>
