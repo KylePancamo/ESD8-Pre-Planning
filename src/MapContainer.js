@@ -19,11 +19,13 @@ const divStyle = {
     padding: 15
   }
 
-function MyComponent() {
+function MyComponent(props) {
+
   const [activeMarker, setActiveMarker] = useState(false);
   const [markerLoc, setMarkerLoc] = useState();
   const [markers, setMarkers] = useState([{lat: 0, lng: 0},{lat: 0, lng: 0},{lat: 0, lng: 0}]);
   const [center, setCenter] = useState({lat: 29.615106009353045, lng: -98.68537740890328});
+  const [sideBarValue, setSideBarValue] = useState(false);
 
   const [searchBox, setSearchBox] = useState(null);
   const [bounds, setBounds] = useState(null);
@@ -46,7 +48,7 @@ function MyComponent() {
     const nextCenter = nextMarkers.length > 0 ? nextMarkers[0].position : center;
 
     setCenter(nextCenter);
-
+    props.setSideBarValue(true);
   }
 
   const onSBLoad = ref => {
@@ -98,7 +100,6 @@ function MyComponent() {
                 
             }}
         >
-        
 
         {activeMarker === true ? (
             <InfoWindow 

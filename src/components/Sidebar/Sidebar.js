@@ -1,14 +1,14 @@
 import { useState } from "react";
 
-function Sidebar() {
-  const [sideBarValue, setSideBarValue] = useState(false);
+function Sidebar(props) {
+
   const toggleSideBar = () => {
-    setSideBarValue(!sideBarValue);
+    props.setSideBarValue(!props.sideBarValue);
   };
 
   return (
     <div className="sidebar-wrapper">
-      {sideBarValue === false ? (
+      {props.sideBarValue === false ? (
         <button className="sidebar-button" onClick={toggleSideBar}>
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -20,7 +20,7 @@ function Sidebar() {
           </svg>
         </button>
       ) : null}
-      {sideBarValue === true ? (
+      {props.sideBarValue === true ? (
         <div class="sidebar-menu" id="sidebar-menu">
           <div className="sidebar-close">
             <button
