@@ -74,8 +74,10 @@ function MyComponent(props) {
   }, [])
 
   const handleOnClick = () => {
-    console.log(activeMarker)
-    setActiveMarker(true)
+    setSideBarValue(!sideBarValue);
+    props.setSideBarValue(sideBarValue);
+    console.log(sideBarValue);
+    //setActiveMarker(true)
   }
 
 
@@ -92,6 +94,7 @@ function MyComponent(props) {
       >
             
         <Marker
+            position={center}
             onClick={ () => handleOnClick()}
             draggable={true}
             label={window.google.maps.MarkerLabel = {
