@@ -3,11 +3,7 @@ const app = express();
 const mysql = require('mysql2');
 require('dotenv').config()
 
-const PORT = 5000;
-
 app.use(express.json());
-
-console.log(process.env.MYSQL_USERNAME)
 
 const db = mysql.createConnection({
   user: process.env.MYSQL_USERNAME,
@@ -46,7 +42,8 @@ app.post('/test/:id', (req, res) => {
   res.send(`Hello ${name}! Your id is ${id}`);
 });
 
+const PORT = 5000;
 // start express server on port 5000
-app.listen(5000, () => {
+app.listen(PORT, () => {
   console.log(`server started on http://localhost:${PORT} `);
 })
