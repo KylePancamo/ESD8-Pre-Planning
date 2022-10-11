@@ -61,7 +61,7 @@ New files within src can be created to help you develop the frontend further.
 
 <ins>Google API Key</ins>
   - Everyone will need the the API key on their local machine for maps to work properly.
-    - To make it work, you need to add a file named .env to the root directory and place the following inside: REACT_APP_GOOGLE_API_KEY=AIzaSyCQCEWuYTIWsxrfQ_L5eRqY2tdeMMyTM2w
+    - To make it work, you need to add a file named .env to the root directory. API key can be found on JIRA
     - ***Important:*** The .env file shouldn't appear in changes whenever committing
 
 
