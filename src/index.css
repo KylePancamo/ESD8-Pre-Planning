@@ -41,7 +41,6 @@ code {
   fill: lightgrey;
 }
 
-
 .webpage {
   display: flex;
 }
@@ -67,7 +66,7 @@ code {
 
 .sidebar-menu {
   position: relative;
-  width: 15vw;
+  width: 408px;
   height: 100vh;
   background-color: inherit;
   border-style: solid;
@@ -75,6 +74,7 @@ code {
   border-color: lightgrey;
   overflow: auto;
 }
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -90,6 +90,9 @@ code {
 }
 
 .sidebar-data-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 5px;
   margin-top: 70px;
 }
@@ -102,4 +105,62 @@ code {
   border-color: lightgrey;
   padding: 10px;
   margin: 25px;
+}
+
+/*****************************************************************/
+/*********************** SIDE BAR HEADER *************************/
+/*****************************************************************/
+
+.sidebar-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+}
+
+/******************************************************************/
+/*********************** SIDE BAR CONTENT *************************/
+/******************************************************************/
+
+.sidebar__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar__block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+}
+
+.sidebar__block h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.sidebar__block-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px;
+}
+
+/******************************************************************/
+/*********************** SIDE BAR FOOTER *************************/
+/******************************************************************/
+
+.sidebar__footer {
+  position: relative;
+  bottom: 0;
+}
+
+.sidebar__footer-link {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
