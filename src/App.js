@@ -13,6 +13,7 @@ function App() {
         setSideBarValue={setSideBarValue}
       />
       <MapContainer
+        sideBarValue={sideBarValue}
         setSideBarValue={setSideBarValue}
       />
     </div>

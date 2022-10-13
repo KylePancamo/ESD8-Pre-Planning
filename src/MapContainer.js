@@ -74,11 +74,8 @@ function MyComponent(props) {
   }, [])
 
   const handleOnClick = () => {
-    setSideBarValue(!sideBarValue);
-    props.setSideBarValue(sideBarValue);
-    console.log(sideBarValue);
-    //setActiveMarker(true)
-  }
+    props.setSideBarValue(!props.sideBarValue);
+  };
 
   let MapStyle = [
     {
