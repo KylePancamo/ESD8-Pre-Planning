@@ -124,24 +124,22 @@ function MyComponent(props) {
         styles: MapStyle,
       }}
     >
-      {
-        markers.map((marker) => {
-          marker.position = {
-            lat: marker.latitude,
-            lng: marker.longitude,
-          };
+      {markers.map((marker) => {
+        marker.position = {
+          lat: marker.latitude,
+          lng: marker.longitude,
+        };
 
-          return (
-            <Marker
-              key={marker.latitude}
-              position={marker.position}
-              onClick={() => {
-                console.log(marker.position);
-              }}
-            />
-          );
-        })
-      }
+        return (
+          <Marker
+            key={marker.latitude}
+            position={marker.position}
+            onClick={() => {
+              console.log(marker.position);
+            }}
+          />
+        );
+      })}
       <Marker
         position={center}
         onClick={() => handleOnClick()}
