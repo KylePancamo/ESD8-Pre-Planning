@@ -28,7 +28,7 @@ const divStyle = {
 };
 
 function MyComponent(props) {
-  const [libraries] = useState(["drawing", "places"])
+  const [libraries] = useState(["drawing", "places"]);
   const [activeMarker, setActiveMarker] = useState(false);
   const [markerLoc, setMarkerLoc] = useState();
   const [markers, setMarkers] = useState([
@@ -74,7 +74,7 @@ function MyComponent(props) {
     version: "weekly",
     id: "google-map-script",
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries
+    libraries,
   });
 
   const [map, setMap] = React.useState(null);
@@ -86,12 +86,14 @@ function MyComponent(props) {
     setMap(map);
   }, []);
 
-   const FlushMarkers = () => {
-    Axios.delete("http://localhost:5000/api/deleteMarkers").then((response) => {
-      console.log(response);
-    }).catch((err) => {
-      console.log(err);
-    });
+  const FlushMarkers = () => {
+    Axios.delete("http://localhost:5000/api/deleteMarkers")
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const onUnmount = React.useCallback(function callback(map) {
@@ -159,27 +161,31 @@ function MyComponent(props) {
       </Marker>
 
       <DrawingManager
-      onMarkerComplete={(marker) => {
-        const position = marker.position;
-        Axios.post("http://localhost:5000/api/setMarkerInfo", {position}).then((response) => {
-          console.log(response);
-        }).catch((error) => {
-          console.log(error)
-        });
-        
-        marker.addListener("click", ()=> {
+        onMarkerComplete={(marker) => {
           const position = marker.position;
-          Axios.get("http://localhost:5000/api/getMarkerInfo").then((response) => {
-            response.data.forEach((locationInfo) => {
-              if(locationInfo.latitude == position.lat().toFixed(8) && locationInfo.longitude == position.lng().toFixed(8)) {
-                console.log(locationInfo)
-              }
+          Axios.post("http://localhost:5000/api/setMarkerInfo", { position })
+            .then((response) => {
+              console.log(response);
             })
-          }).catch((error) => {
-            console.log(error)
+            .catch((error) => {
+              console.log(error);
+            });
+
+          marker.addListener("click", () => {
+            const position = marker.position;
+            Axios.get("http://localhost:5000/api/getMarkerInfo")
+              .then((response) => {
+                response.data.forEach((locationInfo) => {
+                  if (locationInfo.latitude == position.lat().toFixed(8) && locationInfo.longitude == position.lng().toFixed(8)) {
+                    console.log(locationInfo);
+                  }
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           });
-        })
-      }}
+        }}
         onPolygonComplete={(e) => {
           {
             for (let i = 0; i < e.getPath().getLength(); i++) {
