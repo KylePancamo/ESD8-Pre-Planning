@@ -33,7 +33,7 @@ function Sidebar(props) {
               X
             </button>
           </div>
-          <div class="sidebar-data-wrapper">
+          <div className="sidebar-data-wrapper">
             <Header />
             <Content />
             <Footer />
