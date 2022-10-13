@@ -80,6 +80,17 @@ function MyComponent(props) {
     //setActiveMarker(true)
   }
 
+  let MapStyle = [
+    {
+      featureType: "poi",
+      elementType: "labels.icon",
+      stylers: [
+        {
+          visibility: "off"
+        }
+      ]
+    }
+  ]
 
   return isLoaded ? (
       <GoogleMap
@@ -91,6 +102,11 @@ function MyComponent(props) {
         onClick={() => {
           setActiveMarker(false)
         }}
+        options={
+          {
+            styles: MapStyle
+          }
+        }
       >
             
         <Marker
