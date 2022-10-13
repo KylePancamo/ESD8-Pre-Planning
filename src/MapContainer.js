@@ -31,11 +31,7 @@ function MyComponent(props) {
   const [libraries] = useState(["drawing", "places"]);
   const [activeMarker, setActiveMarker] = useState(false);
   const [markerLoc, setMarkerLoc] = useState();
-  const [markers, setMarkers] = useState([
-    { lat: 0, lng: 0 },
-    { lat: 0, lng: 0 },
-    { lat: 0, lng: 0 },
-  ]);
+  const [markers, setMarkers] = useState([]);
   const [center, setCenter] = useState({
     lat: 29.615106009353045,
     lng: -98.68537740890328,
@@ -80,20 +76,18 @@ function MyComponent(props) {
   const [map, setMap] = React.useState(null);
 
   const onLoad = React.useCallback(function callback(map) {
-    FlushMarkers();
+    placeMarkers();
     const bounds = new window.google.maps.LatLngBounds(center);
     map.fitBounds(bounds);
     setMap(map);
   }, []);
 
-  const FlushMarkers = () => {
-    Axios.delete("http://localhost:5000/api/deleteMarkers")
-      .then((response) => {
-        console.log(response);
+  const placeMarkers = () => {
+    Axios.get("http://localhost:5000/api/getMarkerInfo")
+      .then((res) => {
+        setMarkers(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const onUnmount = React.useCallback(function callback(map) {
@@ -130,6 +124,24 @@ function MyComponent(props) {
         styles: MapStyle,
       }}
     >
+      {
+        markers.map((marker) => {
+          marker.position = {
+            lat: marker.latitude,
+            lng: marker.longitude,
+          };
+
+          return (
+            <Marker
+              key={marker.latitude}
+              position={marker.position}
+              onClick={() => {
+                console.log(marker.position);
+              }}
+            />
+          );
+        })
+      }
       <Marker
         position={center}
         onClick={() => handleOnClick()}
@@ -186,29 +198,7 @@ function MyComponent(props) {
               });
           });
         }}
-        onPolygonComplete={(e) => {
-          {
-            for (let i = 0; i < e.getPath().getLength(); i++) {
-              setMarkers((markers) => {
-                const copy = [...markers];
-                copy[i] = {
-                  lat: e.getPath().getAt(i).lat(),
-                  lng: e.getPath().getAt(i).lng(),
-                };
-                return copy;
-              });
-            }
-          }
-          setMarkerLoc({
-            lat: e.getPath().getArray()[0].lat(),
-            lng: e.getPath().getArray()[0].lng(),
-          });
-        }}
       />
-
-      {markers.map((marker, index) => (
-        <Marker key={index} position={marker}></Marker>
-      ))}
 
       <StandaloneSearchBox
         bounds={bounds}
