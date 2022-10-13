@@ -9,6 +9,8 @@ import {
   StandaloneSearchBox,
 } from "@react-google-maps/api";
 
+import Axios from "axios";
+
 const containerStyle = {
   width: "100vw",
   height: "100vh",
@@ -26,6 +28,7 @@ const divStyle = {
 };
 
 function MyComponent(props) {
+  const [libraries] = useState(["drawing", "places"])
   const [activeMarker, setActiveMarker] = useState(false);
   const [markerLoc, setMarkerLoc] = useState();
   const [markers, setMarkers] = useState([
@@ -68,18 +71,28 @@ function MyComponent(props) {
   };
 
   const { isLoaded } = useJsApiLoader({
+    version: "weekly",
     id: "google-map-script",
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries: ["drawing", "places"],
+    libraries
   });
 
   const [map, setMap] = React.useState(null);
 
   const onLoad = React.useCallback(function callback(map) {
+    FlushMarkers();
     const bounds = new window.google.maps.LatLngBounds(center);
     map.fitBounds(bounds);
     setMap(map);
   }, []);
+
+   const FlushMarkers = () => {
+    Axios.delete("http://localhost:5000/api/deleteMarkers").then((response) => {
+      console.log(response);
+    }).catch((err) => {
+      console.log(err);
+    });
+  };
 
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null);
@@ -146,7 +159,27 @@ function MyComponent(props) {
       </Marker>
 
       <DrawingManager
-        drawingMode={window.google.maps.drawing.OverlayType.POLYGON}
+      onMarkerComplete={(marker) => {
+        const position = marker.position;
+        Axios.post("http://localhost:5000/api/setMarkerInfo", {position}).then((response) => {
+          console.log(response);
+        }).catch((error) => {
+          console.log(error)
+        });
+        
+        marker.addListener("click", ()=> {
+          const position = marker.position;
+          Axios.get("http://localhost:5000/api/getMarkerInfo").then((response) => {
+            response.data.forEach((locationInfo) => {
+              if(locationInfo.latitude == position.lat().toFixed(8) && locationInfo.longitude == position.lng().toFixed(8)) {
+                console.log(locationInfo)
+              }
+            })
+          }).catch((error) => {
+            console.log(error)
+          });
+        })
+      }}
         onPolygonComplete={(e) => {
           {
             for (let i = 0; i < e.getPath().getLength(); i++) {

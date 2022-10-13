@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
 const mysql = require('mysql2');
+const cors = require('cors');
 require('dotenv').config()
 
+app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
@@ -21,26 +23,54 @@ db.connect((err) => {
   console.log("Connected to MySQL server.");
 });
 
-app.get('/test', (req, res) => {
-  res.status(200).send('Hello World!');
-});
 
-app.post('/api/dbtest', (req, res) => {
-  db.query('SELECT * FROM locations', (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.status(200).send(result);
+app.post('/api/setMarkerInfo', (req, res) => {
+  const data = [
+    req.body.position.lat.toFixed(8),
+    req.body.position.lng.toFixed(8)
+  ]
+  const query = "INSERT INTO markers(marker_name, latitude, longitude) VALUES ('test', ?, ?) "
+  db.query(
+    query, data, (err, result) => {
+      if (err) {
+        console.log(err.message)
+      } else {
+        res.status(200).send(result);
+      }
     }
-  });
+  )
 });
 
-app.post('/test/:id', (req, res) => {
-  const {id} = req.params;
-  const {name} = req.body;
-
-  res.send(`Hello ${name}! Your id is ${id}`);
+app.get('/api/getMarkerInfo', (req, res) => {
+  const query = "SELECT * FROM markers"
+  
+  db.query(
+    query, 
+    (err, result) => {
+      if (err) {
+        console.log(err.message)
+      } else {
+        console.log(result);
+        res.status(200).send(result);
+      }
+    }
+  )
 });
+
+app.delete('/api/deleteMarkers', (req, res) => {
+  const query = "DELETE FROM markers"
+
+  db.query(
+    query,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send(result);
+      }
+    }
+  )
+})
 
 const PORT = 5000;
 // start express server on port 5000
