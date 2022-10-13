@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Popup from './components/Popup/PopupWindow';
 import {
   GoogleMap,
   useJsApiLoader,
@@ -36,6 +37,8 @@ function MyComponent(props) {
     lat: 29.615106009353045,
     lng: -98.68537740890328,
   });
+
+  const [markerClicked, setMarkerClicked] = useState(false);
 
   const [searchBox, setSearchBox] = useState(null);
   const [bounds, setBounds] = useState(null);
@@ -135,11 +138,20 @@ function MyComponent(props) {
             key={marker.latitude}
             position={marker.position}
             onClick={() => {
-              console.log(marker.position);
+              setMarkerClicked(!markerClicked);
+              setMarkerLoc(marker);
             }}
           />
         );
       })}
+      {markerClicked ? (
+        <Popup 
+          markerClicked={markerClicked}
+          setMarkerClicked={setMarkerClicked}
+          markerLoc={markerLoc}
+        />
+        ) : null
+      }
       <Marker
         position={center}
         onClick={() => handleOnClick()}
