@@ -162,12 +162,13 @@ function MyComponent(props) {
           />
         );
       })}
+
       {markerClicked ? (
-        <Popup 
-          markerClicked={markerClicked}
-          setMarkerClicked={setMarkerClicked}
-          markerLoc={markerLoc}
-        />
+          <Popup
+            show={markerClicked}
+            onHide={() => setMarkerClicked(false)}
+            markerLoc={markerLoc}
+          />
         ) : null
       }
       <Marker

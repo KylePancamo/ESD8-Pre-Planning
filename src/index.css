@@ -165,24 +165,6 @@ code {
   margin-bottom: 1rem;
 }
 
-
-/******************************************************************/
-/*********************** POPUP WINDOW *****************************/
-/******************************************************************/
-
-.popup_inner {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: fit-content;
-  height: 10%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: aqua;
-}
-
 .flush {
   position: fixed;
   top: 10vh;
