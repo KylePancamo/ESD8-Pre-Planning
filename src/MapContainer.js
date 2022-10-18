@@ -159,18 +159,18 @@ function MyComponent(props) {
               }
               setLocation(marker);
             }}
+            icon={{
+              url: "https://cdn-icons-png.flaticon.com/512/394/394565.png",
+              scaledSize: new window.google.maps.Size(30, 30),
+            }}
           />
         );
       })}
-
-      {markerClicked ? (
-          <Popup
-            show={markerClicked}
-            onHide={() => setMarkerClicked(false)}
-            markerLoc={markerLoc}
-          />
-        ) : null
-      }
+      <Popup
+        show={markerClicked}
+        onHide={() => setMarkerClicked(false)}
+        markerLoc={markerLoc}
+      />
       <Marker
         position={center}
         onClick={() => handleOnClick()}
@@ -211,7 +211,7 @@ function MyComponent(props) {
             .catch((error) => {
               console.log(error);
             });
-
+            
           marker.addListener("click", () => {
             let position = marker.position;
             Axios.get("http://localhost:5000/api/getMarkerInfo")
@@ -222,6 +222,7 @@ function MyComponent(props) {
                       setMarkerClicked(true);
                     }
                     setLocation(locationInfo);
+                    
                   }
                 });
               })
@@ -230,6 +231,13 @@ function MyComponent(props) {
             });
           });
         }}
+        options={
+          {
+            drawingControlOptions:{
+              drawingModes: ['marker']
+            }
+          }
+        }
       />
 
       <StandaloneSearchBox
