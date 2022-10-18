@@ -182,3 +182,12 @@ code {
   align-items: center;
   background-color: aqua;
 }
+
+.flush {
+  position: fixed;
+  top: 10vh;
+  right: 0;
+  min-width: fit-content;
+  min-height: fit-content;
+  background-color: rgba(0, 0, 0, 0.5);
+}

@@ -11,6 +11,8 @@ import {
 } from "@react-google-maps/api";
 
 import Axios from "axios";
+import './useStateWithCallback'
+import useStateWithCallback from "./useStateWithCallback";
 
 const containerStyle = {
   width: "100vw",
@@ -31,7 +33,7 @@ const divStyle = {
 function MyComponent(props) {
   const [libraries] = useState(["drawing", "places"]);
   const [activeMarker, setActiveMarker] = useState(false);
-  const [markerLoc, setMarkerLoc] = useState();
+  const [markerLoc, setMarkerLoc] = useStateWithCallback(0);
   const [markers, setMarkers] = useState([]);
   const [center, setCenter] = useState({
     lat: 29.615106009353045,
@@ -113,6 +115,19 @@ function MyComponent(props) {
     },
   ];
 
+  const setLocation = (marker) => {
+    setMarkerLoc(marker);
+  }
+
+  const FlushMarkers = () => {
+    Axios.delete("http://localhost:5000/api/deleteMarkers").then((response) => {
+      console.log(response);
+      setMarkers([]);
+    }).catch((err) => {
+      console.log(err);
+    });
+  };
+
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -128,18 +143,21 @@ function MyComponent(props) {
       }}
     >
       {markers.map((marker) => {
+        let markerId = 0;
         marker.position = {
           lat: marker.latitude,
           lng: marker.longitude,
         };
-
+        markerId++;
         return (
           <Marker
-            key={marker.latitude}
+            key={markerId}
             position={marker.position}
             onClick={() => {
-              setMarkerClicked(!markerClicked);
-              setMarkerLoc(marker);
+              if (markerClicked === false) {
+                setMarkerClicked(true);
+              }
+              setLocation(marker);
             }}
           />
         );
@@ -194,18 +212,21 @@ function MyComponent(props) {
             });
 
           marker.addListener("click", () => {
-            const position = marker.position;
+            let position = marker.position;
             Axios.get("http://localhost:5000/api/getMarkerInfo")
               .then((response) => {
                 response.data.forEach((locationInfo) => {
                   if (locationInfo.latitude == position.lat().toFixed(8) && locationInfo.longitude == position.lng().toFixed(8)) {
-                    console.log(locationInfo);
+                    if (markerClicked === false) {
+                      setMarkerClicked(true);
+                    }
+                    setLocation(locationInfo);
                   }
                 });
               })
               .catch((error) => {
                 console.log(error);
-              });
+            });
           });
         }}
       />
@@ -234,7 +255,18 @@ function MyComponent(props) {
           }}
         />
       </StandaloneSearchBox>
+
+      <div className='flush'>
+        <button
+          className='btn btn-primary'
+          onClick={() => {
+            FlushMarkers();
+          }}>
+          Flush Markers
+          </button>
+      </div>
     </GoogleMap>
+
   ) : (
     <></>
   );

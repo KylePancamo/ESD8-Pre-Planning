@@ -5,20 +5,14 @@ function PopupWindow(props) {
     return (
         
         <div className="popup">
-            {console.log(props)}
                 {props.markerClicked ? (
                     <div className="popup_inner">
                         <div>
-                            {
-                                props.markerLoc.position ? (
-                                    <div>
-                                    Lat:{props.markerLoc.position.lat}
-                                    &nbsp;
-                                    Lng:{props.markerLoc.position.lng}
-                                    </div>
-                                ) : null
-                            }
-                            
+                            <div>
+                                Lat:{props.markerLoc.latitude}
+                                &nbsp;
+                                Lng:{props.markerLoc.longitude}
+                            </div>
                         </div>
                         <button onClick={() => props.setMarkerClicked(false)}>close popup</button>
                     </div>
