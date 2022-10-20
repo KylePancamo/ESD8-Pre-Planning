@@ -1,8 +1,9 @@
 function Header() {
   return (
     <div className="sidebar-header">
-      <h2 className="sidebar-header__title">Sidebar Header Title</h2>
-      <p className="sidebar-header__subtitle">Sidebar Header Subtitle</p>
+      <p className="sidebar-header__title">Site Name</p>
+      <p className="sidebar-header__subtitle">Site Address Line 1</p>
+      <p className="sidebar-header__subtitle2">Site Address Line 2</p>
     </div>
   );
 }
