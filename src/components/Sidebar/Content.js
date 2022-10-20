@@ -6,19 +6,6 @@ function Content() {
 
       <div className="sidebar__block">
         <div className="sidebar__block-content">
-          <div className="sidebar__block-title">Mutual Aid</div>
-          <p className="sidebar__block-box" id="mutual-aid">
-            Fire Department <br></br>
-	          Fire Department <br></br>
-	          Fire Department <br></br>
-          </p>
-        </div>
-      </div>
-
-      <div className="sidebar__content-separator"></div>
-
-      <div className="sidebar__block">
-        <div className="sidebar__block-content">
           <div className="sidebar__block-title">Occupancy Type
             <span className="sidebar__block-text" id="occupancy-type">
               TYPE
@@ -38,6 +25,19 @@ function Content() {
             </span>
           </div>
           <div className="filler"></div>
+        </div>
+      </div>
+
+      <div className="sidebar__content-separator"></div>
+
+      <div className="sidebar__block">
+        <div className="sidebar__block-content">
+          <div className="sidebar__block-title">Mutual Aid</div>
+          <p className="sidebar__block-box" id="mutual-aid">
+            Fire Department <br></br>
+	          Fire Department <br></br>
+	          Fire Department <br></br>
+          </p>
         </div>
       </div>
 
