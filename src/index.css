@@ -216,3 +216,15 @@ code {
   min-height: fit-content;
   background-color: rgba(0, 0, 0, 0.5);
 }
+
+.edit-menu-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.edit-form {
+  height: 10vh;
+}
