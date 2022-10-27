@@ -1,6 +1,7 @@
 import MapContainer from "./MapContainer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "./components/Sidebar/Sidebar";
+import FileUpload from "./components/Popup/FileUploads";
 import {useState} from "react";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         sideBarValue={sideBarValue}
         setSideBarValue={setSideBarValue}
       />
+      <FileUpload />
     </div>
   );
 }
