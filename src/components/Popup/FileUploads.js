@@ -6,8 +6,7 @@ import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 
 function FileUpload(props) {
-  const inputRef = useRef(null);
-  const [files, setFiles] = useState([]);
+  let inputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [FileUploadStatus, setFileUploadStatus] = useState();
   const [FileUploadString, setFileUploadString] = useState("");
@@ -39,9 +38,13 @@ function FileUpload(props) {
   return (
     <div>
       <Modal
-        size="sm"
         show={props.show}
         onHide={props.onHide}
+        onExit={() => {
+          setFileUploadStatus(undefined);
+          setFileUploadString("");
+          setFileName("");
+        }}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter" className="m-2">
@@ -78,7 +81,7 @@ function FileUpload(props) {
           ) : null}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
+          <Button onClick={() => props.onHide()}>Close</Button>
         </Modal.Footer>
       </Modal>
     </div>

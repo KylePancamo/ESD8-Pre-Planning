@@ -12,16 +12,23 @@ function GenericPopupWindow(props) {
       onHide={props.onHide}
       backdrop="static"
       keyboard={false}
+      contentClassName={props.contentClassName}
     >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter" className="m-2">Generic Popup</Modal.Title>
+      <Modal.Header 
+        closeButton 
+        className={props.headerClassName}
+      >
+        <Modal.Title id="contained-modal-title-vcenter" className="m-2">{props.title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body
+        className={props.bodyClassName}
+      >
         {props.children}
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer
+        className={props.footerClassName}
+      >
         <Button onClick={props.onHide}>Close</Button>
-        <Button onClick={props.onHide}>Save</Button>
       </Modal.Footer>
     </Modal>
   );

@@ -14,7 +14,7 @@ import Axios from "axios";
 import './useStateWithCallback'
 import useStateWithCallback from "./useStateWithCallback";
 import GenericPopupWindow from "./components/Popup/GenericPopup";
-import FileUploads from "./components/Popup/FileUploads";
+import AdminPanel from "./components/AdminPanel/AdminPanel";
 
 const containerStyle = {
   width: "100vw",
@@ -33,8 +33,6 @@ const divStyle = {
 };
 
 function MyComponent(props) {
-  const [fileUploadPopup, setFileUploadPopup] = useState(false);
-  const [adminPanel, setAdminPanel] = useState(false);
   const [libraries] = useState(["drawing", "places"]);
   const [activeMarker, setActiveMarker] = useState(false);
   const [markerLoc, setMarkerLoc] = useStateWithCallback(0);
@@ -268,48 +266,9 @@ function MyComponent(props) {
           }}
         />
       </StandaloneSearchBox>
-
-      <div className='admin-ui'>
-        <button
-          className='btn btn-primary'
-          onClick={() => {
-            setAdminPanel(true);
-          }}
-          >
-          Admin Panel
-        </button>
-        <GenericPopupWindow
-          show={adminPanel}
-          onHide={() => {
-            setAdminPanel(false);
-          }}
-        >
-          <div className='admin-panel'>
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                FlushMarkers();
-              }}
-              >
-                FlushMarkers
-            </button>
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                setFileUploadPopup(true);
-              }}
-            >
-                Upload File
-            </button>
-            <FileUploads
-              show={fileUploadPopup}
-              onHide={() => {
-                setFileUploadPopup(false);
-              }}
-            />
-          </div>
-        </GenericPopupWindow>
-      </div>
+      <AdminPanel
+        flushMarkers={() => FlushMarkers()}
+      />
     </GoogleMap>
   ) : (
     <></>
