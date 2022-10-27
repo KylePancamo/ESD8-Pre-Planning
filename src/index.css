@@ -208,13 +208,12 @@ code {
   margin-bottom: 1rem;
 }
 
-.flush {
+.admin-ui {
   position: fixed;
   top: 10vh;
   right: 0;
   min-width: fit-content;
   min-height: fit-content;
-  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .edit-menu-button {

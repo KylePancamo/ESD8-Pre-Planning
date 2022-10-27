@@ -2,10 +2,15 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql2');
 const cors = require('cors');
-require('dotenv').config()
+require('dotenv').config();
 
+var fs = require('fs');
+var fileupload = require('express-fileupload');
+
+app.use(fileupload());
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const db = mysql.createConnection({
   user: process.env.MYSQL_USERNAME,
@@ -70,6 +75,31 @@ app.delete('/api/deleteMarkers', (req, res) => {
       }
     }
   )
+})
+
+app.post('/api/upload', (req, res) => {
+  let file = req.files.file;
+  if (file.mimetype !== 'image/png') {
+    res.status(400).send({message: 'File must be a png image'});
+
+    return;
+  }
+
+  if (fs.existsSync('./src/uploads/' + file.name)) {
+    res.status(400).send({message: 'File already exists'});
+
+    return;
+  }
+
+  let filename = file.name;
+  file.mv('./src/uploads/' + filename, (err) => {
+    if (err) {
+      console.log(err);
+      res.status(400).send({ message: 'File upload failed', error: err });
+    } else {
+      res.send('File uploaded!');
+    }
+  });
 })
 
 const PORT = 5000;
