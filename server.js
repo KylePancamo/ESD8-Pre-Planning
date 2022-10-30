@@ -85,25 +85,48 @@ app.post('/api/upload', (req, res) => {
     return;
   }
 
-  if (fs.existsSync('./src/uploads/' + file.name)) {
+  if (fs.existsSync('./public/images/' + file.name)) {
     res.status(400).send({message: 'File already exists'});
 
     return;
   }
 
   let filename = file.name;
-  file.mv('./src/uploads/' + filename, (err) => {
+  const data = [
+    filename,
+  ]
+  const query = 'INSERT INTO icons (file_path) VALUES (?)';
+
+  db.query(query, data, (err, result) => {
     if (err) {
-      console.log(err);
-      res.status(400).send({ message: 'File upload failed', error: err });
+      console.log(err.message);
+      res.status(400).send({message: 'Error uploading file'});
     } else {
-      res.send('File uploaded!');
+      file.mv('./public/images/' + filename, (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.status(200).send({message: 'File uploaded'});
+        }
+      })
     }
   });
-})
+});
+
+app.get('/api/getIcons', (req, res) => {
+  const query = 'SELECT * FROM icons';
+
+  db.query(query, (err, result) => {
+    if (err) {
+      console.log(err.message);
+    } else {
+      res.status(200).send(result);
+    }
+  });
+});
 
 const PORT = 5000;
 // start express server on port 5000
 app.listen(PORT, () => {
   console.log(`server started on http://localhost:${PORT} `);
-})
+});

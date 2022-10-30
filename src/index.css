@@ -258,6 +258,14 @@ code {
 .modal-admin {
   color: white !important;
   width: 100vw;
-  height: 90vh;
+  height: fit-content;
   background-color: rgb(20, 28, 36) !important;
+}
+
+.tr .images {
+  background-color: aliceblue;
+}
+
+.list-image-container .tables {
+  text-align: left;
 }

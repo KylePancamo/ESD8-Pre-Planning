@@ -5,9 +5,8 @@ import Modal from "react-bootstrap/Modal";
 function GenericPopupWindow(props) {
   return (
     <Modal
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
+      size={props.size}
+      area-labelledby={props.areaLabelledBy}
       show={props.show}
       onHide={props.onHide}
       backdrop="static"

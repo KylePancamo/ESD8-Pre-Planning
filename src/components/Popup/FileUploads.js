@@ -23,7 +23,7 @@ function FileUpload(props) {
       Axios.post("http://localhost:5000/api/upload", formData)
         .then((response) => {
           setFileUploadStatus(true);
-          setFileUploadString(response.data);
+          setFileUploadString(response.data.message);
           setFileName(inputRef.current?.files[0].name);
           console.log(response);
         })

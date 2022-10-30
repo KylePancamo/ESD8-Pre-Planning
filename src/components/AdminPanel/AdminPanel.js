@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import Axios from "axios";
 import FileUploads from "../Popup/FileUploads";
 import GenericPopupWindow from "../Popup/GenericPopup";
 
@@ -7,14 +7,23 @@ function AdminPanel(props) {
   const [fileUploadPopup, setFileUploadPopup] = useState(false);
   const [adminPanel, setAdminPanel] = useState(false);
   const [mainContentString, setMainContentString] = useState("");
+  const [images, setImages] = useState([]);
+
+  const fetchImages = ()  => {
+    Axios.get("http://localhost:5000/api/getIcons").then((response) => {
+      setImages(response.data);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
 
   return (
     <div className="admin-ui">
-      {console.log(props)}
       <button
         className="btn btn-primary"
         onClick={() => {
           setAdminPanel(true);
+          fetchImages();
         }}
       >
         Admin Panel
@@ -33,7 +42,6 @@ function AdminPanel(props) {
               className="btn btn-primary"
               onClick={() => {
                 props.flushMarkers();
-                setMainContentString("flush-markers");
               }}
             >
               FlushMarkers
@@ -42,7 +50,6 @@ function AdminPanel(props) {
               className="btn btn-primary"
               onClick={() => {
                 setFileUploadPopup(true);
-                setMainContentString("file-upload");
               }}
             >
               Upload File
@@ -53,7 +60,6 @@ function AdminPanel(props) {
                 setFileUploadPopup(false);
               }}
             />
-            {console.log(fileUploadPopup)}
           </div>
           <div className="admin-panel-main">
             <h2>List of Images:</h2>
@@ -61,12 +67,25 @@ function AdminPanel(props) {
               <table className="tables">
                 <thead>
                   <tr className="tr">
-                    <th>Image Name</th>
+                    <th>Image Id</th>
                     <th>Image</th>
                   </tr>
                 </thead>
                 <tbody>
-                
+                  {images.map((image) => {
+                    return (
+                      <tr className="tr">
+                        <td>{image.icon_id}</td>
+                        <td>
+                          <img
+                            src={"/images/" + image.file_path}
+                            alt={image.name}
+                            className="images"
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
