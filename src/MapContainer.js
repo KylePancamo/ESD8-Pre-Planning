@@ -36,7 +36,21 @@ function MyComponent(props) {
   const [libraries] = useState(["drawing", "places"]);
   const [activeMarker, setActiveMarker] = useState(false);
   const [markerLoc, setMarkerLoc] = useStateWithCallback(0);
-  const [markers, setMarkers] = useState([]);
+  const [markers, setMarkers] = useState([
+    {
+      marker_name: "default",
+      latitude: 0,
+      longitude: 0,
+      icon_id: 0,
+    }
+  ]);
+  const [marker, setMarker] = useState({
+    marker_name: "default",
+    latitude: 0,
+    longitude: 0,
+    icon_id: 0,
+  });
+
   const [center, setCenter] = useState({
     lat: 29.615106009353045,
     lng: -98.68537740890328,
@@ -159,7 +173,7 @@ function MyComponent(props) {
               if (markerClicked === false) {
                 setMarkerClicked(true);
               }
-              setLocation(marker);
+              setMarker(marker);
             }}
             icon={{
               url: "https://cdn-icons-png.flaticon.com/512/394/394565.png",
@@ -171,7 +185,7 @@ function MyComponent(props) {
       <Popup
         show={markerClicked}
         onHide={() => setMarkerClicked(false)}
-        markerLoc={markerLoc}
+        marker={marker}
       />
       <Marker
         position={center}
