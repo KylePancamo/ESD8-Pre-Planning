@@ -78,7 +78,7 @@ function AdminPanel(props) {
                         <td>{image.icon_id}</td>
                         <td>
                           <img
-                            src={"/images/" + image.file_path}
+                            src={"/images/" + image.file_name}
                             alt={image.name}
                             className="images"
                           />

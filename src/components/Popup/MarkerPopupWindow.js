@@ -9,40 +9,45 @@ import Axios from "axios";
 import { Pencil } from "react-bootstrap-icons";
 import GenericPopupWindow from "./GenericPopup";
 
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
 
 function EditWindow(props) {
   return (
-  <GenericPopupWindow
-    show={props.edit}
-    onHide={() => props.setEdit(false)}
-    size="sm"
-  >
-    <Form>
-      <Form.Group controlId="formBasicEmail">
-        <Form.Label>Marker Name</Form.Label>
-        <Form.Control type="text" placeholder="Enter Marker Name" />
-        <Form.Text className="text-muted">
-          This is the name of the marker.
-        </Form.Text>
-      </Form.Group>
-    </Form>
-  </GenericPopupWindow>
+    <GenericPopupWindow
+      show={props.edit}
+      onHide={() => props.setEdit(false)}
+      size="sm"
+    >
+      <Form>
+        <Form.Group controlId="formBasicEmail">
+          <Form.Label>Marker Name</Form.Label>
+          <Form.Control type="text" placeholder="Enter Marker Name" />
+          <Form.Text className="text-muted">
+            This is the name of the marker.
+          </Form.Text>
+        </Form.Group>
+      </Form>
+    </GenericPopupWindow>
   );
 }
 
 function PopupWindow(props) {
   const [imageIcons, setImageIcons] = useState([]);
-  const [selectedIcon, setSelectedIcon] = useState({icon_id: 0, icon_name: ""});
+  const [selectedIcon, setSelectedIcon] = useState({
+    icon_id: 0,
+    icon_name: "",
+  });
   const [edit, setEdit] = useState(false);
 
   useEffect(() => {
-    Axios.get("http://localhost:5000/api/getIcons").then((response) => {
-      setImageIcons(response.data);
-    }).catch((err) => {
-      console.log(err);
-    });
+    Axios.get("http://localhost:5000/api/getIcons")
+      .then((response) => {
+        setImageIcons(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
@@ -54,54 +59,82 @@ function PopupWindow(props) {
       onHide={props.onHide}
       backdrop="static"
       keyboard={false}
+      onExit={() => {
+        setSelectedIcon({ icon_id: 0, icon_name: "" });
+      }}
     >
       {console.log(props)}
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter" className="m-2">{props.marker.marker_name}</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter" className="m-2">
+          Marker Modification
+        </Modal.Title>
         <Button
-            size="sm"
-            onClick={() => { 
-              setEdit(true);
-            }}
-          >
-            <div className="edit-menu-button">
-              <Pencil />
-              Edit
-            </div>
-          </Button>
-          {<EditWindow
+          size="sm"
+          onClick={() => {
+            setEdit(true);
+          }}
+        >
+          <div className="edit-menu-button">
+            <Pencil />
+            Edit
+          </div>
+        </Button>
+        {
+          <EditWindow
             edit={edit}
             setEdit={() => {
-              setEdit(false)
+              setEdit(false);
             }}
-          />}
+          />
+        }
       </Modal.Header>
       <Modal.Body>
         <Container>
           <Row>
-            <Col xs={12} md={4}>
-              <DropdownButton id = "dropdown-basic-button" title = "Select an icon">
-                {imageIcons.map((icon) => (
-                  <Dropdown.Item onClick={() => {
-                    setSelectedIcon({icon_id: icon.icon_id, icon_path: icon.file_path});
-                  }}>{
-                    <img
-                            src={"/images/" + icon.file_path}
-                            alt={icon.name}
-                            className="images"
-                          />  
-                  }</Dropdown.Item>
-                ))}
-              </DropdownButton>
+            <Col xs={6} md={4}>
+              Marker Name: {props.marker.marker_name}
             </Col>
-            <Col xs={12} md={4}>
-              {selectedIcon.icon_path !== "" ? (
+            <Col xs={6} md={4}>
+              <b>Current Marker Icon: </b>
+              <img
+                src={"/images/" + props.marker.file_name}
+                alt={""}
+                className="images"
+              />
+            </Col>
+            <Col xs={6} md={4}>
+              <Col xs={6} md={2}>
+                <DropdownButton
+                  id="dropdown-basic-button"
+                  title="Select an icon"
+                >
+                  {imageIcons.map((icon) => (
+                    <Dropdown.Item
+                      onClick={() => {
+                        setSelectedIcon({
+                          icon_id: icon.icon_id,
+                          icon_name: icon.file_name,
+                        });
+                      }}
+                    >
+                      {
+                        <img
+                          src={"/images/" + icon.file_name}
+                          alt={icon.name}
+                          className="images"
+                        />
+                      }
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
+                {selectedIcon.icon_name !== "" ? (
                 <img
-                  src={"/images/" + selectedIcon.icon_path}
+                  src={"/images/" + selectedIcon.icon_name}
                   alt={""}
                   className="images"
                 />
               ) : null}
+              </Col>
             </Col>
           </Row>
           <Row>

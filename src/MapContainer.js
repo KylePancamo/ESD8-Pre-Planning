@@ -41,14 +41,14 @@ function MyComponent(props) {
       marker_name: "default",
       latitude: 0,
       longitude: 0,
-      icon_id: 0,
+      file_name: "",
     }
   ]);
   const [marker, setMarker] = useState({
     marker_name: "default",
     latitude: 0,
     longitude: 0,
-    icon_id: 0,
+    file_name: "",
   });
 
   const [center, setCenter] = useState({
@@ -175,10 +175,7 @@ function MyComponent(props) {
               }
               setMarker(marker);
             }}
-            icon={{
-              url: "https://cdn-icons-png.flaticon.com/512/394/394565.png",
-              scaledSize: new window.google.maps.Size(30, 30),
-            }}
+            icon={"/images/" + marker.file_name}
           />
         );
       })}

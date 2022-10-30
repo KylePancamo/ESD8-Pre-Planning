@@ -47,7 +47,14 @@ app.post('/api/setMarkerInfo', (req, res) => {
 });
 
 app.get('/api/getMarkerInfo', (req, res) => {
-  const query = "SELECT * FROM markers"
+  const query = `SELECT
+                  markers.marker_name,
+                  markers.latitude,
+                  markers.longitude,
+                  icons.file_name
+                FROM markers
+                JOIN icons
+                  ON markers.icon_id = icons.icon_id`;
   
   db.query(
     query, 
@@ -95,7 +102,7 @@ app.post('/api/upload', (req, res) => {
   const data = [
     filename,
   ]
-  const query = 'INSERT INTO icons (file_path) VALUES (?)';
+  const query = 'INSERT INTO icons (file_name) VALUES (?)';
 
   db.query(query, data, (err, result) => {
     if (err) {
