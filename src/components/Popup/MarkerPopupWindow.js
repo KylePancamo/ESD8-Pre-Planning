@@ -8,6 +8,7 @@ import Col from "react-bootstrap/Col";
 import Axios from "axios";
 import { Pencil } from "react-bootstrap-icons";
 import GenericPopupWindow from "./GenericPopup";
+import Alert from "react-bootstrap/Alert";
 
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -39,6 +40,8 @@ function PopupWindow(props) {
     icon_name: "",
   });
   const [edit, setEdit] = useState(false);
+  const [markerSaved, setMarkerSaved] = useState(false);
+  const [currentMarker, setCurrentMarker] = useState();
 
   useEffect(() => {
     Axios.get("http://localhost:5000/api/getIcons")
@@ -49,6 +52,90 @@ function PopupWindow(props) {
         console.log(err);
       });
   }, []);
+
+  const handleIconChange = () => {
+    props.setMarkers((markers) => {
+      return markers.map((marker) => {
+        if (marker.marker_id === props.marker.marker_id) {
+          const data = {
+            marker_id: marker.marker_id,
+            icon_id: selectedIcon.icon_id,
+          };
+          Axios.post("http://localhost:5000/api/updateMarker", { data })
+            .then((response) => {
+              props.setMarker((prevMarker) => ({
+                ...prevMarker,
+                file_name: selectedIcon.icon_name,
+              }));
+              marker.file_name = selectedIcon.icon_name;
+            })
+            .then(() => {
+              setMarkerSaved(true);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+        return marker;
+      });
+    });
+  };
+
+  const handleIconChange2 = () => {
+    new Promise((resolve, reject) => {
+      fetchMarker(resolve);
+    }).then((response) => {
+      if (!response) {
+        const data = {
+          marker_id: props.marker.marker_id,
+          icon_id: selectedIcon.icon_id,
+        };
+        Axios.post("http://localhost:5000/api/updateMarker", { data })
+          .then((response) => {
+            props.setMarker((prevMarker) => ({
+              ...prevMarker,
+              file_name: selectedIcon.icon_name,
+            }));
+          })
+          .then(() => {
+            setMarkerSaved(true);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
+
+  const fetchMarker = (resolve) => {
+    props.markers.map((marker) => {
+      if (marker.marker_id === props.marker.marker_id) {
+        const data = {
+          marker_id: marker.marker_id,
+          icon_id: selectedIcon.icon_id,
+        };
+        Axios.post("http://localhost:5000/api/updateMarker", { data })
+          .then((response) => {
+            props.setMarker((prevMarker) => ({
+              ...prevMarker,
+              file_name: selectedIcon.icon_name,
+            }));
+            marker.file_name = selectedIcon.icon_name;
+          })
+          .then(() => {
+            setMarkerSaved(true);
+          })
+          .then(() => {
+            setCurrentMarker(marker);
+            resolve(marker);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+    resolve(null);
+  };
 
   return (
     <Modal
@@ -63,7 +150,6 @@ function PopupWindow(props) {
         setSelectedIcon({ icon_id: 0, icon_name: "" });
       }}
     >
-      {console.log(props)}
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter" className="m-2">
           Marker Modification
@@ -116,6 +202,7 @@ function PopupWindow(props) {
                           icon_name: icon.file_name,
                         });
                       }}
+                      key={icon.icon_id}
                     >
                       {
                         <img
@@ -128,12 +215,12 @@ function PopupWindow(props) {
                   ))}
                 </DropdownButton>
                 {selectedIcon.icon_name !== "" ? (
-                <img
-                  src={"/images/" + selectedIcon.icon_name}
-                  alt={""}
-                  className="images"
-                />
-              ) : null}
+                  <img
+                    src={"/images/" + selectedIcon.icon_name}
+                    alt={""}
+                    className="images"
+                  />
+                ) : null}
               </Col>
             </Col>
           </Row>
@@ -147,8 +234,17 @@ function PopupWindow(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Close</Button>
-        <Button onClick={props.onHide}>Save</Button>
+        <Button onClick={handleIconChange2}>Save</Button>
       </Modal.Footer>
+      <GenericPopupWindow
+        show={markerSaved}
+        onHide={() => setMarkerSaved(false)}
+        title="Marker Saved"
+      >
+        <Alert variant="success">
+          The marker icon was successfully changed. You can close this box
+        </Alert>
+      </GenericPopupWindow>
     </Modal>
   );
 }

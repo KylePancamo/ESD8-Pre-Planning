@@ -34,7 +34,7 @@ app.post('/api/setMarkerInfo', (req, res) => {
     req.body.position.lat.toFixed(8),
     req.body.position.lng.toFixed(8)
   ]
-  const query = "INSERT INTO markers(marker_name, latitude, longitude) VALUES ('test', ?, ?) "
+  const query = "INSERT INTO markers(marker_name, latitude, longitude, icon_id) VALUES ('test', ?, ?, 10) "
   db.query(
     query, data, (err, result) => {
       if (err) {
@@ -46,8 +46,28 @@ app.post('/api/setMarkerInfo', (req, res) => {
   )
 });
 
+app.post('/api/updateMarker',  (req, res) => {
+  const query = "UPDATE markers SET icon_id = ? WHERE marker_id = ?"
+  const data = [
+    req.body.data.icon_id,
+    req.body.data.marker_id
+  ]
+
+  db.query(
+    query, data, (err, result) => {
+      if (err) {
+        console.log(err.message)
+      } else {
+        res.status(200).send(result);
+      }
+    }
+  )
+});
+
+
 app.get('/api/getMarkerInfo', (req, res) => {
   const query = `SELECT
+                  markers.marker_id,
                   markers.marker_name,
                   markers.latitude,
                   markers.longitude,

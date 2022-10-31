@@ -38,6 +38,7 @@ function MyComponent(props) {
   const [markerLoc, setMarkerLoc] = useStateWithCallback(0);
   const [markers, setMarkers] = useState([
     {
+      marker_id: 0,
       marker_name: "default",
       latitude: 0,
       longitude: 0,
@@ -45,6 +46,7 @@ function MyComponent(props) {
     }
   ]);
   const [marker, setMarker] = useState({
+    marker_id: 0,
     marker_name: "default",
     latitude: 0,
     longitude: 0,
@@ -158,16 +160,14 @@ function MyComponent(props) {
         styles: MapStyle,
       }}
     >
+      {/*Update drawmanager marker UI whenever we modify the icon without refreshing */}
       {markers.map((marker) => {
-        let markerId = 0;
         marker.position = {
           lat: marker.latitude,
           lng: marker.longitude,
         };
-        markerId++;
         return (
           <Marker
-            key={markerId}
             position={marker.position}
             onClick={() => {
               if (markerClicked === false) {
@@ -176,6 +176,7 @@ function MyComponent(props) {
               setMarker(marker);
             }}
             icon={"/images/" + marker.file_name}
+            key={marker.marker_id}
           />
         );
       })}
@@ -183,6 +184,9 @@ function MyComponent(props) {
         show={markerClicked}
         onHide={() => setMarkerClicked(false)}
         marker={marker}
+        markers={markers}
+        setMarker={setMarker}
+        setMarkers={setMarkers}
       />
       <Marker
         position={center}
@@ -217,6 +221,7 @@ function MyComponent(props) {
       <DrawingManager
         onMarkerComplete={(marker) => {
           const position = marker.position;
+          marker.setIcon("/images/edit_location_FILL0_wght400_GRAD0_opsz48.png");
           Axios.post("http://localhost:5000/api/setMarkerInfo", { position })
             .then((response) => {
               console.log(response);
@@ -233,8 +238,14 @@ function MyComponent(props) {
                   if (locationInfo.latitude == position.lat().toFixed(8) && locationInfo.longitude == position.lng().toFixed(8)) {
                     if (markerClicked === false) {
                       setMarkerClicked(true);
+                      setMarker({
+                        marker_id: locationInfo.marker_id,
+                        marker_name: locationInfo.marker_name,
+                        latitude: locationInfo.latitude,
+                        longitude: locationInfo.longitude,
+                        file_name: locationInfo.file_name,
+                      })
                     }
-                    setLocation(locationInfo);
                     
                   }
                 });
