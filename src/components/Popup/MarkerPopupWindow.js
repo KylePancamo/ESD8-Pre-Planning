@@ -84,37 +84,6 @@ function PopupWindow(props) {
         .catch((err) => {
           console.log(err);
         });
-    } else {
-      const data = {
-        marker_id: props.selectedMarker.marker_id,
-        icon_id: selectedIcon.icon_id,
-      };
-      Axios.post("http://localhost:5000/api/updateMarker", { data })
-        .then((response) => {
-          // add drawmanager marker to props.markers array
-          props.setMarkers((current) => [
-            ...current,
-            {
-              marker_id: props.selectedMarker.marker_id,
-              marker_name: props.selectedMarker.marker_name,
-              latitude: props.selectedMarker.latitude,
-              longitude: props.selectedMarker.longitude,
-              file_name: selectedIcon.icon_name,
-            },
-          ]);
-          props.setSelectedMarker((prevMarker) => ({
-            ...prevMarker,
-            file_name: selectedIcon.icon_name,
-          }));
-          // remove drawManager marker from the map
-          props.drawManagerMarker.setMap(null);
-        })
-        .then(() => {
-          setMarkerSaved(true);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     }
   };
 

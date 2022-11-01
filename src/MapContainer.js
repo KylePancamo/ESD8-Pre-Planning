@@ -161,11 +161,10 @@ function MyComponent(props) {
         styles: MapStyle,
       }}
     >
-      {/*Update drawmanager marker UI whenever we modify the icon without refreshing */}
       {markers.map((marker) => {
         marker.position = {
-          lat: marker.latitude,
-          lng: marker.longitude,
+          lat: parseFloat(marker.latitude),
+          lng: parseFloat(marker.longitude),
         };
         return (
           <Marker
@@ -205,40 +204,25 @@ function MyComponent(props) {
       <DrawingManager
         onMarkerComplete={(marker) => {
           const position = marker.position;
-          marker.setIcon("/images/edit_location_FILL0_wght400_GRAD0_opsz48.png");
+          marker.setMap(null);
           Axios.post("http://localhost:5000/api/setMarkerInfo", { position })
             .then((response) => {
-              console.log(response);
+              console.log(response.data.payload)
+              // add marker to markers array
+              setMarkers((current) => [
+                ...current,
+                {
+                  marker_id: response.data.payload.marker_id,
+                  marker_name: response.data.payload.marker_name,
+                  latitude: parseFloat(response.data.payload.latitude),
+                  longitude: parseFloat(response.data.payload.longitude),
+                  file_name: "edit_location_FILL0_wght400_GRAD0_opsz48.png",
+                },
+              ]);
             })
             .catch((error) => {
               console.log(error);
             });
-            
-          marker.addListener("click", () => {
-            let position = marker.position;
-            Axios.get("http://localhost:5000/api/getMarkerInfo")
-              .then((response) => {
-                response.data.forEach((locationInfo) => {
-                  if (locationInfo.latitude == position.lat().toFixed(8) && locationInfo.longitude == position.lng().toFixed(8)) {
-                    if (markerClicked === false) {
-                      setMarkerClicked(true);
-                      setSelectedMarker({
-                        marker_id: locationInfo.marker_id,
-                        marker_name: locationInfo.marker_name,
-                        latitude: locationInfo.latitude,
-                        longitude: locationInfo.longitude,
-                        file_name: locationInfo.file_name,
-                      })
-                      setDrawManagerMarker(marker);
-                    }
-                    
-                  }
-                });
-              })
-              .catch((error) => {
-                console.log(error);
-            });
-          });
         }}
         options={
           {

@@ -34,12 +34,20 @@ app.post('/api/setMarkerInfo', (req, res) => {
     req.body.position.lat.toFixed(8),
     req.body.position.lng.toFixed(8)
   ]
-  const query = "INSERT INTO markers(marker_name, latitude, longitude, icon_id) VALUES ('test', ?, ?, 10) "
+  const query = "INSERT INTO markers(marker_name, latitude, longitude, icon_id) VALUES ('test', ?, ?, 10)"
   db.query(
     query, data, (err, result) => {
       if (err) {
         console.log(err.message)
       } else {
+        const payload = {
+          marker_id: result.insertId,
+          marker_name: "test",
+          latitude: req.body.position.lat.toFixed(8),
+          longitude: req.body.position.lng.toFixed(8),
+          file_name: "/images/edit_location_FILL0_wght400_GRAD0_opsz48.png",
+        }
+        result.payload = payload;
         res.status(200).send(result);
       }
     }
