@@ -197,28 +197,10 @@ function MyComponent(props) {
         label={
           (window.google.maps.MarkerLabel = {
             text: "ESD8",
-            fontSize: "12px",
+            fontSize: "10px",
           })
         }
-      >
-        {activeMarker === true ? (
-          <InfoWindow onCloseClick={() => setActiveMarker(false)}>
-            <div style={divStyle}>
-              <h1>
-                {" "}
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-                convallis pretium fermentum. Cras sagittis, libero quis maximus
-                sagittis, magna velit pulvinar tellus, a tincidunt magna tellus
-                a est. Aliquam pretium eros lectus. Nunc elit lorem, imperdiet
-                malesuada iaculis vel, pellentesque non enim. In lobortis nibh
-                at libero vulputate, laoreet ullamcorper arcu elementum. Morbi
-                faucibus vel urna nec iaculis. Donec sit amet tempus lectus.
-                Nunc pulvinar ex quis interdum elementum.
-              </h1>
-            </div>
-          </InfoWindow>
-        ) : null}
-      </Marker>
+      />
 
       <DrawingManager
         onMarkerComplete={(marker) => {
