@@ -98,7 +98,7 @@ app.get('/api/getMarkerInfo', (req, res) => {
 });
 
 app.delete('/api/deleteMarkers', (req, res) => {
-  const query = "DELETE FROM markers"
+  const query = "TRUNCATE TABLE markers"
 
   db.query(
     query,
