@@ -74,7 +74,7 @@ function AdminPanel(props) {
                 <tbody>
                   {images.map((image) => {
                     return (
-                      <tr className="tr">
+                      <tr className="tr" key={image.icon_id}>
                         <td>{image.icon_id}</td>
                         <td>
                           <img
