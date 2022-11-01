@@ -36,6 +36,7 @@ function MyComponent(props) {
   const [libraries] = useState(["drawing", "places"]);
   const [activeMarker, setActiveMarker] = useState(false);
   const [markerLoc, setMarkerLoc] = useStateWithCallback(0);
+  const [drawManagerMarker, setDrawManagerMarker] = useState();
   const [markers, setMarkers] = useState([
     {
       marker_id: 0,
@@ -187,6 +188,7 @@ function MyComponent(props) {
         markers={markers}
         setMarker={setMarker}
         setMarkers={setMarkers}
+        drawManagerMarker={drawManagerMarker}
       />
       <Marker
         position={center}
@@ -245,6 +247,7 @@ function MyComponent(props) {
                         longitude: locationInfo.longitude,
                         file_name: locationInfo.file_name,
                       })
+                      setDrawManagerMarker(marker);
                     }
                     
                   }

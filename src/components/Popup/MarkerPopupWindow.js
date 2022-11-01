@@ -53,88 +53,69 @@ function PopupWindow(props) {
       });
   }, []);
 
-  const handleIconChange = () => {
-    props.setMarkers((markers) => {
-      return markers.map((marker) => {
-        if (marker.marker_id === props.marker.marker_id) {
-          const data = {
-            marker_id: marker.marker_id,
-            icon_id: selectedIcon.icon_id,
-          };
-          Axios.post("http://localhost:5000/api/updateMarker", { data })
-            .then((response) => {
-              props.setMarker((prevMarker) => ({
-                ...prevMarker,
-                file_name: selectedIcon.icon_name,
-              }));
-              marker.file_name = selectedIcon.icon_name;
-            })
-            .then(() => {
-              setMarkerSaved(true);
-            })
-            .catch((err) => {
-              console.log(err);
+  const handleMarkerSaving = () => {
+    let markerFound = props.markers.find(
+      (marker) => marker.marker_id === props.marker.marker_id
+    );
+    if (markerFound) {
+      const data = {
+        marker_id: props.marker.marker_id,
+        icon_id: selectedIcon.icon_id,
+      };
+      Axios.post("http://localhost:5000/api/updateMarker", { data })
+        .then((response) => {
+          props.setMarker((prevMarker) => ({
+            ...prevMarker,
+            file_name: selectedIcon.icon_name,
+          }));
+          // update props.markers array with new icon
+          props.setMarkers((markers) => {
+            return markers.map((marker) => {
+              if (marker.marker_id === props.marker.marker_id) {
+                marker.file_name = selectedIcon.icon_name;
+              }
+              return marker;
             });
-        }
-        return marker;
-      });
-    });
-  };
-
-  const handleIconChange2 = () => {
-    new Promise((resolve, reject) => {
-      fetchMarker(resolve);
-    }).then((response) => {
-      if (!response) {
-        const data = {
-          marker_id: props.marker.marker_id,
-          icon_id: selectedIcon.icon_id,
-        };
-        Axios.post("http://localhost:5000/api/updateMarker", { data })
-          .then((response) => {
-            props.setMarker((prevMarker) => ({
-              ...prevMarker,
-              file_name: selectedIcon.icon_name,
-            }));
-          })
-          .then(() => {
-            setMarkerSaved(true);
-          })
-          .catch((err) => {
-            console.log(err);
           });
-      }
-    });
-  };
-
-  const fetchMarker = (resolve) => {
-    props.markers.map((marker) => {
-      if (marker.marker_id === props.marker.marker_id) {
-        const data = {
-          marker_id: marker.marker_id,
-          icon_id: selectedIcon.icon_id,
-        };
-        Axios.post("http://localhost:5000/api/updateMarker", { data })
-          .then((response) => {
-            props.setMarker((prevMarker) => ({
-              ...prevMarker,
+        })
+        .then(() => {
+          setMarkerSaved(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      const data = {
+        marker_id: props.marker.marker_id,
+        icon_id: selectedIcon.icon_id,
+      };
+      Axios.post("http://localhost:5000/api/updateMarker", { data })
+        .then((response) => {
+          // add drawmanager marker to props.markers array
+          props.setMarkers((current) => [
+            ...current,
+            {
+              marker_id: props.marker.marker_id,
+              marker_name: props.marker.marker_name,
+              latitude: props.marker.latitude,
+              longitude: props.marker.longitude,
               file_name: selectedIcon.icon_name,
-            }));
-            marker.file_name = selectedIcon.icon_name;
-          })
-          .then(() => {
-            setMarkerSaved(true);
-          })
-          .then(() => {
-            setCurrentMarker(marker);
-            resolve(marker);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
-    resolve(null);
+            },
+          ]);
+          props.setMarker((prevMarker) => ({
+            ...prevMarker,
+            file_name: selectedIcon.icon_name,
+          }));
+          // remove drawManager marker from the map
+          props.drawManagerMarker.setMap(null);
+        })
+        .then(() => {
+          setMarkerSaved(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -233,8 +214,10 @@ function PopupWindow(props) {
         </Container>
       </Modal.Body>
       <Modal.Footer>
+          Delete Marker
+        </Button>
         <Button onClick={props.onHide}>Close</Button>
-        <Button onClick={handleIconChange2}>Save</Button>
+        <Button onClick={handleMarkerSaving}>Save</Button>
       </Modal.Footer>
       <GenericPopupWindow
         show={markerSaved}
