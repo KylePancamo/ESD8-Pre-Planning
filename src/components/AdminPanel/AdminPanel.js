@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Axios from "axios";
 import FileUploads from "../Popup/FileUploads";
 import GenericPopupWindow from "../Popup/GenericPopup";
-
+import Button from "react-bootstrap/Button";
 function AdminPanel(props) {
   const [fileUploadPopup, setFileUploadPopup] = useState(false);
   const [adminPanel, setAdminPanel] = useState(false);
@@ -38,22 +38,21 @@ function AdminPanel(props) {
       >
         <div className="admin-panel">
           <div className="admin-panel-leftbar">
-            <button
-              className="btn btn-primary"
+            <Button
+              variant="danger"
               onClick={() => {
                 props.flushMarkers();
               }}
             >
               FlushMarkers
-            </button>
-            <button
-              className="btn btn-primary"
+            </Button>
+            <Button
               onClick={() => {
                 setFileUploadPopup(true);
               }}
             >
               Upload File
-            </button>
+            </Button>
             <FileUploads
               show={fileUploadPopup}
               onHide={() => {
