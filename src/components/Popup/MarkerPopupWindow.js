@@ -55,23 +55,23 @@ function PopupWindow(props) {
 
   const handleMarkerSaving = () => {
     let markerFound = props.markers.find(
-      (marker) => marker.marker_id === props.marker.marker_id
+      (marker) => marker.marker_id === props.selectedMarker.marker_id
     );
     if (markerFound) {
       const data = {
-        marker_id: props.marker.marker_id,
+        marker_id: props.selectedMarker.marker_id,
         icon_id: selectedIcon.icon_id,
       };
       Axios.post("http://localhost:5000/api/updateMarker", { data })
         .then((response) => {
-          props.setMarker((prevMarker) => ({
+          props.setSelectedMarker((prevMarker) => ({
             ...prevMarker,
             file_name: selectedIcon.icon_name,
           }));
           // update props.markers array with new icon
           props.setMarkers((markers) => {
             return markers.map((marker) => {
-              if (marker.marker_id === props.marker.marker_id) {
+              if (marker.marker_id === props.selectedMarker.marker_id) {
                 marker.file_name = selectedIcon.icon_name;
               }
               return marker;
@@ -86,7 +86,7 @@ function PopupWindow(props) {
         });
     } else {
       const data = {
-        marker_id: props.marker.marker_id,
+        marker_id: props.selectedMarker.marker_id,
         icon_id: selectedIcon.icon_id,
       };
       Axios.post("http://localhost:5000/api/updateMarker", { data })
@@ -95,14 +95,14 @@ function PopupWindow(props) {
           props.setMarkers((current) => [
             ...current,
             {
-              marker_id: props.marker.marker_id,
-              marker_name: props.marker.marker_name,
-              latitude: props.marker.latitude,
-              longitude: props.marker.longitude,
+              marker_id: props.selectedMarker.marker_id,
+              marker_name: props.selectedMarker.marker_name,
+              latitude: props.selectedMarker.latitude,
+              longitude: props.selectedMarker.longitude,
               file_name: selectedIcon.icon_name,
             },
           ]);
-          props.setMarker((prevMarker) => ({
+          props.setSelectedMarker((prevMarker) => ({
             ...prevMarker,
             file_name: selectedIcon.icon_name,
           }));
@@ -159,12 +159,12 @@ function PopupWindow(props) {
         <Container>
           <Row>
             <Col xs={6} md={4}>
-              Marker Name: {props.marker.marker_name}
+              Marker Name: {props.selectedMarker.marker_name}
             </Col>
             <Col xs={6} md={4}>
               <b>Current Marker Icon: </b>
               <img
-                src={"/images/" + props.marker.file_name}
+                src={"/images/" + props.selectedMarker.file_name}
                 alt={""}
                 className="images"
               />
@@ -208,7 +208,7 @@ function PopupWindow(props) {
           <Row>
             <Col xs={6} lg={8}>
               <b>Marker Location: </b>
-              {props.marker.latitude},{props.marker.longitude}
+              {props.selectedMarker.latitude},{props.selectedMarker.longitude}
             </Col>
           </Row>
         </Container>

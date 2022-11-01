@@ -46,7 +46,7 @@ function MyComponent(props) {
       file_name: "",
     }
   ]);
-  const [marker, setMarker] = useState({
+  const [selectedMarker, setSelectedMarker] = useState({
     marker_id: 0,
     marker_name: "default",
     latitude: 0,
@@ -174,7 +174,7 @@ function MyComponent(props) {
               if (markerClicked === false) {
                 setMarkerClicked(true);
               }
-              setMarker(marker);
+              setSelectedMarker(marker);
             }}
             icon={"/images/" + marker.file_name}
             key={marker.marker_id}
@@ -184,9 +184,9 @@ function MyComponent(props) {
       <Popup
         show={markerClicked}
         onHide={() => setMarkerClicked(false)}
-        marker={marker}
+        selectedMarker={selectedMarker}
         markers={markers}
-        setMarker={setMarker}
+        setSelectedMarker={setSelectedMarker}
         setMarkers={setMarkers}
         drawManagerMarker={drawManagerMarker}
       />
@@ -240,7 +240,7 @@ function MyComponent(props) {
                   if (locationInfo.latitude == position.lat().toFixed(8) && locationInfo.longitude == position.lng().toFixed(8)) {
                     if (markerClicked === false) {
                       setMarkerClicked(true);
-                      setMarker({
+                      setSelectedMarker({
                         marker_id: locationInfo.marker_id,
                         marker_name: locationInfo.marker_name,
                         latitude: locationInfo.latitude,
