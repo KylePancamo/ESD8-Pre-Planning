@@ -7,6 +7,7 @@ import {
   Marker,
   OverlayView,
   DrawingManager,
+  Polygon,
   StandaloneSearchBox,
 } from "@react-google-maps/api";
 
@@ -31,6 +32,13 @@ const divStyle = {
   border: `1px solid #ccc`,
   padding: 15,
 };
+
+// const paths = [
+//   { lat: 25.774, lng: -80.19 },
+//   { lat: 18.466, lng: -66.118 },
+//   { lat: 32.321, lng: -64.757 },
+//   { lat: 25.774, lng: -80.19 }
+// ]
 
 function MyComponent(props) {
   const [libraries] = useState(["drawing", "places"]);
@@ -263,6 +271,20 @@ function MyComponent(props) {
       <AdminPanel
         flushMarkers={() => FlushMarkers()}
       />
+
+      {/* <Polygon 
+        paths={paths}
+        options={{
+          fillColor: '#FF0000',
+          fillOpacity: 0.35,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          clickable: false,
+          editable: false,
+          zIndex: 1
+        }}
+      /> */}
     </GoogleMap>
   ) : (
     <></>
