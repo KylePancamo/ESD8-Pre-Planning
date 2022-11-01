@@ -13,26 +13,6 @@ import Alert from "react-bootstrap/Alert";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 
-function EditWindow(props) {
-  return (
-    <GenericPopupWindow
-      show={props.edit}
-      onHide={() => props.setEdit(false)}
-      size="sm"
-    >
-      <Form>
-        <Form.Group controlId="formBasicEmail">
-          <Form.Label>Marker Name</Form.Label>
-          <Form.Control type="text" placeholder="Enter Marker Name" />
-          <Form.Text className="text-muted">
-            This is the name of the marker.
-          </Form.Text>
-        </Form.Group>
-      </Form>
-    </GenericPopupWindow>
-  );
-}
-
 function PopupWindow(props) {
   const [imageIcons, setImageIcons] = useState([]);
   const [selectedIcon, setSelectedIcon] = useState({
@@ -41,7 +21,9 @@ function PopupWindow(props) {
   });
   const [edit, setEdit] = useState(false);
   const [markerSaved, setMarkerSaved] = useState(false);
+  const [markerDeleted, setMarkerDeleted] = useState(false);
   const [currentMarker, setCurrentMarker] = useState();
+  const [markerName, setMarkerName] = useState("");
 
   useEffect(() => {
     Axios.get("http://localhost:5000/api/getIcons")
@@ -57,10 +39,12 @@ function PopupWindow(props) {
     let markerFound = props.markers.find(
       (marker) => marker.marker_id === props.selectedMarker.marker_id
     );
+
     if (markerFound) {
       const data = {
         marker_id: props.selectedMarker.marker_id,
         icon_id: selectedIcon.icon_id,
+        marker_name: markerName,
       };
       Axios.post("http://localhost:5000/api/updateMarker", { data })
         .then((response) => {
@@ -87,6 +71,31 @@ function PopupWindow(props) {
     }
   };
 
+  const deleteMarkerPopup = () => {
+    setMarkerDeleted(true);
+  }
+
+  const handleMarkerDelete = () => {
+    const data = {
+      marker_id: props.selectedMarker.marker_id,
+    };
+    Axios.delete("http://localhost:5000/api/deleteMarker", { data })
+      .then((response) => {
+        console.log(response);
+        // remove marker from props.markers array
+        props.setMarkers((markers) => {
+          return markers.filter(
+            (marker) => marker.marker_id !== props.selectedMarker.marker_id
+          );
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      setMarkerDeleted(false);
+      props.onHide();
+  }
+
   return (
     <Modal
       size="lg"
@@ -104,31 +113,24 @@ function PopupWindow(props) {
         <Modal.Title id="contained-modal-title-vcenter" className="m-2">
           Marker Modification
         </Modal.Title>
-        <Button
-          size="sm"
-          onClick={() => {
-            setEdit(true);
-          }}
-        >
-          <div className="edit-menu-button">
-            <Pencil />
-            Edit
-          </div>
-        </Button>
-        {
-          <EditWindow
-            edit={edit}
-            setEdit={() => {
-              setEdit(false);
-            }}
-          />
-        }
       </Modal.Header>
       <Modal.Body>
         <Container>
           <Row>
             <Col xs={6} md={4}>
-              Marker Name: {props.selectedMarker.marker_name}
+              <Form>
+                <Form.Group controlId="formBasicText">
+                  <Form.Label>Current Marker Name: <b>{props.selectedMarker.marker_name}</b></Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter New Marker Name"
+                    onChange={(e) => {
+                      setMarkerName(e.target.value);
+                    }}
+                    >
+                    </Form.Control>
+                </Form.Group>
+              </Form>
             </Col>
             <Col xs={6} md={4}>
               <b>Current Marker Icon: </b>
@@ -184,6 +186,7 @@ function PopupWindow(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button
+          onClick={deleteMarkerPopup}
           variant={"danger"}
           className="delele-marker"
         >
@@ -199,6 +202,17 @@ function PopupWindow(props) {
       >
         <Alert variant="success">
           The marker icon was successfully changed. You can close this box
+        </Alert>
+      </GenericPopupWindow>
+      <GenericPopupWindow
+        show={markerDeleted}
+        onHide={() => setMarkerDeleted(false)}
+        title="Marker Deletion Warning"
+        extraButton={"Delete Marker"}
+        extraAction={handleMarkerDelete}
+      >
+        <Alert variant="danger">
+          Are you sure you want to delete this marker? This action cannot be  undone.
         </Alert>
       </GenericPopupWindow>
     </Modal>

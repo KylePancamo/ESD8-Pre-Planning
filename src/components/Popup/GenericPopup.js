@@ -28,6 +28,9 @@ function GenericPopupWindow(props) {
         className={props.footerClassName}
       >
         <Button onClick={props.onHide}>Close</Button>
+        {props.extraButton ? (
+          <Button onClick={props.extraAction}>{props.extraButton}</Button>
+        ) : null }
       </Modal.Footer>
     </Modal>
   );

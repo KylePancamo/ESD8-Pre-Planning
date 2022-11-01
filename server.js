@@ -112,6 +112,25 @@ app.delete('/api/deleteMarkers', (req, res) => {
   )
 })
 
+app.delete('/api/deleteMarker', (req, res) => {
+  const query = "DELETE FROM markers WHERE marker_id = ?"
+  const data = [
+    req.body.marker_id
+  ]
+
+  db.query(
+    query, data,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send(result);
+      }
+    }
+  )
+})
+
+
 app.post('/api/upload', (req, res) => {
   let file = req.files.file;
   if (file.mimetype !== 'image/png') {

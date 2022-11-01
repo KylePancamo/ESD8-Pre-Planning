@@ -204,10 +204,13 @@ function MyComponent(props) {
       <DrawingManager
         onMarkerComplete={(marker) => {
           const position = marker.position;
-          marker.setMap(null);
+          marker.setIcon("/images/edit_location_FILL0_wght400_GRAD0_opsz48.png");
+          // Make marker transition little nicer with timeout
+          setTimeout(() => {
+            marker.setMap(null);
+          }, 500);
           Axios.post("http://localhost:5000/api/setMarkerInfo", { position })
             .then((response) => {
-              console.log(response.data.payload)
               // add marker to markers array
               setMarkers((current) => [
                 ...current,
