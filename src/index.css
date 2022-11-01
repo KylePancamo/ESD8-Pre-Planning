@@ -269,3 +269,14 @@ code {
 .list-image-container .tables {
   text-align: left;
 }
+
+.modal-footer {
+  position: relative;
+  display: flex;
+}
+
+.delele-marker {
+  position: absolute;
+  left: 1vw;
+}
+

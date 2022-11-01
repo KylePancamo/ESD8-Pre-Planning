@@ -214,6 +214,10 @@ function PopupWindow(props) {
         </Container>
       </Modal.Body>
       <Modal.Footer>
+        <Button
+          variant={"danger"}
+          className="delele-marker"
+        >
           Delete Marker
         </Button>
         <Button onClick={props.onHide}>Close</Button>
