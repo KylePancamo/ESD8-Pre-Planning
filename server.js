@@ -160,7 +160,11 @@ app.post('/api/upload', (req, res) => {
         if (err) {
           console.log(err);
         } else {
-          res.status(200).send({message: 'File uploaded'});
+          const payload = {
+            icon_id: result.insertId,
+            file_name: filename,
+          }
+          res.status(200).send({message: 'File uploaded', payload: payload});
         }
       })
     }

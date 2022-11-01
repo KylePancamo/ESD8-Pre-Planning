@@ -58,6 +58,7 @@ function AdminPanel(props) {
               onHide={() => {
                 setFileUploadPopup(false);
               }}
+              setImages={setImages}
             />
           </div>
           <div className="admin-panel-main">

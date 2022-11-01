@@ -25,7 +25,7 @@ function FileUpload(props) {
           setFileUploadStatus(true);
           setFileUploadString(response.data.message);
           setFileName(inputRef.current?.files[0].name);
-          console.log(response);
+          props.setImages(currImages => [...currImages, response.data.payload]);
         })
         .catch((error) => {
           console.log(error);
