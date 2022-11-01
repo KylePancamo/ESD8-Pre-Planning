@@ -24,8 +24,8 @@ function PopupWindow(props) {
   const [markerDeleted, setMarkerDeleted] = useState(false);
   const [currentMarker, setCurrentMarker] = useState();
   const [markerName, setMarkerName] = useState("");
-
-  useEffect(() => {
+  
+  const fetchImages = () => {
     Axios.get("http://localhost:5000/api/getIcons")
       .then((response) => {
         setImageIcons(response.data);
@@ -33,8 +33,7 @@ function PopupWindow(props) {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-
+  }
   const handleMarkerSaving = () => {
     let markerFound = props.markers.find(
       (marker) => marker.marker_id === props.selectedMarker.marker_id
@@ -105,6 +104,9 @@ function PopupWindow(props) {
       onHide={props.onHide}
       backdrop="static"
       keyboard={false}
+      onEnter={() => {
+        fetchImages();
+      }}
       onExit={() => {
         setSelectedIcon({ icon_id: 0, icon_name: "" });
       }}
