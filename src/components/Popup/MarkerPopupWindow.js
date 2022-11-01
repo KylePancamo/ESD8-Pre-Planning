@@ -24,7 +24,7 @@ function PopupWindow(props) {
   const [markerDeleted, setMarkerDeleted] = useState(false);
   const [currentMarker, setCurrentMarker] = useState();
   const [markerName, setMarkerName] = useState("");
-  
+
   const fetchImages = () => {
     Axios.get("http://localhost:5000/api/getIcons")
       .then((response) => {
@@ -33,7 +33,7 @@ function PopupWindow(props) {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
   const handleMarkerSaving = () => {
     let markerFound = props.markers.find(
       (marker) => marker.marker_id === props.selectedMarker.marker_id
@@ -72,7 +72,7 @@ function PopupWindow(props) {
 
   const deleteMarkerPopup = () => {
     setMarkerDeleted(true);
-  }
+  };
 
   const handleMarkerDelete = () => {
     const data = {
@@ -91,9 +91,9 @@ function PopupWindow(props) {
       .catch((err) => {
         console.log(err);
       });
-      setMarkerDeleted(false);
-      props.onHide();
-  }
+    setMarkerDeleted(false);
+    props.onHide();
+  };
 
   return (
     <Modal
@@ -122,15 +122,17 @@ function PopupWindow(props) {
             <Col xs={6} md={4}>
               <Form>
                 <Form.Group controlId="formBasicText">
-                  <Form.Label>Current Marker Name: <b>{props.selectedMarker.marker_name}</b></Form.Label>
+                  <Form.Label>
+                    Current Marker Name:{" "}
+                    <b>{props.selectedMarker.marker_name}</b>
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Enter New Marker Name"
                     onChange={(e) => {
                       setMarkerName(e.target.value);
                     }}
-                    >
-                    </Form.Control>
+                  ></Form.Control>
                 </Form.Group>
               </Form>
             </Col>
@@ -214,7 +216,8 @@ function PopupWindow(props) {
         extraAction={handleMarkerDelete}
       >
         <Alert variant="danger">
-          Are you sure you want to delete this marker? This action cannot be  undone.
+          Are you sure you want to delete this marker? This action cannot be
+          undone.
         </Alert>
       </GenericPopupWindow>
     </Modal>

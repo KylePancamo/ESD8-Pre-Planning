@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Popup from './components/Popup/MarkerPopupWindow';
+import Popup from "./components/Popup/MarkerPopupWindow";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -12,7 +12,7 @@ import {
 } from "@react-google-maps/api";
 
 import Axios from "axios";
-import './useStateWithCallback'
+import "./useStateWithCallback";
 import useStateWithCallback from "./useStateWithCallback";
 import GenericPopupWindow from "./components/Popup/GenericPopup";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
@@ -52,7 +52,7 @@ function MyComponent(props) {
       latitude: 0,
       longitude: 0,
       file_name: "",
-    }
+    },
   ]);
   const [selectedMarker, setSelectedMarker] = useState({
     marker_id: 0,
@@ -144,15 +144,17 @@ function MyComponent(props) {
 
   const setLocation = (marker) => {
     setMarkerLoc(marker);
-  }
+  };
 
   const FlushMarkers = () => {
-    Axios.delete("http://localhost:5000/api/deleteMarkers").then((response) => {
-      console.log(response);
-      setMarkers([]);
-    }).catch((err) => {
-      console.log(err);
-    });
+    Axios.delete("http://localhost:5000/api/deleteMarkers")
+      .then((response) => {
+        console.log(response);
+        setMarkers([]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return isLoaded ? (
@@ -212,7 +214,9 @@ function MyComponent(props) {
       <DrawingManager
         onMarkerComplete={(marker) => {
           const position = marker.position;
-          marker.setIcon("/images/edit_location_FILL0_wght400_GRAD0_opsz48.png");
+          marker.setIcon(
+            "/images/edit_location_FILL0_wght400_GRAD0_opsz48.png"
+          );
           // Make marker transition little nicer with timeout
           setTimeout(() => {
             marker.setMap(null);
@@ -235,13 +239,11 @@ function MyComponent(props) {
               console.log(error);
             });
         }}
-        options={
-          {
-            drawingControlOptions:{
-              drawingModes: ['marker']
-            }
-          }
-        }
+        options={{
+          drawingControlOptions: {
+            drawingModes: ["marker"],
+          },
+        }}
       />
 
       <StandaloneSearchBox
@@ -268,9 +270,7 @@ function MyComponent(props) {
           }}
         />
       </StandaloneSearchBox>
-      <AdminPanel
-        flushMarkers={() => FlushMarkers()}
-      />
+      <AdminPanel flushMarkers={() => FlushMarkers()} />
 
       {/* <Polygon 
         paths={paths}

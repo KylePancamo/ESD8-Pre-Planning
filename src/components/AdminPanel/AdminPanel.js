@@ -9,13 +9,15 @@ function AdminPanel(props) {
   const [mainContentString, setMainContentString] = useState("");
   const [images, setImages] = useState([]);
 
-  const fetchImages = ()  => {
-    Axios.get("http://localhost:5000/api/getIcons").then((response) => {
-      setImages(response.data);
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
+  const fetchImages = () => {
+    Axios.get("http://localhost:5000/api/getIcons")
+      .then((response) => {
+        setImages(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="admin-ui">

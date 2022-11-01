@@ -3,7 +3,6 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Axios from "axios";
 import Alert from "react-bootstrap/Alert";
-import Spinner from "react-bootstrap/Spinner";
 
 function FileUpload(props) {
   let inputRef = useRef(null);
@@ -25,7 +24,10 @@ function FileUpload(props) {
           setFileUploadStatus(true);
           setFileUploadString(response.data.message);
           setFileName(inputRef.current?.files[0].name);
-          props.setImages(currImages => [...currImages, response.data.payload]);
+          props.setImages((currImages) => [
+            ...currImages,
+            response.data.payload,
+          ]);
         })
         .catch((error) => {
           console.log(error);
@@ -68,13 +70,13 @@ function FileUpload(props) {
               {fileName ? fileName : "Upload"}
             </button>
           </div>
-          { FileUploadStatus === true ? (
+          {FileUploadStatus === true ? (
             <Alert variant="success" className="m-2">
               {FileUploadString}
             </Alert>
           ) : null}
 
-          { FileUploadStatus === false ? (
+          {FileUploadStatus === false ? (
             <Alert variant="danger" className="m-2">
               {FileUploadString}
             </Alert>
