@@ -270,6 +270,28 @@ code {
   text-align: left;
 }
 
+.modal-title{
+  position: relative;
+  left: 40%;
+}
+
+.marker-location {
+  display: block;
+  position: absolute;
+  width: 25%;
+  border-radius: 5px;
+}
+
+.icon-modification {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  justify-items: center;
+  align-items: center;
+  margin-bottom: 5vh;
+}
+
 .modal-footer {
   position: relative;
   display: flex;

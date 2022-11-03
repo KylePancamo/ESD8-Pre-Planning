@@ -34,6 +34,14 @@ function PopupWindow(props) {
         console.log(err);
       });
   };
+
+  useEffect(() => {
+    setSelectedIcon({
+      icon_id: 0,
+      icon_name: props.selectedMarker.file_name,
+    })
+  }, [props] );
+
   const handleMarkerSaving = () => {
     let markerFound = props.markers.find(
       (marker) => marker.marker_id === props.selectedMarker.marker_id
@@ -104,7 +112,7 @@ function PopupWindow(props) {
       onHide={props.onHide}
       backdrop="static"
       keyboard={false}
-      onEnter={() => {
+      onEntered={() => {
         fetchImages();
       }}
       onExit={() => {
@@ -112,43 +120,27 @@ function PopupWindow(props) {
       }}
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter" className="m-2">
-          Marker Modification
-        </Modal.Title>
+        <div className="marker-location">
+          <b>Marker Location: </b>
+          {props.selectedMarker.latitude},{props.selectedMarker.longitude}
+        </div>  
+        <Modal.Title className="header-title">Edit this Marker</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Container>
           <Row>
-            <Col xs={6} md={4}>
-              <Form>
-                <Form.Group controlId="formBasicText">
-                  <Form.Label>
-                    Current Marker Name:{" "}
-                    <b>{props.selectedMarker.marker_name}</b>
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter New Marker Name"
-                    onChange={(e) => {
-                      setMarkerName(e.target.value);
-                    }}
-                  ></Form.Control>
-                </Form.Group>
-              </Form>
-            </Col>
-            <Col xs={6} md={4}>
-              <b>Current Marker Icon: </b>
-              <img
-                src={"/images/" + props.selectedMarker.file_name}
-                alt={""}
-                className="images"
-              />
-            </Col>
-            <Col xs={6} md={4}>
-              <Col xs={6} md={2}>
+            <Col xs={12} md={2} className="icon-modification">
+              <b>Icon: </b>
+              <Col xs={6} md={4}>
                 <DropdownButton
                   id="dropdown-basic-button"
-                  title="Select an icon"
+                  title={
+                    <img
+                      src={"/images/" + selectedIcon.icon_name}
+                      alt={""}
+                      className="images"
+                    />
+                  }
                 >
                   {imageIcons.map((icon) => (
                     <Dropdown.Item
@@ -170,20 +162,26 @@ function PopupWindow(props) {
                     </Dropdown.Item>
                   ))}
                 </DropdownButton>
-                {selectedIcon.icon_name !== "" ? (
-                  <img
-                    src={"/images/" + selectedIcon.icon_name}
-                    alt={""}
-                    className="images"
-                  />
-                ) : null}
               </Col>
             </Col>
           </Row>
           <Row>
-            <Col xs={6} lg={8}>
-              <b>Marker Location: </b>
-              {props.selectedMarker.latitude},{props.selectedMarker.longitude}
+            <Col xs={6} md={4}>
+              <Form>
+                <Form.Group controlId="formBasicText">
+                  <Form.Label>
+                    Current Marker Name:{" "}
+                    <b>{props.selectedMarker.marker_name}</b>
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter New Marker Name"
+                    onChange={(e) => {
+                      setMarkerName(e.target.value);
+                    }}
+                  ></Form.Control>
+                </Form.Group>
+              </Form>
             </Col>
           </Row>
         </Container>
