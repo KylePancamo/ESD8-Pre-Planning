@@ -22,6 +22,7 @@ const db = mysql.createConnection({
 db.connect((err) => {
   if (err) {
       console.log("\x1b[41m", "MySQL Connection Error:")
+      console.log(process.env.MYSQL_DATABASE)
       throw err;
   }
 
@@ -182,6 +183,28 @@ app.get('/api/getIcons', (req, res) => {
     }
   });
 });
+
+/*********SIDEBAR REQUESTS*********/
+
+app.post('/getSidebarData', (req, res) => {
+  let address = req.body.address;
+  const query = "SELECT * FROM pre_planning WHERE occupancyaddress = ?";
+  const data = [ 
+    address, 
+  ]
+
+  db.query(
+    query, data, (err, result) => {
+      if (err) {
+        console.log(err.message);
+      } else {
+        res.status(200).send(result);
+      }
+    }
+  );
+});
+
+/*********SIDEBAR REQUESTS*********/
 
 const PORT = 5000;
 // start express server on port 5000

@@ -1,4 +1,4 @@
-function Header() {
+function Header(props) {
   return (
     <div className="sidebar-header">
       <p className="sidebar-header__title">Site Name</p>

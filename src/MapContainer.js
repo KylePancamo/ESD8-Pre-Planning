@@ -79,6 +79,7 @@ function MyComponent(props) {
     places.forEach((place) => {
       if (place.geometry.viewport) {
         bounds.union(place.geometry.viewport);
+        props.setSearchedSite(place.formatted_address);
       } else {
         bounds.extend(place.geometry.location);
       }

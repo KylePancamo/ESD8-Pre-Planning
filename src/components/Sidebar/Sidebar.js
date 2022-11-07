@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./Header";
 import Content from "./Content";
 import EditableContent from "./EditableContent";
@@ -6,12 +6,31 @@ import Footer from "./Footer";
 import { Pencil } from "react-bootstrap-icons";
 import { Button } from "react-bootstrap";
 import Popup from "../Popup/GenericPopup"
+import Axios from "axios";
 
 function Sidebar(props) {
   const [edit, setEdit] = useState(false);
+  const [sidebarData, setSidebarData] = useState([]);
+  const [siteIsSet, setSiteIsSet] = useState(false);
+
   const toggleSideBar = () => {
     props.setSideBarValue(!props.sideBarValue);
   };
+
+  useEffect(() => {
+    Axios.post("http://localhost:5000/getSidebarData", { address: props.searchedSite })
+    .then((response) => {
+      if(response.data.length > 0) {
+        setSiteIsSet(true);
+        setSidebarData(response.data[0]);
+        console.log(response);
+      }
+    })
+    .catch((error) => {
+      setSiteIsSet(false);
+      console.log(error);
+    });
+  }, [props.searchedSite]);
 
   return (
     <div className="sidebar-wrapper">
@@ -43,18 +62,27 @@ function Sidebar(props) {
 
           <div className="sidebar-close">
             <button
-              class="close-button"
+              className="close-button"
               id="close-button"
               onClick={toggleSideBar}
             >
               X
             </button>
           </div>
-          <div className="sidebar-data-wrapper">
-            <Header />
-            <Content/>
-            <Footer />
-          </div>
+            {siteIsSet ?
+              <div className="sidebar-data-wrapper">
+                <Header 
+                  sidebarData={sidebarData}
+                >
+                </Header>
+                <Content
+                  sidebarData={sidebarData}
+                >
+                </Content>
+                <Footer />
+              </div>
+              : <h2>No pre-plan data for this site!</h2>  
+            }
         </div>
       ) : null}
       <Popup 

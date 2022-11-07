@@ -1,4 +1,5 @@
-function Content() {
+function Content(props) {
+  
   return (
     <div className="sidebar__content">
       <div className="sidebar__content-separator"></div>
