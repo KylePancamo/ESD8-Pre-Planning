@@ -1,5 +1,23 @@
 function Content(props) {
-  
+  let hazardList = [];
+
+  if(props.sidebarData.hazards != null) {
+    const hazards = props.sidebarData.hazards.split(";");
+    hazardList = hazards.map((hazard) =>
+      <span key={hazard}>{hazard}</span>
+    );
+  }
+
+  let accessList = [];
+
+  if(props.sidebarData.access != null) {
+    const access = props.sidebarData.access.split(";");
+    accessList = access.map((acc) =>
+      <span key={acc}>{acc}</span>
+    );
+  }
+
+
   return (
     <div className="sidebar__content">
       <div className="sidebar__content-separator"></div>
@@ -23,7 +41,7 @@ function Content(props) {
           <div className="sidebar__block-title">
             Construction Type
             <span className="sidebar__block-text" id="construction-type">
-              TYPE
+              {props.sidebarData.constructiontype}
             </span>
           </div>
           <div className="filler"></div>
@@ -36,9 +54,7 @@ function Content(props) {
         <div className="sidebar__block-content">
           <div className="sidebar__block-title">Mutual Aid</div>
           <p className="sidebar__block-box" id="mutual-aid">
-            Fire Department <br></br>
-            Fire Department <br></br>
-            Fire Department <br></br>
+            
           </p>
         </div>
       </div>
@@ -49,9 +65,7 @@ function Content(props) {
         <div className="sidebar__block-content">
           <div className="sidebar__block-title">Hazards</div>
           <p className="sidebar__block-box" id="hazards">
-            Hazard <br></br>
-            Hazard <br></br>
-            Hazard <br></br>
+            {hazardList}
           </p>
         </div>
       </div>
@@ -62,8 +76,8 @@ function Content(props) {
         <div className="sidebar__block-content">
           <div className="sidebar__block-title">Hydrant Location</div>
           <p className="sidebar__block-box" id="hydrant-location">
-            Address <br></br>
-            (Some ft away) <br></br>
+            {props.sidebarData.hydrant_address} <br></br>
+            ({props.sidebarData.hydrant_distance} ft away) <br></br>
           </p>
         </div>
       </div>
@@ -74,8 +88,7 @@ function Content(props) {
         <div className="sidebar__block-content">
           <div className="sidebar__block-title">Access</div>
           <p className="sidebar__block-box" id="access">
-            Access here <br></br>
-            Access here <br></br>
+            {accessList}
           </p>
         </div>
       </div>
@@ -87,7 +100,7 @@ function Content(props) {
           <div className="sidebar__block-title">Emergency Contact</div>
           <p className="sidebar__block-box" id="emergency-contact">
             Contact Name <br></br>
-            (888-888-8888) <br></br>
+            {props.sidebarData.emergency_contact_number} <br></br>
           </p>
         </div>
       </div>
@@ -98,12 +111,7 @@ function Content(props) {
         <div className="sidebar__block-content">
           <div className="sidebar__block-title">Notes</div>
           <p className="sidebar__block-box" id="notes">
-            Note <br></br>
-            Note <br></br>
-            Note <br></br>
-            Note <br></br>
-            Note <br></br>
-            Note <br></br>
+            {props.sidebarData.other_notes}
           </p>
         </div>
       </div>

@@ -175,7 +175,7 @@ code {
   border-color: rgb(218,220,224);
   border-radius: 8px;
   width: 300px;
-  color: #70757a;
+  color: #56595c;
 }
 
 .sidebar__block-box:hover {
@@ -185,7 +185,7 @@ code {
 .sidebar__block-text {
   display: table;
   margin: 0 auto;
-  color: #70757a;
+  color: #56595c;
 }
 
 .filler {
