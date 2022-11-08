@@ -1,4 +1,5 @@
 import MapContainer from "./MapContainer";
+import Legend from "./components/Legend";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "./components/Sidebar/Sidebar";
 import FileUpload from "./components/Popup/FileUploads";
@@ -23,6 +24,7 @@ function App() {
         setSearchedSite={setSearchedSite}
       />
       <FileUpload />
+      <Legend />
     </div>
   );
 }

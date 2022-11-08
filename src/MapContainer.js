@@ -33,13 +33,6 @@ const divStyle = {
   padding: 15,
 };
 
-// const paths = [
-//   { lat: 25.774, lng: -80.19 },
-//   { lat: 18.466, lng: -66.118 },
-//   { lat: 32.321, lng: -64.757 },
-//   { lat: 25.774, lng: -80.19 }
-// ]
-
 function MyComponent(props) {
   const [libraries] = useState(["drawing", "places"]);
   const [activeMarker, setActiveMarker] = useState(false);
@@ -198,6 +191,7 @@ function MyComponent(props) {
         markers={markers}
         setSelectedMarker={setSelectedMarker}
         setMarkers={setMarkers}
+        drawManagerMarker={drawManagerMarker}
       />
       <Marker
         position={center}
