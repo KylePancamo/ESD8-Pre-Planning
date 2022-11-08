@@ -56,11 +56,22 @@ app.post('/api/setMarkerInfo', (req, res) => {
 });
 
 app.post('/api/updateMarker',  (req, res) => {
-  const query = "UPDATE markers SET icon_id = ? WHERE marker_id = ?"
-  const data = [
-    req.body.data.icon_id,
-    req.body.data.marker_id
-  ]
+  let query;
+  let data;
+  if (req.body.data.marker_name === "") {
+    query = "UPDATE markers SET icon_id = ? WHERE marker_id = ?"
+    data = [
+      req.body.data.icon_id,
+      req.body.data.marker_id,
+    ]
+  } else {
+    query = "UPDATE markers SET marker_name = ?, icon_id = ? WHERE marker_id = ?"
+    data = [
+      req.body.data.marker_name,
+      req.body.data.icon_id,
+      req.body.data.marker_id,
+    ]
+  }
 
   db.query(
     query, data, (err, result) => {

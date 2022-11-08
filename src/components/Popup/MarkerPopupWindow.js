@@ -39,15 +39,15 @@ function PopupWindow(props) {
     setSelectedIcon({
       icon_id: 0,
       icon_name: props.selectedMarker.file_name,
-    })
-  }, [props] );
+    });
+  }, [props]);
 
   const handleMarkerSaving = () => {
     let markerFound = props.markers.find(
       (marker) => marker.marker_id === props.selectedMarker.marker_id
     );
 
-    if (markerFound) {
+    if (markerFound)  {
       const data = {
         marker_id: props.selectedMarker.marker_id,
         icon_id: selectedIcon.icon_id,
@@ -58,12 +58,14 @@ function PopupWindow(props) {
           props.setSelectedMarker((prevMarker) => ({
             ...prevMarker,
             file_name: selectedIcon.icon_name,
+            marker_name: (markerName === "") ? prevMarker.marker_name : markerName,
           }));
           // update props.markers array with new icon
           props.setMarkers((markers) => {
             return markers.map((marker) => {
               if (marker.marker_id === props.selectedMarker.marker_id) {
                 marker.file_name = selectedIcon.icon_name;
+                marker.marker_name = (markerName === "") ? marker.marker_name : markerName;
               }
               return marker;
             });
@@ -112,7 +114,7 @@ function PopupWindow(props) {
       onHide={props.onHide}
       backdrop="static"
       keyboard={false}
-      onEntered={() => {
+      onEnter={() => {
         fetchImages();
       }}
       onExit={() => {
@@ -170,7 +172,7 @@ function PopupWindow(props) {
               <Form>
                 <Form.Group controlId="formBasicText">
                   <Form.Label>
-                    Current Marker Name:{" "}
+                    Current Marker Name:
                     <b>{props.selectedMarker.marker_name}</b>
                   </Form.Label>
                   <Form.Control
@@ -179,7 +181,8 @@ function PopupWindow(props) {
                     onChange={(e) => {
                       setMarkerName(e.target.value);
                     }}
-                  ></Form.Control>
+                  >
+                  </Form.Control>
                 </Form.Group>
               </Form>
             </Col>

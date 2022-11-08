@@ -76,7 +76,7 @@ function AdminPanel(props) {
                 <tbody>
                   {images.map((image) => {
                     return (
-                      <tr className="tr" key={image.icon_id}>
+                      <tr className="image-body" key={image.icon_id}>
                         <td>{image.icon_id}</td>
                         <td>
                           <img
@@ -84,6 +84,11 @@ function AdminPanel(props) {
                             alt={image.name}
                             className="images"
                           />
+                        </td>
+                        <td>
+                          <Button>
+                            Delete
+                          </Button>
                         </td>
                       </tr>
                     );

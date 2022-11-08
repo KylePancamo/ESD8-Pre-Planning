@@ -198,7 +198,6 @@ function MyComponent(props) {
         markers={markers}
         setSelectedMarker={setSelectedMarker}
         setMarkers={setMarkers}
-        drawManagerMarker={drawManagerMarker}
       />
       <Marker
         position={center}

@@ -262,14 +262,21 @@ code {
   background-color: rgb(20, 28, 36) !important;
 }
 
-.tr .images {
-  background-color: aliceblue;
+.image-body .images {
+  background-color: rgb(255, 255, 255);
 }
 
 .list-image-container .tables {
   text-align: left;
 }
 
+.list-image-container .tables .tr {
+  margin: auto;
+}
+
+.list-image-container .tables .tbody {
+  margin: auto;
+}
 .modal-title{
   position: relative;
   left: 40%;
