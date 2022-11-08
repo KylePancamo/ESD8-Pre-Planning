@@ -272,20 +272,7 @@ function MyComponent(props) {
         />
       </StandaloneSearchBox>
       <AdminPanel flushMarkers={() => FlushMarkers()} />
-
-      {/* <Polygon 
-        paths={paths}
-        options={{
-          fillColor: '#FF0000',
-          fillOpacity: 0.35,
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          clickable: false,
-          editable: false,
-          zIndex: 1
-        }}
-      /> */}
+      
     </GoogleMap>
   ) : (
     <></>
