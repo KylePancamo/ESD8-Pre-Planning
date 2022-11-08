@@ -186,7 +186,7 @@ app.get('/api/getIcons', (req, res) => {
 
 /*********SIDEBAR REQUESTS*********/
 
-app.post('/getSidebarData', (req, res) => {
+app.post('/api/getSidebarData', (req, res) => {
   let address = req.body.address;
   const query = "SELECT * FROM pre_planning WHERE occupancyaddress = ?";
   const data = [ 

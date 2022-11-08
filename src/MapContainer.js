@@ -75,11 +75,11 @@ function MyComponent(props) {
   const onPlacesChanged = () => {
     const places = searchBox.getPlaces();
     const bounds = new window.google.maps.LatLngBounds();
+    props.setSearchedSite(places[0].formatted_address);
 
     places.forEach((place) => {
       if (place.geometry.viewport) {
         bounds.union(place.geometry.viewport);
-        props.setSearchedSite(place.formatted_address);
       } else {
         bounds.extend(place.geometry.location);
       }

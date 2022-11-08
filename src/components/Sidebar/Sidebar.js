@@ -18,18 +18,22 @@ function Sidebar(props) {
   };
 
   useEffect(() => {
-    Axios.post("http://localhost:5000/getSidebarData", { address: props.searchedSite })
-    .then((response) => {
-      if(response.data.length > 0) {
-        setSiteIsSet(true);
-        setSidebarData(response.data[0]);
+    console.log(props.searchedSite);
+    if (props.searchedSite !== "") {
+      Axios.post("http://localhost:5000/api/getSidebarData", {address: props.searchedSite})
+      .then((response) => {
         console.log(response);
-      }
-    })
-    .catch((error) => {
-      setSiteIsSet(false);
-      console.log(error);
-    });
+        if(response.data.length > 0) {
+          setSiteIsSet(true);
+          setSidebarData(response.data[0]);
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        setSiteIsSet(false);
+        console.log(error);
+      });
+    }
   }, [props.searchedSite]);
 
   return (
