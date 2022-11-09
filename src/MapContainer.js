@@ -196,13 +196,6 @@ function MyComponent(props) {
       <Marker
         position={center}
         onClick={() => handleOnClick()}
-        draggable={true}
-        label={
-          (window.google.maps.MarkerLabel = {
-            text: "ESD8",
-            fontSize: "10px",
-          })
-        }
       />
 
       <DrawingManager
