@@ -94,8 +94,8 @@ function Content(props) {
         <div className="sidebar__block-content">
           <div className="sidebar__block-title">Hydrant Location</div>
           <p className="sidebar__block-box" id="hydrant-location">
-            {props.sidebarData.hydrant_address} <br></br>
-            ({props.sidebarData.hydrant_distance} ft away) <br></br>
+            {props.sidebarData.hydrant_address} <br/>
+            ({props.sidebarData.hydrant_distance} ft away) <br/>
           </p>
         </div>
       </div>
@@ -117,8 +117,8 @@ function Content(props) {
         <div className="sidebar__block-content">
           <div className="sidebar__block-title">Emergency Contact</div>
           <p className="sidebar__block-box" id="emergency-contact">
-            Contact Name <br></br>
-            {props.sidebarData.emergency_contact_number} <br></br>
+          {props.sidebarData.contactname} <br/>
+            {props.sidebarData.emergency_contact_number} <br/>
           </p>
         </div>
       </div>
