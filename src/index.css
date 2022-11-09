@@ -315,6 +315,7 @@ code {
   position: fixed;
   right: 30vw;
   height: fit-content;
+  width: fit-content !important;
 }
 
 @media screen and (max-width: 1630px) {
@@ -325,8 +326,9 @@ code {
 }
 
 .location .tables {
-  border-collapse:separate; 
-  border-spacing: 10px;
+  position: relative;
+  border-collapse: separate;
+  border-spacing: 25px;
 }
 
 .locations-modal-button-add {

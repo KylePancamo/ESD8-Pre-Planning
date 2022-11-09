@@ -43,17 +43,19 @@ function LocationsModal(props) {
             <div className="location" key={location.id}>
               <table className="tables">
                 <thead>
-                  <tr className="thead-tr">
+                  <tr className="tr">
                     <th>Occupancy Id</th>
                     <th>Occupancy Name</th>
+                    <th>Occupancy Address</th>
                   </tr>
                 </thead>
                 <tbody>
                   {prePlanningLocations.map((location) => {
                     return (
-                      <tr key={location.id}>
+                      <tr className="tr"key={location.id}>
                         <td>{location.id}</td>
                         <td>{location.occupancyname}</td>
+                        <td>{location.occupancyaddress}</td>
                         <td>
                           <Button
                             variant="info"
