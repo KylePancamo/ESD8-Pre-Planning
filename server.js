@@ -215,6 +215,20 @@ app.post('/api/getSidebarData', (req, res) => {
   );
 });
 
+app.get("/api/getPreplanningLocations", (req, res) => {
+  const query = "SELECT * FROM pre_planning";
+
+  db.query(
+    query, (err, result) => {
+      if (err) {
+        console.log(err.message);
+      } else {
+        res.status(200).send(result);
+      }
+    }
+  );
+});
+
 /*********SIDEBAR REQUESTS*********/
 
 const PORT = 5000;

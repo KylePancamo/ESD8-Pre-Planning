@@ -240,7 +240,7 @@ code {
 .admin-panel-leftbar {
   display: flex;
   flex-direction: column;
-  width: 10vw;
+  min-width: fit-content;
   height: 100%;
   border-radius: 10px;
 }
@@ -268,14 +268,8 @@ code {
 
 .list-image-container .tables {
   text-align: left;
-}
-
-.list-image-container .tables .tr {
-  margin: auto;
-}
-
-.list-image-container .tables .tbody {
-  margin: auto;
+  border-collapse:separate; 
+  border-spacing: 10px;
 }
 .modal-title{
   position: relative;
@@ -316,3 +310,28 @@ code {
   min-width: fit-content;
   min-height: fit-content;
 }
+
+.locations-modal {
+  position: fixed;
+  right: 30vw;
+  height: fit-content;
+}
+
+@media screen and (max-width: 1630px) {
+  .locations-modal {
+    right: 0;
+    top: 60vh;
+  }
+}
+
+.location .tables {
+  border-collapse:separate; 
+  border-spacing: 10px;
+}
+
+.locations-modal-button-add {
+  position: absolute;
+  right: 1vw;
+  top: 1vh;
+}
+

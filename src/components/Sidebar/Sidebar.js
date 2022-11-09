@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Header from "./Header";
 import Content from "./Content";
-import EditableContent from "./EditableContent";
 import Footer from "./Footer";
 import { Pencil } from "react-bootstrap-icons";
 import { Button } from "react-bootstrap";
@@ -9,7 +8,6 @@ import Popup from "../Popup/GenericPopup"
 import Axios from "axios";
 
 function Sidebar(props) {
-  const [edit, setEdit] = useState(false);
   const [sidebarData, setSidebarData] = useState([]);
   const [siteIsSet, setSiteIsSet] = useState(false);
 
@@ -52,18 +50,6 @@ function Sidebar(props) {
       ) : null}
       {props.sideBarValue === true ? (
         <div className="sidebar-menu" id="sidebar-menu">
-          <Button
-            size="sm"
-            onClick={() => { 
-              setEdit(true);
-            }}
-          >
-            <div className="edit-menu-button">
-              <Pencil />
-              Edit
-            </div>
-          </Button>
-
           <div className="sidebar-close">
             <button
               className="close-button"
@@ -89,14 +75,6 @@ function Sidebar(props) {
             }
         </div>
       ) : null}
-      <Popup 
-        show={edit}
-        onHide={() => {
-          setEdit(false);
-        }}
-      >
-        <EditableContent/>
-      </Popup>
     </div>
   );
 }

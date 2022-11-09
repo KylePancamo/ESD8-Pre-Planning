@@ -12,12 +12,13 @@ function GenericPopupWindow(props) {
       backdrop="static"
       keyboard={false}
       contentClassName={props.contentClassName}
+      onEntering={props.onEntering}
     >
       <Modal.Header 
         closeButton 
         className={props.headerClassName}
       >
-        <Modal.Title id="contained-modal-title-vcenter" className="m-2">{props.title}</Modal.Title>
+        <Modal.Title >{props.title}</Modal.Title>
       </Modal.Header>
       <Modal.Body
         className={props.bodyClassName}
