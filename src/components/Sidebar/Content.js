@@ -1,21 +1,39 @@
 function Content(props) {
-  let hazardList = [];
 
+  let hazardList = [];
   if(props.sidebarData.hazards != null) {
     const hazards = props.sidebarData.hazards.split(";");
     hazardList = hazards.map((hazard) =>
-      <span key={hazard}>{hazard}</span>
+      <span key={hazard}>{hazard}<br/></span>
     );
   }
 
   let accessList = [];
-
   if(props.sidebarData.access != null) {
     const access = props.sidebarData.access.split(";");
     accessList = access.map((acc) =>
-      <span key={acc}>{acc}</span>
+      <span key={acc}>{acc}<br/></span>
     );
   }
+
+  let mutualAidList = [];
+  if(props.sidebarData.mut_aid_bc2fd === 1) {
+    mutualAidList.push("BC2 FD - Hazmat");
+  }
+  if(props.sidebarData.mut_aid_d7fr === 1) {
+    mutualAidList.push("D7 Fire & Rescue");
+  }
+  if(props.sidebarData.mut_aid_helotesfd === 1) {
+    mutualAidList.push("Helotes FD");
+  }
+  if(props.sidebarData.mut_aid_leonspringsvfd === 1) {
+    mutualAidList.push("Leon Springs VFD");
+  }
+  mutualAidList = mutualAidList.map((mutAid) =>
+    <span key={mutAid}>{mutAid}<br/></span>
+  );
+  
+
 
 
   return (
@@ -27,7 +45,7 @@ function Content(props) {
           <div className="sidebar__block-title">
             Occupancy Type
             <span className="sidebar__block-text" id="occupancy-type">
-              TYPE
+            {props.sidebarData.occupancytype}
             </span>
           </div>
           <div className="filler"></div>
@@ -54,7 +72,7 @@ function Content(props) {
         <div className="sidebar__block-content">
           <div className="sidebar__block-title">Mutual Aid</div>
           <p className="sidebar__block-box" id="mutual-aid">
-            
+            {mutualAidList}
           </p>
         </div>
       </div>
