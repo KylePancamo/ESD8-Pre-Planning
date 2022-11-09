@@ -309,3 +309,10 @@ code {
   left: 1vw;
 }
 
+.legend {
+  position: fixed;
+  top: 15vh;
+  right: 0;
+  min-width: fit-content;
+  min-height: fit-content;
+}

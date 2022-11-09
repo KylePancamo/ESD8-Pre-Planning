@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 
 function Legend(props) {
     const [edit, setEdit] = useState(false);
-    const [legend, setLegend] = useState(true);
+    const [legend, setLegend] = useState(false);
     const [legendItems, setLegendItems] = useState([]);
     const [legendItemsLoaded, setLegendItemsLoaded] = useState(false);
 
