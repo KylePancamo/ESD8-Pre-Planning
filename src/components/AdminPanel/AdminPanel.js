@@ -38,49 +38,45 @@ function LocationsModal(props) {
             Add Location
           </Button>
         </div>
-        {prePlanningLocations.map((location) => {
-          return (
-            <div className="location" key={location.id}>
-              <table className="tables">
-                <thead>
-                  <tr className="tr">
-                    <th>Occupancy Id</th>
-                    <th>Occupancy Name</th>
-                    <th>Occupancy Address</th>
+        <div className="location">
+          <table className="tables">
+            <thead>
+              <tr className="tr">
+                <th>Occupancy Id</th>
+                <th>Occupancy Name</th>
+                <th>Occupancy Address</th>
+              </tr>
+            </thead>
+            <tbody>
+              {prePlanningLocations.map((location) => {
+                return (
+                  <tr className="tr" key={location.id}>
+                    <td>{location.id}</td>
+                    <td>{location.occupancyname}</td>
+                    <td>{location.occupancyaddress}</td>
+                    <td>
+                      <Button
+                        variant="info"
+                        style={{
+                          marginLeft: "10px",
+                          width: "fit-content",
+                          height: "fit-content",
+                          color: "white",
+                        }}
+                        onClick={() => {
+                          setEdit(true);
+                          setSelectedEditLocation(location);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {prePlanningLocations.map((location) => {
-                    return (
-                      <tr className="tr"key={location.id}>
-                        <td>{location.id}</td>
-                        <td>{location.occupancyname}</td>
-                        <td>{location.occupancyaddress}</td>
-                        <td>
-                          <Button
-                            variant="info"
-                            style={{
-                              marginLeft: "10px",
-                              width: "fit-content",
-                              height: "fit-content",
-                              color: "white",
-                            }}
-                            onClick={() => {
-                              setEdit(true);
-                              setSelectedEditLocation(location);
-                            }}
-                          >
-                            Edit
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          );
-        })}
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </GenericPopupWindow>
       <GenericPopupWindow
         show={edit}
@@ -143,7 +139,8 @@ function LocationsModal(props) {
                 className="edit-form"
                 defaultValue={
                   selectedEditLocation
-                    ? selectedEditLocation.hydrant_address + " at " +
+                    ? selectedEditLocation.hydrant_address +
+                      " at " +
                       selectedEditLocation.hydrant_distance +
                       "ft from the building"
                     : ""
