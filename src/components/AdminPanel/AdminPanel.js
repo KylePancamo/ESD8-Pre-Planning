@@ -4,6 +4,7 @@ import FileUploads from "../Popup/FileUploads";
 import GenericPopupWindow from "../Popup/GenericPopup";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import AddLocation from "./AddLocation";
 
 function LocationsModal(props) {
   const [edit, setEdit] = useState(false);
@@ -37,6 +38,7 @@ function LocationsModal(props) {
           <Button variant="success" className="locations-modal-button-add">
             Add Location
           </Button>
+          <AddLocation/>
         </div>
         <div className="location">
           <table className="tables">

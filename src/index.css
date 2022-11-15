@@ -337,3 +337,19 @@ code {
   top: 1vh;
 }
 
+.location-form .row {
+  margin-bottom: 10px;
+}
+
+.location-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-location-modal {
+  position: fixed;
+  right: 30vw;
+  height: fit-content;
+  width: 45vw !important;
+}
+
