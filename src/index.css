@@ -351,5 +351,6 @@ code {
   right: 30vw;
   height: fit-content;
   width: 45vw !important;
+  z-index: -1;
 }
 
