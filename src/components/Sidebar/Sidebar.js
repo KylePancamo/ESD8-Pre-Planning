@@ -25,6 +25,9 @@ function Sidebar(props) {
           setSiteIsSet(true);
           setSidebarData(response.data[0]);
           console.log(response);
+        } else {
+          setSiteIsSet(false);
+          setSidebarData([]);
         }
       })
       .catch((error) => {

@@ -202,9 +202,12 @@ app.post('/api/getSidebarData', (req, res) => {
   // splitup address with separator ','
   let addressArray = address.split(',');
 
-  const query = "SELECT * FROM pre_planning WHERE occupancyaddress = ?";
-  const data = [ 
-    addressArray[0], 
+  let occupancyaddress = addressArray[0].trim();
+  let city = addressArray[1].trim();
+  const query = `SELECT * FROM pre_planning WHERE occupancyaddress = ? AND occupancycity = ?`;
+  const data = [
+    occupancyaddress,
+    city,
   ]
 
   db.query(
