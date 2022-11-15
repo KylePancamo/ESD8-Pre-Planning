@@ -199,9 +199,12 @@ app.get('/api/getIcons', (req, res) => {
 
 app.post('/api/getSidebarData', (req, res) => {
   let address = req.body.address;
+  // splitup address with separator ','
+  let addressArray = address.split(',');
+
   const query = "SELECT * FROM pre_planning WHERE occupancyaddress = ?";
   const data = [ 
-    address, 
+    addressArray[0], 
   ]
 
   db.query(
