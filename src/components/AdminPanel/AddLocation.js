@@ -62,7 +62,7 @@ function AddLocation(props) {
                         </Row>
                         <Row className="row" style={{width: "25.8%"}}>
                             <Col>
-                                <Form.Control {...register("constructionType", { required: {value: true, message: "Please enter a Construction Type"}})}type="text" placeholder="Construction Type"/>
+                                <Form.Control {...register("constructionType", {required: {value: true, message: "Please enter a number"}})} type="number"  placeholder="Construction Type"/>
                                 {errors.constructionType && <span style={{color:"red"}}>{errors.constructionType.message}</span>}
                             </Col>
                         </Row>
@@ -113,18 +113,18 @@ function AddLocation(props) {
                         </Row>
                         <Row className="row">
                             <Col>
-                                <Form.Control {...register("mutual_aid1")} type="text" placeholder="Mutual Aid"/>
+                                <Form.Control {...register("mutual_aid1", {required: {value: true, message: "Please enter a number"}})} type="number" placeholder="Mutual Aid"/>
                             </Col>
                             <Col>
-                                <Form.Control {...register("mutual_aid2")} type="text" placeholder="Mutual Aid"/>
+                                <Form.Control {...register("mutual_aid2", {required: {value: true, message: "Please enter a number"}})} type="number" placeholder="Mutual Aid"/>
                             </Col>
                         </Row>
                         <Row className="row">
                             <Col>
-                                <Form.Control {...register("mutual_aid3")} type="text" placeholder="Mutual Aid"/>
+                                <Form.Control {...register("mutual_aid3", {required: {value: true, message: "Please enter a number"}})} type="number" placeholder="Mutual Aid"/>
                             </Col>
                             <Col>
-                                <Form.Control {...register("mutual_aid4")} type="text" placeholder="Mutual Aid"/>
+                                <Form.Control {...register("mutual_aid4", {required: {value: true, message: "Please enter a number"}})} type="number" placeholder="Mutual Aid"/>
                             </Col>
                         </Row>
                     </Container>
@@ -146,7 +146,7 @@ function AddLocation(props) {
                                 {errors.hydrantAddress && <span style={{color:"red"}}>{errors.hydrantAddress.message}</span>}
                             </Col>
                             <Col>
-                                <Form.Control {...register("hydrantDistance", {required: {value: true, message: "Please enter a Hydrant Distance"}})} type="text" placeholder="Hydrant Distance (feet)"/>
+                                <Form.Control {...register("hydrantDistance", {required: {value: true, message: "Please enter a number"}})} type="number" placeholder="Hydrant Distance (feet)"/>
                                 {errors.hydrantDistance && <span style={{color:"red"}}>{errors.hydrantDistance.message}</span>}
                             </Col>
                         </Row>
