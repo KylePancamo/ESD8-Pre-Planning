@@ -251,12 +251,25 @@ app.post("/api/addPreplanningLocation", (req, res) => {
     payload.occupancyType,
     payload.contactName
   ];
+
   db.query(
-    query, data, (err, result) => {
+    `SELECT * FROM pre_planning WHERE occupancyaddress = ? AND occupancycity = ?`, [payload.streetAddress, payload.city], (err, result) => {
       if (err) {
         console.log(err.message);
       } else {
-        res.status(200).send(result);
+        if (result.length > 0) {
+          res.status(409).send({status: "error", message: 'Location already exists'});
+        } else {
+          db.query(
+            query, data, (err, result) => {
+              if (err) {
+                res.status(400).send({status: "error", message: "Error adding preplanning location", error: err.message});
+              } else {
+                res.status(200).send({status: "success", message: "Preplanning location added"});
+              }
+            }
+          )
+        }
       }
     }
   )

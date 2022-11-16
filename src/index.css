@@ -331,10 +331,8 @@ code {
   border-spacing: 25px;
 }
 
-.locations-modal-button-add {
-  position: absolute;
-  right: 1vw;
-  top: 1vh;
+.locations-modal .locations-modal-button-add{
+  position:relative;
 }
 
 .location-form .row {

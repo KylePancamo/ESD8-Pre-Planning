@@ -244,7 +244,6 @@ function MyComponent(props) {
           style={{
             boxSizing: `border-box`,
             border: `1px solid transparent`,
-            minWidth: `15vw`,
             height: `3vh`,
             padding: `0 12px`,
             borderRadius: `3px`,

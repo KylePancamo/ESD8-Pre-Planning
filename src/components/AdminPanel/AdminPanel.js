@@ -10,6 +10,7 @@ function LocationsModal(props) {
   const [edit, setEdit] = useState(false);
   const [selectedEditLocation, setSelectedEditLocation] = useState();
   const [prePlanningLocations, setPrePlanningLocations] = useState([]);
+  const [addLocationTrigger, setAddLocationTrigger] = useState(false);
 
   const fetchPreplanningLocations = () => {
     Axios.get("http://localhost:5000/api/getPreplanningLocations")
@@ -35,10 +36,13 @@ function LocationsModal(props) {
         }}
       >
         <div className="locations-modal-container">
-          <Button variant="success" className="locations-modal-button-add">
+          <Button variant="success" className="locations-modal-button-add" onClick={() => setAddLocationTrigger(true)}>
             Add Location
           </Button>
-          <AddLocation/>
+          <AddLocation
+            show={addLocationTrigger}
+            onHide={() => setAddLocationTrigger(false)}
+          />
         </div>
         <div className="location">
           <table className="tables">

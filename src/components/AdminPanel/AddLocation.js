@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import GenericPopupWindow from '../Popup/GenericPopup';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -7,23 +7,32 @@ import Container from 'react-bootstrap/Container';
 import {useForm} from 'react-hook-form';
 import Button from 'react-bootstrap/Button';
 import Axios from 'axios';
+import states from './states';
 
 function AddLocation(props) {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const [locationAddedResponse, setLocationAddedResponse] = useState(false);
     const [data, setData] = useState("");
 
     const onSubmit = (data) => {
         Axios.post("http://localhost:5000/api/addPreplanningLocation", {payload: data}).then((response) => {
             console.log(response);
+            setLocationAddedResponse(response.data);
         }).catch((error) => {
-            console.log(error);
+            setLocationAddedResponse(error.response.data);
         });
     }
 
+    useEffect(() => {
+        reset();
+    }, [props.show])
+
     return (
         <GenericPopupWindow
-            show={true}
+            show={props.show}
+            onHide={() => props.onHide()}
             contentClassName="add-location-modal"
+            title="Add Location"
         >
             <Form className="location-form" onSubmit={handleSubmit((data) => onSubmit((data)))}>
                 <Form.Group className="occupancy-group">
@@ -76,7 +85,12 @@ function AddLocation(props) {
                                 {errors.city && <span style={{color:"red"}}>{errors.city.message}</span>}
                             </Col>
                             <Col>
-                                <Form.Control {...register("state", {required: {value: true, message: "Please enter a State"}})} style={{width: "100%"}} type="text" placeholder="State" />
+                                <Form.Select  {...register("state", {required: {value: true, message: "Please select a state"}})} aria-label="Default select example">
+                                    <option value="">State</option>
+                                    {states.map((state) => {
+                                        return <option value={state.abbreviation}>{state.abbreviation} - {state.name}</option>
+                                    })}
+                                </Form.Select>
                                 {errors.state && <span style={{color:"red"}}>{errors.state.message}</span>}
                             </Col>
                         </Row>
@@ -178,6 +192,11 @@ function AddLocation(props) {
                 <Button variant="primary" type="submit">
                     Submit
                 </Button>
+                {locationAddedResponse?.status === "success" ? (
+                    <div style={{color: "green"}}>{locationAddedResponse?.message}</div>
+                ) : locationAddedResponse?.status === "error" ? (
+                    <div style={{color: "red"}}>{locationAddedResponse?.message}</div>
+                ) : null}
             </Form>
         </GenericPopupWindow>
     );
