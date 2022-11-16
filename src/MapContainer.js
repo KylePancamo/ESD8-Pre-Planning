@@ -253,6 +253,7 @@ function MyComponent(props) {
             position: `absolute`,
             left: `40vw`,
             top: `5%`,
+            width: `18vw`,
           }}
         />
       </StandaloneSearchBox>
