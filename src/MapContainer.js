@@ -195,10 +195,7 @@ function MyComponent(props) {
         setMarkers={setMarkers}
         drawManagerMarker={drawManagerMarker}
       />
-      <Marker
-        position={center}
-        onClick={() => handleOnClick()}
-      />
+      <Marker position={center} onClick={() => handleOnClick()} />
 
       <DrawingManager
         onMarkerComplete={(marker) => {
@@ -262,7 +259,7 @@ function MyComponent(props) {
       <AdminPanel flushMarkers={() => FlushMarkers()} />
       <div className="marker-visiblity">
         <Form>
-          <Form.Check 
+          <Form.Check
             type="switch"
             label="Marker Visibility"
             checked={markerVisibility}
