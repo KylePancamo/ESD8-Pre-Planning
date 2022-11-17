@@ -370,3 +370,9 @@ code {
 .edit-location-modal {
   width: 45vw !important;
 }
+
+.marker-visiblity {
+  position: absolute;
+  left: 1vw;
+  top: 10vh;
+}
