@@ -16,6 +16,7 @@ import "./useStateWithCallback";
 import useStateWithCallback from "./useStateWithCallback";
 import GenericPopupWindow from "./components/Popup/GenericPopup";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
+import Form from "react-bootstrap/Form";
 
 const containerStyle = {
   width: "100vw",
@@ -61,7 +62,7 @@ function MyComponent(props) {
   });
 
   const [markerClicked, setMarkerClicked] = useState(false);
-
+  const [markerVisibility, setMarkerVisibility] = useState(true);
   const [searchBox, setSearchBox] = useState(null);
   const [bounds, setBounds] = useState(null);
 
@@ -181,6 +182,7 @@ function MyComponent(props) {
             }}
             icon={"/images/" + marker.file_name}
             key={marker.marker_id}
+            visible={markerVisibility}
           />
         );
       })}
@@ -258,7 +260,16 @@ function MyComponent(props) {
         />
       </StandaloneSearchBox>
       <AdminPanel flushMarkers={() => FlushMarkers()} />
-      
+      <div className="marker-visiblity">
+        <Form>
+          <Form.Check 
+            type="switch"
+            label="Marker Visibility"
+            checked={markerVisibility}
+            onChange={() => setMarkerVisibility(!markerVisibility)}
+          />
+        </Form>
+      </div>
     </GoogleMap>
   ) : (
     <></>
