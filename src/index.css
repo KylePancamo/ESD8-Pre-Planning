@@ -305,10 +305,29 @@ code {
 
 .legend {
   position: fixed;
-  top: 15vh;
-  right: 0;
-  min-width: fit-content;
-  min-height: fit-content;
+  max-height: 26vh;
+  height:fit-content;
+  width: fit-content;
+  top: 35vw;
+  right: 5vw;
+  background-color: rgb(255, 255, 255);
+  border: 3px solid;
+  border-color: rgb(0, 0, 0);
+}
+
+.legend-images {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  justify-items: flex-end;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.legend-images .legend-item {
+  flex: 1 0 30%;
+  margin-bottom: 5px;
 }
 
 .locations-modal {
