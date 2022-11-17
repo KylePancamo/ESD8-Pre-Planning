@@ -3,14 +3,27 @@ import Axios from "axios";
 import FileUploads from "../Popup/FileUploads";
 import GenericPopupWindow from "../Popup/GenericPopup";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import AddLocation from "./AddLocation";
+import EditLocation from "./EditLocation";
 
 function LocationsModal(props) {
   const [edit, setEdit] = useState(false);
   const [selectedEditLocation, setSelectedEditLocation] = useState();
   const [prePlanningLocations, setPrePlanningLocations] = useState([]);
   const [addLocationTrigger, setAddLocationTrigger] = useState(false);
+  const [currentEditLocation, setCurrentEditLocation] = useState({});
+
+  const updateLocations = (newVal) => {
+    setPrePlanningLocations((locations) => {
+      return locations.map((location) => {
+        if (location.id === newVal.id) {
+          location.occupancyname = newVal.occupancyname;
+          location.occupancyaddress = newVal.occupancyaddress;
+        }
+        return location;
+      });
+    });
+  }
 
   const fetchPreplanningLocations = () => {
     Axios.get("http://localhost:5000/api/getPreplanningLocations")
@@ -72,6 +85,7 @@ function LocationsModal(props) {
                         onClick={() => {
                           setEdit(true);
                           setSelectedEditLocation(location);
+                          setCurrentEditLocation({id: location.id});
                         }}
                       >
                         Edit
@@ -84,112 +98,12 @@ function LocationsModal(props) {
           </table>
         </div>
       </GenericPopupWindow>
-      <GenericPopupWindow
+      <EditLocation 
         show={edit}
-        onHide={() => {
-          setEdit(false);
-        }}
-        title="Edit Location"
-      >
-        <div className="editable-content">
-          <Form>
-            <Form.Group size="lg" controlId="email">
-              <Form.Label>Occupancy Type :</Form.Label>
-
-              <Form.Control
-                autoFocus
-                className="edit-form"
-                defaultValue={
-                  selectedEditLocation ? selectedEditLocation.occupancyname : ""
-                }
-              />
-            </Form.Group>
-
-            <Form.Group size="lg" controlId="password">
-              <Form.Label>Construction Type :</Form.Label>
-
-              <Form.Control
-                className="edit-form"
-                defaultValue={
-                  selectedEditLocation
-                    ? selectedEditLocation.constructiontype
-                    : ""
-                }
-              />
-              <div styles="height:20px"></div>
-            </Form.Group>
-            <Form.Group size="lg" controlId="email">
-              <Form.Label>Mutual Aid:</Form.Label>
-
-              <Form.Control autoFocus className="edit-form" />
-            </Form.Group>
-
-            <Form.Group size="lg" controlId="password">
-              <Form.Label>Hazards:</Form.Label>
-
-              <Form.Control
-                className="edit-form"
-                defaultValue={
-                  selectedEditLocation ? selectedEditLocation.hazards : ""
-                }
-              />
-              <div styles="height:20px"></div>
-            </Form.Group>
-
-            <Form.Group size="lg" controlId="password">
-              <Form.Label>Hydrant Location:</Form.Label>
-
-              {/*form control with <br/> in defaultValue*/}
-
-              <Form.Control
-                className="edit-form"
-                defaultValue={
-                  selectedEditLocation
-                    ? selectedEditLocation.hydrant_address +
-                      " at " +
-                      selectedEditLocation.hydrant_distance +
-                      "ft from the building"
-                    : ""
-                }
-              />
-              <div styles="height:20px"></div>
-            </Form.Group>
-
-            <Form.Group size="lg" controlId="password">
-              <Form.Label>Access:</Form.Label>
-
-              <Form.Control className="edit-form" />
-              <div styles="height:20px"></div>
-            </Form.Group>
-
-            <Form.Group size="lg" controlId="password">
-              <Form.Label>Emergency Contact:</Form.Label>
-
-              <Form.Control
-                className="edit-form"
-                defaultValue={
-                  selectedEditLocation
-                    ? selectedEditLocation.emergency_contact_number
-                    : ""
-                }
-              />
-              <div styles="height:20px"></div>
-            </Form.Group>
-
-            <Form.Group size="lg" controlId="password">
-              <Form.Label>Notes :</Form.Label>
-
-              <Form.Control
-                className="edit-form"
-                defaultValue={
-                  selectedEditLocation ? selectedEditLocation.other_notes : ""
-                }
-              />
-              <div styles="height:20px"></div>
-            </Form.Group>
-          </Form>
-        </div>
-      </GenericPopupWindow>
+        onHide={() => setEdit(false)}
+        selectedEditLocation={selectedEditLocation}
+        updateLocations={updateLocations}
+      />
     </div>
   );
 }

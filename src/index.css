@@ -345,10 +345,9 @@ code {
 }
 
 .add-location-modal {
-  position: fixed;
-  right: 30vw;
-  height: fit-content;
   width: 45vw !important;
-  z-index: -1;
 }
 
+.edit-location-modal {
+  width: 45vw !important;
+}
