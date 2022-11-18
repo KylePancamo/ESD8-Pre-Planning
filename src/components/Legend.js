@@ -26,7 +26,9 @@ function Legend(props) {
           return (
             <div className="legend-item">
               <img src={"/images/" + image.file_name} />
+              {image.icon_name}
             </div>
+           
           );
         })}
       </div>
