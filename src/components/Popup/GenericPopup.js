@@ -14,6 +14,7 @@ function GenericPopupWindow(props) {
       contentClassName={props.contentClassName}
       onEntering={props.onEntering}
       onEntered={props.onEntered}
+      onExit={props.onExit}
     >
       <Modal.Header 
         closeButton 
