@@ -237,17 +237,12 @@ function MyComponent(props) {
         onPlacesChanged={onPlacesChanged}
         onLoad={onSBLoad}
       >
-        <input
+        <Form.Control
           type="text"
           placeholder="Search for a location"
           style={{
             boxSizing: `border-box`,
-            border: `1px solid transparent`,
-            height: `3vh`,
-            padding: `0 12px`,
-            borderRadius: `3px`,
             boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-            fontSize: `14px`,
             textOverflow: `ellipses`,
             position: `absolute`,
             left: `40vw`,
