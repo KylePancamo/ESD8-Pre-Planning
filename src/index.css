@@ -256,8 +256,10 @@ code {
 }
 
 .modal-admin {
+  position: fixed;
+  right: 55%;
   color: white !important;
-  width: 100vw;
+  width: 35vw !important;
   height: fit-content;
   background-color: rgb(20, 28, 36) !important;
 }
@@ -305,10 +307,9 @@ code {
 
 .legend {
   position: fixed;
-  max-height: 26vh;
   height:fit-content;
   width: fit-content;
-  top: 35vw;
+  top: 65vh;
   right: 5vw;
   background-color: rgb(255, 255, 255);
   border: 3px solid;
@@ -326,18 +327,19 @@ code {
 }
 
 .legend-images .legend-item {
-  flex: 1 0 30%;
+  flex: 1 0 40%;
   margin-bottom: 5px;
+  width: 3vw;
 }
 
 .locations-modal {
   position: fixed;
-  right: 30vw;
+  left: 55%;
   height: fit-content;
   width: fit-content !important;
 }
 
-@media screen and (max-width: 1630px) {
+@media screen and (max-width: 1500px) {
   .locations-modal {
     right: 0;
     top: 60vh;
@@ -364,6 +366,7 @@ code {
 }
 
 .add-location-modal {
+  position: fixed;
   width: 45vw !important;
 }
 
@@ -371,8 +374,20 @@ code {
   width: 45vw !important;
 }
 
+.icon-edit-window {
+  position: relative;
+  left: 55%;
+}
+
 .marker-visiblity {
   position: absolute;
   left: 1vw;
   top: 10vh;
+}
+
+.file-uploads {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
