@@ -145,6 +145,7 @@ app.delete('/api/deleteMarker', (req, res) => {
 
 app.post('/api/upload', (req, res) => {
   let file = req.files.file;
+  let iconName = req.body.iconName;
   if (file.mimetype !== 'image/png') {
     res.status(400).send({message: 'File must be a png image'});
 
@@ -160,8 +161,9 @@ app.post('/api/upload', (req, res) => {
   let filename = file.name;
   const data = [
     filename,
+    iconName,
   ]
-  const query = 'INSERT INTO icons (file_name) VALUES (?)';
+  const query = 'INSERT INTO icons (file_name, icon_name) VALUES (?, ?)';
 
   db.query(query, data, (err, result) => {
     if (err) {
@@ -349,6 +351,25 @@ app.get("/api/getPreplanningLocation/:id", (req, res) => {
     }
   )
 });
+
+app.post("/api/updateIconName", (req, res) => {
+  const id = req.body.id;
+  const iconName = req.body.formData.iconName;
+  const query = `UPDATE icons SET icon_name = ? WHERE icon_id = ?`;
+
+  const data = [
+    iconName,
+    id
+  ]
+
+  db.query(query, data, (err, result) => {
+    if (err) {
+      res.status(400).send({status: "error", message: "Error updating icon name", error: err.message});
+    } else {
+      res.status(200).send({status: "success", message: "Icon name updated"});
+    }
+  })
+})
 
 /*********SIDEBAR REQUESTS*********/
 

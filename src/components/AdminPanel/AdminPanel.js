@@ -5,6 +5,7 @@ import GenericPopupWindow from "../Popup/GenericPopup";
 import Button from "react-bootstrap/Button";
 import AddLocation from "./AddLocation";
 import EditLocation from "./EditLocation";
+import IconEditWindow from "./IconEditWindow";
 
 function LocationsModal(props) {
   const [edit, setEdit] = useState(false);
@@ -113,6 +114,9 @@ function AdminPanel(props) {
   const [mainContentString, setMainContentString] = useState("");
   const [images, setImages] = useState([]);
   const [locationsButton, setLocationsButton] = useState(false);
+  const [iconEditState, setIconEditState] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState();
+
 
   const fetchImages = () => {
     Axios.get("http://localhost:5000/api/getIcons")
@@ -188,6 +192,7 @@ function AdminPanel(props) {
                   <tr className="tr">
                     <th>Image Id</th>
                     <th>Image</th>
+                    <th>Icon Name</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -203,7 +208,15 @@ function AdminPanel(props) {
                           />
                         </td>
                         <td>
-                          <Button>Delete</Button>
+                          {image.icon_name}
+                        </td>
+                        <td>
+                          <Button
+                            onClick={() => {
+                              setIconEditState(true);
+                              setSelectedIcon(image);
+                            }}
+                          >Edit</Button>
                         </td>
                       </tr>
                     );
@@ -214,6 +227,14 @@ function AdminPanel(props) {
           </div>
         </div>
       </GenericPopupWindow>
+      <IconEditWindow
+        show={iconEditState}
+        onHide={() => setIconEditState(false)}
+        selectedIcon={selectedIcon}
+        setSelectedIcon={setSelectedIcon}
+        contentClassName="modal-edit-icon"
+        setImages={setImages}
+      />
     </div>
   );
 }
