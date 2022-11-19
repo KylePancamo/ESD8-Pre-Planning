@@ -259,7 +259,7 @@ code {
   position: fixed;
   right: 55%;
   color: white !important;
-  width: 35vw !important;
+  width: fit-content;
   height: fit-content;
   background-color: rgb(20, 28, 36) !important;
 }
