@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import Axios from "axios";
 import FileUploads from "../Popup/FileUploads";
 import GenericPopupWindow from "../Popup/GenericPopup";
@@ -6,6 +6,9 @@ import Button from "react-bootstrap/Button";
 import AddLocation from "./AddLocation";
 import EditLocation from "./EditLocation";
 import IconEditWindow from "./IconEditWindow";
+import {useRecoilState} from 'recoil';
+import {imagesState} from "../../atoms";
+
 
 function LocationsModal(props) {
   const [edit, setEdit] = useState(false);
@@ -112,7 +115,7 @@ function AdminPanel(props) {
   const [fileUploadPopup, setFileUploadPopup] = useState(false);
   const [adminPanel, setAdminPanel] = useState(false);
   const [mainContentString, setMainContentString] = useState("");
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useRecoilState(imagesState);
   const [locationsButton, setLocationsButton] = useState(false);
   const [iconEditState, setIconEditState] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState();

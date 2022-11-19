@@ -4,8 +4,11 @@ import Axios from 'axios';
 import {useForm} from 'react-hook-form';
 import { useState } from 'react';
 import Alert from "react-bootstrap/Alert";
+import {useRecoilState} from 'recoil';
+import {imagesState} from "../../atoms";
 
 function IconEditWindow(props) {
+    const [images, setImages] = useRecoilState(imagesState);
     const [iconUpdateStatus, setIconUpdateStatus] = useState({
         variant: '',
         message: ''
@@ -26,14 +29,11 @@ function IconEditWindow(props) {
         }).then((response) => {
             console.log(response.data.message);
             setIconUpdateStatus({variant: 'success', message: response.data.message});
-            props.setImages((images) => {
-                return images.map((image) => {
-                    if (image.icon_id === props.selectedIcon.icon_id) {
-                        image.icon_name = data.iconName;
-                    }
-                    return image;
-                })
+            let newImages = images.map((image) => {
+                if (image.icon_id === props.selectedIcon.icon_id) return {...image, icon_name: data.iconName};
+                else return image;
             })
+            setImages(newImages);
         }).catch((err) => {
             setIconUpdateStatus({variant: 'danger', message: err.response?.data.message});
         });
