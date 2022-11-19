@@ -120,24 +120,12 @@ function AdminPanel(props) {
   const [iconEditState, setIconEditState] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState();
 
-
-  const fetchImages = () => {
-    Axios.get("http://localhost:5000/api/getIcons")
-      .then((response) => {
-        setImages(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   return (
     <div className="admin-ui">
       <button
         className="btn btn-primary"
         onClick={() => {
           setAdminPanel(true);
-          fetchImages();
         }}
       >
         Admin Panel
