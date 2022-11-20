@@ -278,12 +278,21 @@ code {
   left: 40%;
 }
 
+.marker-modification {
+  position: fixed;
+  width: fit-content !important;
+}
+
 .marker-location {
-  display: block;
+  display: flex;
   position: absolute;
-  width: 25%;
+  flex-wrap: wrap;
+  width: 30%;
+  justify-content: center;
+  align-items: center;
   border-radius: 5px;
 }
+
 
 .icon-modification {
   display: flex;
