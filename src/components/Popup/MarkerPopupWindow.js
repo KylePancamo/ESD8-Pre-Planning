@@ -9,8 +9,6 @@ import Axios from "axios";
 import GenericPopupWindow from "./GenericPopup";
 import Alert from "react-bootstrap/Alert";
 import {useForm} from 'react-hook-form';
-
-
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 
@@ -20,17 +18,15 @@ function PopupWindow(props) {
     icon_id: 0,
     icon_name: "",
   });
-  const [edit, setEdit] = useState(false);
+
   const [markerSaved, setMarkerSaved] = useState(false);
   const [markerDeleted, setMarkerDeleted] = useState(false);
-  const [currentMarker, setCurrentMarker] = useState();
   const [markerName, setMarkerName] = useState("");
   const {
     register,
     handleSubmit,
     reset,
     setValue,
-    replace,
     formState: { errors },
   } = useForm();
 
