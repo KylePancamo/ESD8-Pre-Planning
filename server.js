@@ -91,6 +91,7 @@ app.get('/api/getMarkerInfo', (req, res) => {
                   markers.marker_name,
                   markers.latitude,
                   markers.longitude,
+                  markers.icon_id,
                   icons.file_name
                 FROM markers
                 JOIN icons

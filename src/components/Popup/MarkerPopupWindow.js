@@ -8,6 +8,7 @@ import Col from "react-bootstrap/Col";
 import Axios from "axios";
 import GenericPopupWindow from "./GenericPopup";
 import Alert from "react-bootstrap/Alert";
+import {useForm} from 'react-hook-form';
 
 
 import Dropdown from "react-bootstrap/Dropdown";
@@ -24,6 +25,14 @@ function PopupWindow(props) {
   const [markerDeleted, setMarkerDeleted] = useState(false);
   const [currentMarker, setCurrentMarker] = useState();
   const [markerName, setMarkerName] = useState("");
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    replace,
+    formState: { errors },
+  } = useForm();
 
   const fetchImages = () => {
     Axios.get("http://localhost:5000/api/getIcons")
@@ -37,21 +46,27 @@ function PopupWindow(props) {
 
   useEffect(() => {
     setSelectedIcon({
-      icon_id: 0,
+      icon_id: props.selectedMarker.icon_id,
       icon_name: props.selectedMarker.file_name,
     });
   }, [props]);
 
-  const handleMarkerSaving = () => {
-    let markerFound = props.markers.find(
+  const handleMarkerSaving = (formData) => {
+    formData.imageName = selectedFile?.name;
+
+    let markerFoundOnMap = props.markers.find(
       (marker) => marker.marker_id === props.selectedMarker.marker_id
     );
 
-    if (markerFound)  {
+
+    if (markerFoundOnMap)  {
       const data = {
-        marker_id: props.selectedMarker.marker_id,
+        marker_id: formData.selectedMarkerId,
         icon_id: selectedIcon.icon_id,
-        marker_name: markerName,
+        marker_name: formData.markerName,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
+        image_name: formData.fileName,
       };
       Axios.post("http://localhost:5000/api/updateMarker", { data })
         .then((response) => {
@@ -116,6 +131,8 @@ function PopupWindow(props) {
   
     // create a preview as a side effect, whenever selected file is changed
     useEffect(() => {
+      resetFormData();
+
       if (!selectedFile) {
           setPreview(undefined)
           return
@@ -126,18 +143,28 @@ function PopupWindow(props) {
   
       // free memory when ever this component is unmounted
       return () => URL.revokeObjectURL(objectUrl)
-    }, [selectedFile])
+    }, [selectedFile, props.selectedMarker])
+
+    const resetFormData = () => {
+      console.log(props.selectedMarker);
+      reset({
+        markerName: props.selectedMarker.marker_name,
+        latitude: props.selectedMarker.latitude,
+        longitude: props.selectedMarker.longitude,
+        activeIcon: props.selectedMarker.file_name,
+        activeIconId: props.selectedMarker.icon_id,
+        selectedMarkerId: props.selectedMarker.marker_id,
+      })
+    }
   
     const onSelectFile = e => {
       if (!inputRef.current?.files || inputRef.current?.files.length === 0) {
           setSelectedFile(undefined)
           return
       }
-  
-      // I've kept this example simple by using the first image instead of multiple
+      
       setSelectedFile(inputRef.current?.files[0])
     }
-
 
   return (
     <Modal
@@ -167,116 +194,116 @@ function PopupWindow(props) {
       </Modal.Header>
       <Modal.Body>
         <Container>
-          <Row className="icon-modification">
-            <Col style={{display: "flex", alignItems: "flex-start", gap: "2vh", flexDirection: "column"}}>
-              <label style={{display: "flex", alignItems: "center", gap: ".2vw"}}>
-                Select an photo image to display: 
-                <Button 
-                  onClick={handleFileUpload}
-                  style={{ width: "fit-content" }}
-                >
-                  Select Image
-                </Button>
-              </label>
-                
-              <input
-                id="input-file"
-                className="d-none"
-                type="file"
-                ref={inputRef}
-                onChange={onSelectFile}
-              />
-              <div className="marker-image">
-                  {selectedFile ? (
-                    <img style={{width: "30vw"}} src={preview} />
-                  ) : null }
-              </div>
-            </Col>
-          </Row>
-          <Row className="icon-modification">
-          <Col style={{display: "flex", alignItems: "center", gap: "2%"}}>
-              <b>Edit Icon Image: </b>
-              <Col>
-                <DropdownButton
-                  id="dropdown-basic-button"
-                  title={
-                    <img
-                      src={"/images/" + selectedIcon.icon_name}
-                      alt={""}
-                      style={{ width: "2vw"}}
-                    />
-                  }
-                >
-                  {imageIcons.map((icon) => (
-                    <Dropdown.Item
-                      onClick={() => {
-                        setSelectedIcon({
-                          icon_id: icon.icon_id,
-                          icon_name: icon.file_name,
-                        });
-                      }}
-                      key={icon.icon_id}
-                    >
-                      {
-                        <img
-                          src={"/images/" + icon.file_name}
-                          alt={icon.name}
-                          className="images"
-                        />
-                      }
-                    </Dropdown.Item>
-                  ))}
-                </DropdownButton>
-              </Col>
-              
-            </Col>
-          </Row>
-          <Row className="icon-modification">
-            <Col xs={6} md={4}>
-              <Form>
-                <Form.Group>
-                  <Form.Label>
-                    Current Marker Name:
-                    <b>{props.selectedMarker.marker_name}</b>
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter New Marker Name"
-                    onChange={(e) => {
-                      setMarkerName(e.target.value);
-                    }}
+          <Form>
+            <Row className="icon-modification">
+              <Col style={{display: "flex", alignItems: "flex-start", gap: "2vh", flexDirection: "column"}}>
+                <label style={{display: "flex", alignItems: "center", gap: ".2vw"}}>
+                  Select an photo image to display: 
+                  <Button 
+                    onClick={handleFileUpload}
+                    style={{ width: "fit-content" }}
                   >
-                  </Form.Control>
-                </Form.Group>
-              </Form>
-            </Col>
-            <Col>
-              <Form>
-                <Form.Group>
-                  <Form.Label>
-                    Latitude
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter new latitude"
-                  />
-                </Form.Group>
-              </Form>
-            </Col>
-            <Col>
-              <Form>
-                <Form.Group>
-                  <Form.Label>
-                    Longitude
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter new latitude"
-                  />
-                </Form.Group>
-              </Form>
-            </Col>
-          </Row>
+                    Select Image
+                  </Button>
+                </label>
+                <input
+                  id="input-file"
+                  className="d-none"
+                  type="file"
+                  ref={inputRef}
+                  onChange={() => {
+                    onSelectFile();
+                  }}
+                />
+                <div className="marker-image">
+                    {selectedFile ? (
+                      <img style={{width: "30vw"}} src={preview} />
+                    ) : null }
+                </div>
+              </Col>
+            </Row>
+            <Row className="icon-modification">
+            <Col style={{display: "flex", alignItems: "center", gap: "2%"}}>
+                <b>Edit Icon Image: </b>
+                <Col>
+                  <DropdownButton
+                    id="dropdown-basic-button"
+                    title={
+                      <img
+                        src={"/icon_images/" + selectedIcon.icon_name}
+                        alt={""}
+                        style={{ width: "1.2vw"}}
+                      />
+                    }
+                  >
+                    {imageIcons.map((icon) => (
+                      <Dropdown.Item
+                        onClick={() => {
+                          setValue("activeIcon", icon.file_name);
+                          setValue("activeIconId", icon.icon_id);
+                          setSelectedIcon({
+                            icon_id: icon.icon_id,
+                            icon_name: icon.file_name,
+                          });
+                        }}
+                        key={icon.icon_id}
+                      >
+                        {
+                          <img
+                            src={"/icon_images/" + icon.file_name}
+                            alt={icon.name}
+                            className="images"
+                          />
+                        }
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                </Col>
+              </Col>
+            </Row>
+            <Row className="icon-modification">
+              <Col xs={6} md={4}>
+                  <Form.Group>
+                    <Form.Label>
+                      Current Marker Name:
+                      <b>{props.selectedMarker.marker_name}</b>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter New Marker Name"
+                      {...register("markerName", {
+                        required: true
+                      })}
+                    >
+                    </Form.Control>
+                  </Form.Group>
+              </Col>
+              <Col>
+                  <Form.Group>
+                    <Form.Label>
+                      Latitude
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter new latitude"
+                      {...register("latitude", {required: true})}
+                    />
+                  </Form.Group>
+              </Col>
+              <Col>
+                  <Form.Group>
+                    <Form.Label>
+                      Longitude
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter new longitude"
+                      {...register("longitude", {required: true})}
+                    />
+                  </Form.Group>
+              </Col>
+            </Row>
+          </Form>
         </Container>
       </Modal.Body>
       <Modal.Footer>
@@ -288,7 +315,7 @@ function PopupWindow(props) {
           Delete Marker
         </Button>
         <Button onClick={props.onHide}>Close</Button>
-        <Button onClick={handleMarkerSaving}>Save</Button>
+        <Button onClick={handleSubmit((data) => handleMarkerSaving(data))}>Save</Button>
       </Modal.Footer>
       <GenericPopupWindow
         show={markerSaved}
