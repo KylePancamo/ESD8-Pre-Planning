@@ -46,7 +46,7 @@ app.post('/api/setMarkerInfo', (req, res) => {
           marker_name: "test",
           latitude: req.body.position.lat.toFixed(8),
           longitude: req.body.position.lng.toFixed(8),
-          file_name: "/images/edit_location_FILL0_wght400_GRAD0_opsz48.png",
+          file_name: "/icon_images/edit_location_FILL0_wght400_GRAD0_opsz48.png",
         }
         result.payload = payload;
         res.status(200).send(result);
@@ -152,7 +152,7 @@ app.post('/api/upload', (req, res) => {
     return;
   }
 
-  if (fs.existsSync('./public/images/' + file.name)) {
+  if (fs.existsSync('./public/icon_images/' + file.name)) {
     res.status(400).send({message: 'File already exists'});
 
     return;
@@ -170,7 +170,7 @@ app.post('/api/upload', (req, res) => {
       console.log(err.message);
       res.status(400).send({message: 'Error uploading file'});
     } else {
-      file.mv('./public/images/' + filename, (err) => {
+      file.mv('./public/icon_images/' + filename, (err) => {
         if (err) {
           console.log(err);
         } else {

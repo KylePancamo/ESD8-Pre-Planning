@@ -180,7 +180,7 @@ function MyComponent(props) {
               }
               setSelectedMarker(marker);
             }}
-            icon={"/images/" + marker.file_name}
+            icon={"/icon_images/" + marker.file_name}
             key={marker.marker_id}
             visible={markerVisibility}
           />
@@ -201,7 +201,7 @@ function MyComponent(props) {
         onMarkerComplete={(marker) => {
           const position = marker.position;
           marker.setIcon(
-            "/images/edit_location_FILL0_wght400_GRAD0_opsz48.png"
+            "/icon_images/edit_location_FILL0_wght400_GRAD0_opsz48.png"
           );
           // Make marker transition little nicer with timeout
           setTimeout(() => {
