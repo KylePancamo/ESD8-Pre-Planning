@@ -4,6 +4,8 @@ import Modal from "react-bootstrap/Modal";
 import Axios from "axios";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
+import { useRecoilState } from "recoil";
+import { imagesState } from "../../atoms";
 
 
 function FileUpload(props) {
@@ -12,6 +14,7 @@ function FileUpload(props) {
   const [FileUploadStatus, setFileUploadStatus] = useState();
   const [FileUploadString, setFileUploadString] = useState("");
   const [iconName, setIconName] = useState("");
+  const [images, setImages] = useRecoilState(imagesState);
 
   const handleFileUpload = () => {
     inputRef.current?.click();
@@ -30,7 +33,7 @@ function FileUpload(props) {
             setFileUploadStatus(true);
             setFileUploadString(response.data.message);
             setFileName(inputRef.current?.files[0].name);
-            props.setImages((currImages) => [
+            setImages((currImages) => [
               ...currImages,
               response.data.payload,
             ]);
@@ -75,18 +78,20 @@ function FileUpload(props) {
                   ref={inputRef}
                   onChange={handleDisplayFileDetails}
                 />
-                <Form>
-                  <Form.Group>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter icon name"
-                      onChange={(e) => {
-                        setIconName(e.target.value);
-                      }}
-                      style={{width: "75%"}}
-                    />
-                  </Form.Group>
-                </Form>
+                {(FileUploadStatus === undefined || FileUploadStatus === false) ? (
+                  <Form>
+                    <Form.Group>
+                      <Form.Control
+                        type="text"
+                        placeholder="Enter icon name"
+                        onChange={(e) => {
+                          setIconName(e.target.value);
+                        }}
+                        style={{width: "75%"}}
+                      />
+                    </Form.Group>
+                  </Form>
+                  ) : null }
                 <button
                   onClick={handleFileUpload}
                   style={{ width: "fit-content" }}

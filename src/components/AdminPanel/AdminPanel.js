@@ -56,7 +56,6 @@ function AdminPanel(props) {
               onHide={() => {
                 setFileUploadPopup(false);
               }}
-              setImages={setImages}
             />
             <Button
               onClick={() => {
