@@ -1,20 +1,12 @@
+import MapStandaloneSearchBox from "./MapStandaloneSearchBox";
+import MapDrawingManager from "./MapDrawingManager";
 import React, { useState } from "react";
 import Popup from "./components/Popup/MarkerPopupWindow";
-import {
-  GoogleMap,
-  useJsApiLoader,
-  InfoWindow,
-  Marker,
-  OverlayView,
-  DrawingManager,
-  Polygon,
-  StandaloneSearchBox,
-} from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
 import Axios from "axios";
 import "./useStateWithCallback";
 import useStateWithCallback from "./useStateWithCallback";
-import GenericPopupWindow from "./components/Popup/GenericPopup";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
 import Form from "react-bootstrap/Form";
 
@@ -34,7 +26,7 @@ const divStyle = {
   padding: 15,
 };
 
-function MyComponent(props) {
+function MapContainer(props) {
   const [libraries] = useState(["drawing", "places"]);
   const [activeMarker, setActiveMarker] = useState(false);
   const [markerLoc, setMarkerLoc] = useStateWithCallback(0);
@@ -197,60 +189,13 @@ function MyComponent(props) {
       />
       <Marker position={center} onClick={() => handleOnClick()} />
 
-      <DrawingManager
-        onMarkerComplete={(marker) => {
-          const position = marker.position;
-          marker.setIcon(
-            "/icon_images/edit_location_FILL0_wght400_GRAD0_opsz48.png"
-          );
-          // Make marker transition little nicer with timeout
-          setTimeout(() => {
-            marker.setMap(null);
-          }, 500);
-          Axios.post("http://localhost:5000/api/setMarkerInfo", { position })
-            .then((response) => {
-              // add marker to markers array
-              setMarkers((current) => [
-                ...current,
-                {
-                  marker_id: response.data.payload.marker_id,
-                  marker_name: response.data.payload.marker_name,
-                  latitude: parseFloat(response.data.payload.latitude),
-                  longitude: parseFloat(response.data.payload.longitude),
-                  file_name: "edit_location_FILL0_wght400_GRAD0_opsz48.png",
-                },
-              ]);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }}
-        options={{
-          drawingControlOptions: {
-            drawingModes: ["marker"],
-          },
-        }}
-      />
+      <MapDrawingManager setMarkers={setMarkers} />
 
-      <StandaloneSearchBox
+      <MapStandaloneSearchBox
         bounds={bounds}
         onPlacesChanged={onPlacesChanged}
-        onLoad={onSBLoad}
-      >
-        <Form.Control
-          type="text"
-          placeholder="Search for a location"
-          style={{
-            boxSizing: `border-box`,
-            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-            textOverflow: `ellipses`,
-            position: `absolute`,
-            left: `40vw`,
-            top: `5%`,
-            width: `18vw`,
-          }}
-        />
-      </StandaloneSearchBox>
+        onSBLoad={onSBLoad}
+      />
       <AdminPanel flushMarkers={() => FlushMarkers()} />
       <div className="marker-visiblity">
         <Form>
@@ -268,4 +213,4 @@ function MyComponent(props) {
   );
 }
 
-export default React.memo(MyComponent);
+export default React.memo(MapContainer);
