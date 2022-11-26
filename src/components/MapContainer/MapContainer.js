@@ -1,13 +1,13 @@
 import MapStandaloneSearchBox from "./MapStandaloneSearchBox";
 import MapDrawingManager from "./MapDrawingManager";
 import React, { useState } from "react";
-import Popup from "./components/Popup/MarkerPopupWindow";
+import Popup from "../Popup/MarkerPopupWindow";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
 import Axios from "axios";
-import "./useStateWithCallback";
-import useStateWithCallback from "./useStateWithCallback";
-import AdminPanel from "./components/AdminPanel/AdminPanel";
+import "../../useStateWithCallback";
+import useStateWithCallback from "../../useStateWithCallback";
+import AdminPanel from "../AdminPanel/AdminPanel";
 import Form from "react-bootstrap/Form";
 
 const containerStyle = {
