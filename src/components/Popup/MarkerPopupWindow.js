@@ -13,6 +13,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 
 function PopupWindow(props) {
+  let inputRef = useRef(null);
   const [imageIcons, setImageIcons] = useState([]);
   const [selectedIcon, setSelectedIcon] = useState({
     icon_id: 0,
@@ -47,29 +48,33 @@ function PopupWindow(props) {
     });
   }, [props]);
 
-  const handleMarkerSaving = (formData) => {
-    formData.imageName = selectedFile?.name;
-
+  const handleMarkerSaving = (inputData) => {
+    inputData.imageName = selectedFile?.name;
     let markerFoundOnMap = props.markers.find(
       (marker) => marker.marker_id === props.selectedMarker.marker_id
     );
 
 
     if (markerFoundOnMap)  {
-      const data = {
-        marker_id: formData.selectedMarkerId,
-        icon_id: selectedIcon.icon_id,
-        marker_name: formData.markerName,
-        latitude: formData.latitude,
-        longitude: formData.longitude,
-        image_name: formData.fileName,
-      };
-      Axios.post("http://localhost:5000/api/updateMarker", { data })
+      const formData = new FormData();
+      formData.append("file", inputRef.current?.files[0]);
+      formData.append("marker_id", inputData.selectedMarkerId);
+      formData.append("icon_id", selectedIcon.icon_id);
+      formData.append("marker_name", inputData.markerName);
+      formData.append("latitude", inputData.latitude);
+      formData.append("longitude", inputData.longitude);
+      formData.append("image_name", inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image);
+      
+      Axios.post("http://localhost:5000/api/updateMarker", formData)
         .then((response) => {
+          console.log(response);
           props.setSelectedMarker((prevMarker) => ({
             ...prevMarker,
             file_name: selectedIcon.icon_name,
             marker_name: (markerName === "") ? prevMarker.marker_name : markerName,
+            latitude: inputData.latitude,
+            longitude: inputData.longitude,
+            image: inputData.imageName,
           }));
           // update props.markers array with new icon
           props.setMarkers((markers) => {
@@ -77,6 +82,9 @@ function PopupWindow(props) {
               if (marker.marker_id === props.selectedMarker.marker_id) {
                 marker.file_name = selectedIcon.icon_name;
                 marker.marker_name = (markerName === "") ? marker.marker_name : markerName;
+                marker.latitude = inputData.latitude;
+                marker.longitude = inputData.longitude;
+                marker.image = inputData.imageName;
               }
               return marker;
             });
@@ -117,18 +125,21 @@ function PopupWindow(props) {
   };
 
     // file upload
-    let inputRef = useRef(null);
+    
     const [selectedFile, setSelectedFile] = useState()
     const [preview, setPreview] = useState();
   
-    const handleFileUpload = () => {
+    const handleFileUpload = (e) => {
+      e.preventDefault();
       inputRef.current?.click();
     };
+
+    useEffect(() => {
+      resetFormData();
+    }, [props.selectedMarker]);
   
     // create a preview as a side effect, whenever selected file is changed
     useEffect(() => {
-      resetFormData();
-
       if (!selectedFile) {
           setPreview(undefined)
           return
@@ -139,7 +150,7 @@ function PopupWindow(props) {
   
       // free memory when ever this component is unmounted
       return () => URL.revokeObjectURL(objectUrl)
-    }, [selectedFile, props.selectedMarker])
+    }, [selectedFile])
 
     const resetFormData = () => {
       console.log(props.selectedMarker);
@@ -150,6 +161,7 @@ function PopupWindow(props) {
         activeIcon: props.selectedMarker.file_name,
         activeIconId: props.selectedMarker.icon_id,
         selectedMarkerId: props.selectedMarker.marker_id,
+        image_name: props.selectedMarker.image,
       })
     }
   
@@ -212,9 +224,11 @@ function PopupWindow(props) {
                   }}
                 />
                 <div className="marker-image">
-                    {selectedFile ? (
-                      <img style={{width: "30vw"}} src={preview} />
-                    ) : null }
+                  {selectedFile ? (
+                    <img style={{width: "30vw"}} src={preview} />
+                  ) : ( props.selectedMarker.file_name !== null || props.selectedMarker.file_name !== "undefined") ? (
+                    <img style={{width: "30vw"}} src={"/marker_images/" + props.selectedMarker.image} />
+                  ) : null }
                 </div>
               </Col>
             </Row>

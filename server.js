@@ -56,29 +56,32 @@ app.post('/api/setMarkerInfo', (req, res) => {
 });
 
 app.post('/api/updateMarker',  (req, res) => {
-  let query;
-  let data;
-  if (req.body.data.marker_name === "") {
-    query = "UPDATE markers SET icon_id = ? WHERE marker_id = ?"
-    data = [
-      req.body.data.icon_id,
-      req.body.data.marker_id,
-    ]
-  } else {
-    query = "UPDATE markers SET marker_name = ?, icon_id = ? WHERE marker_id = ?"
-    data = [
-      req.body.data.marker_name,
-      req.body.data.icon_id,
-      req.body.data.marker_id,
-    ]
-  }
+  let query = "UPDATE markers SET marker_name = ?, icon_id = ?, latitude = ?, longitude = ?, image = ? WHERE marker_id = ?"
+  let file = req.files?.file;
+  let data = [
+    req.body.marker_name,
+    req.body.icon_id,
+    Number(req.body.latitude),
+    Number(req.body.longitude),
+    req.body.image_name,
+    req.body.marker_id,
+  ]
 
   db.query(
     query, data, (err, result) => {
       if (err) {
         console.log(err.message)
       } else {
-        res.status(200).send(result);
+        if (file) {
+          file.mv("./public/marker_images/" + file.name, (err) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.status(200).send(result);
+            }
+          });
+        }
+        
       }
     }
   )
@@ -92,6 +95,7 @@ app.get('/api/getMarkerInfo', (req, res) => {
                   markers.latitude,
                   markers.longitude,
                   markers.icon_id,
+                  markers.image,
                   icons.file_name
                 FROM markers
                 JOIN icons
