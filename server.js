@@ -63,7 +63,7 @@ app.post('/api/update-map-marker',  (req, res) => {
     req.body.icon_id,
     Number(req.body.latitude),
     Number(req.body.longitude),
-    req.body.image_name,
+    req.body.image_name ? req.body.image_name : null,
     req.body.marker_id,
   ]
 
@@ -182,6 +182,7 @@ app.post('/api/upload-icon', (req, res) => {
           const payload = {
             icon_id: result.insertId,
             file_name: filename,
+            icon_name: iconName,
           }
           res.status(200).send({message: 'File uploaded', payload: payload});
         }
