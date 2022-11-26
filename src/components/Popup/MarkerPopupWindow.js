@@ -1,3 +1,4 @@
+import MarkerDeletion from './MarkerDeletion';
 import React, { useState, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -6,8 +7,7 @@ import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Axios from "axios";
-import GenericPopupWindow from "./GenericPopup";
-import Alert from "react-bootstrap/Alert";
+
 import {useForm} from 'react-hook-form';
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -74,7 +74,7 @@ function PopupWindow(props) {
             marker_name: (markerName === "") ? prevMarker.marker_name : markerName,
             latitude: inputData.latitude,
             longitude: inputData.longitude,
-            image: inputData.imageName,
+            image: inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image,
           }));
           // update props.markers array with new icon
           props.setMarkers((markers) => {
@@ -84,7 +84,7 @@ function PopupWindow(props) {
                 marker.marker_name = (markerName === "") ? marker.marker_name : markerName;
                 marker.latitude = inputData.latitude;
                 marker.longitude = inputData.longitude;
-                marker.image = inputData.imageName;
+                marker.image = inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image;
               }
               return marker;
             });
@@ -102,77 +102,55 @@ function PopupWindow(props) {
   const deleteMarkerPopup = () => {
     setMarkerDeleted(true);
   };
+  
+  //used for file preview
+  const [selectedFile, setSelectedFile] = useState()
+  const [preview, setPreview] = useState();
 
-  const handleMarkerDelete = () => {
-    const data = {
-      marker_id: props.selectedMarker.marker_id,
-    };
-    Axios.delete("http://localhost:5000/api/deleteMarker", { data })
-      .then((response) => {
-        console.log(response);
-        // remove marker from props.markers array
-        props.setMarkers((markers) => {
-          return markers.filter(
-            (marker) => marker.marker_id !== props.selectedMarker.marker_id
-          );
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    setMarkerDeleted(false);
-    props.onHide();
+  const handleFileUpload = (e) => {
+    e.preventDefault();
+    inputRef.current?.click();
   };
 
-    // file upload
+  useEffect(() => {
+    resetFormData();
+  }, [props.selectedMarker]);
+
+  // create a preview as a side effect, whenever selected file is changed
+  useEffect(() => {
+    if (!selectedFile) {
+        setPreview(undefined)
+        return
+    }
+
+    const objectUrl = URL.createObjectURL(selectedFile)
+    setPreview(objectUrl)
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [selectedFile])
+
+  const resetFormData = () => {
+    console.log(props.selectedMarker);
+    reset({
+      markerName: props.selectedMarker.marker_name,
+      latitude: props.selectedMarker.latitude,
+      longitude: props.selectedMarker.longitude,
+      activeIcon: props.selectedMarker.file_name,
+      activeIconId: props.selectedMarker.icon_id,
+      selectedMarkerId: props.selectedMarker.marker_id,
+      image_name: props.selectedMarker.image,
+    })
+  }
+
+  const onSelectFile = e => {
+    if (!inputRef.current?.files || inputRef.current?.files.length === 0) {
+        setSelectedFile(undefined)
+        return
+    }
     
-    const [selectedFile, setSelectedFile] = useState()
-    const [preview, setPreview] = useState();
-  
-    const handleFileUpload = (e) => {
-      e.preventDefault();
-      inputRef.current?.click();
-    };
-
-    useEffect(() => {
-      resetFormData();
-    }, [props.selectedMarker]);
-  
-    // create a preview as a side effect, whenever selected file is changed
-    useEffect(() => {
-      if (!selectedFile) {
-          setPreview(undefined)
-          return
-      }
-  
-      const objectUrl = URL.createObjectURL(selectedFile)
-      setPreview(objectUrl)
-  
-      // free memory when ever this component is unmounted
-      return () => URL.revokeObjectURL(objectUrl)
-    }, [selectedFile])
-
-    const resetFormData = () => {
-      console.log(props.selectedMarker);
-      reset({
-        markerName: props.selectedMarker.marker_name,
-        latitude: props.selectedMarker.latitude,
-        longitude: props.selectedMarker.longitude,
-        activeIcon: props.selectedMarker.file_name,
-        activeIconId: props.selectedMarker.icon_id,
-        selectedMarkerId: props.selectedMarker.marker_id,
-        image_name: props.selectedMarker.image,
-      })
-    }
-  
-    const onSelectFile = e => {
-      if (!inputRef.current?.files || inputRef.current?.files.length === 0) {
-          setSelectedFile(undefined)
-          return
-      }
-      
-      setSelectedFile(inputRef.current?.files[0])
-    }
+    setSelectedFile(inputRef.current?.files[0])
+  }
 
   return (
     <Modal
@@ -327,27 +305,13 @@ function PopupWindow(props) {
         <Button onClick={props.onHide}>Close</Button>
         <Button onClick={handleSubmit((data) => handleMarkerSaving(data))}>Save</Button>
       </Modal.Footer>
-      <GenericPopupWindow
-        show={markerSaved}
-        onHide={() => setMarkerSaved(false)}
-        title="Marker Saved"
-      >
-        <Alert variant="success">
-          The marker icon was successfully changed. You can close this box
-        </Alert>
-      </GenericPopupWindow>
-      <GenericPopupWindow
-        show={markerDeleted}
-        onHide={() => setMarkerDeleted(false)}
-        title="Marker Deletion Warning"
-        extraButton={"Delete Marker"}
-        extraAction={handleMarkerDelete}
-      >
-        <Alert variant="danger">
-          Are you sure you want to delete this marker? This action cannot be
-          undone.
-        </Alert>
-      </GenericPopupWindow>
+      <MarkerDeletion
+        markerSaved={markerSaved} 
+        setMarkerSaved={setMarkerSaved} 
+        markerDeleted={markerDeleted} 
+        setMarkerDeleted={setMarkerDeleted}
+        props={props}
+      />
     </Modal>
   );
 }
