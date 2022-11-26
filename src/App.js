@@ -1,4 +1,4 @@
-import MapContainer from "./MapContainer";
+import MapContainer from "./components/MapContainer/MapContainer";
 import Legend from "./components/Legend";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -14,7 +14,7 @@ function App() {
   const [images, setImages] = useRecoilState(imagesState);
 
   useEffect(() => {
-    Axios.get("http://localhost:5000/api/getIcons")
+    Axios.get("http://localhost:5000/api/get-uploaded-icons")
       .then((response) => {
         setImages(response.data);
       })

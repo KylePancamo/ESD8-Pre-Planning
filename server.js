@@ -88,7 +88,7 @@ app.post('/api/update-map-marker',  (req, res) => {
 });
 
 
-app.get('/api/fetch-placed-marker', (req, res) => {
+app.get('/api/fetch-placed-markers', (req, res) => {
   const query = `SELECT
                   markers.marker_id,
                   markers.marker_name,

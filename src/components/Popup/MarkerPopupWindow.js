@@ -32,7 +32,7 @@ function PopupWindow(props) {
   } = useForm();
 
   const fetchImages = () => {
-    Axios.get("http://localhost:5000/api/getIcons")
+    Axios.get("http://localhost:5000/api/get-uploaded-icons")
       .then((response) => {
         setImageIcons(response.data);
       })
