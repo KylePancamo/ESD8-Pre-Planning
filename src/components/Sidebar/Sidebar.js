@@ -18,7 +18,7 @@ function Sidebar(props) {
   useEffect(() => {
     console.log(props.searchedSite);
     if (props.searchedSite !== "") {
-      Axios.post("http://localhost:5000/api/getSidebarData", {address: props.searchedSite})
+      Axios.post("http://localhost:5000/api/get-sidebar-data", {address: props.searchedSite})
       .then((response) => {
         console.log(response);
         if(response.data.length > 0) {

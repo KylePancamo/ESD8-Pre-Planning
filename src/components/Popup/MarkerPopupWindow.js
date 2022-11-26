@@ -65,7 +65,7 @@ function PopupWindow(props) {
       formData.append("longitude", inputData.longitude);
       formData.append("image_name", inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image);
       
-      Axios.post("http://localhost:5000/api/updateMarker", formData)
+      Axios.post("http://localhost:5000/api/update-map-marker", formData)
         .then((response) => {
           console.log(response);
           props.setSelectedMarker((prevMarker) => ({

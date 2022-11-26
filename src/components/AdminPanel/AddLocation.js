@@ -20,7 +20,7 @@ function AddLocation(props) {
   const [data, setData] = useState("");
 
   const onSubmit = (data) => {
-    Axios.post("http://localhost:5000/api/addPreplanningLocation", {
+    Axios.post("http://localhost:5000/api/add-preplanning-location", {
       payload: data,
     })
       .then((response) => {

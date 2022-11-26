@@ -12,12 +12,12 @@ function MapDrawingManager({
         const position = marker.position;
         marker.setIcon(
           "/icon_images/edit_location_FILL0_wght400_GRAD0_opsz48.png"
-        ); // Make marker transition little nicer with timeout
-
+        ); 
+        // Make marker transition little nicer with timeout
         setTimeout(() => {
           marker.setMap(null);
         }, 500);
-        Axios.post("http://localhost:5000/api/setMarkerInfo", {
+        Axios.post("http://localhost:5000/api/insert-placed-marker", {
           position,
         })
           .then((response) => {

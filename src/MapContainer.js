@@ -102,7 +102,7 @@ function MapContainer(props) {
   }, []);
 
   const placeMarkers = () => {
-    Axios.get("http://localhost:5000/api/getMarkerInfo")
+    Axios.get("http://localhost:5000/api/fetch-placed-markers")
       .then((res) => {
         setMarkers(res.data);
       })
@@ -134,7 +134,7 @@ function MapContainer(props) {
   };
 
   const FlushMarkers = () => {
-    Axios.delete("http://localhost:5000/api/deleteMarkers")
+    Axios.delete("http://localhost:5000/api/delete-all-markers")
       .then((response) => {
         console.log(response);
         setMarkers([]);

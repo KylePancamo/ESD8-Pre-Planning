@@ -26,7 +26,7 @@ function LocationsModal(props) {
   };
 
   const fetchPreplanningLocations = () => {
-    Axios.get("http://localhost:5000/api/getPreplanningLocations")
+    Axios.get("http://localhost:5000/api/get-preplanning-locations")
       .then((response) => {
         setPrePlanningLocations(response.data);
       })

@@ -21,7 +21,7 @@ function EditLocation(props) {
   const [preplanData, setpreplanData] = useState({});
 
   const onSubmit = (data) => {
-    Axios.post("http://localhost:5000/api/updatePreplanningLocation", {
+    Axios.post("http://localhost:5000/api/update-preplanning-location", {
       payload: data,
       id: props.selectedEditLocation.id,
     })

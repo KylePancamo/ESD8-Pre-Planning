@@ -25,7 +25,7 @@ function FileUpload(props) {
         formData.append("file", inputRef.current?.files[0]);
         formData.append('iconName', iconName);
 
-        Axios.post("http://localhost:5000/api/upload", formData)
+        Axios.post("http://localhost:5000/api/upload-icon", formData)
           .then((response) => {
             setFileUploadStatus(true);
             setFileUploadString(response.data.message);

@@ -30,7 +30,7 @@ db.connect((err) => {
 });
 
 
-app.post('/api/setMarkerInfo', (req, res) => {
+app.post('/api/insert-placed-marker', (req, res) => {
   const data = [
     req.body.position.lat.toFixed(8),
     req.body.position.lng.toFixed(8)
@@ -55,7 +55,7 @@ app.post('/api/setMarkerInfo', (req, res) => {
   )
 });
 
-app.post('/api/updateMarker',  (req, res) => {
+app.post('/api/update-map-marker',  (req, res) => {
   let query = "UPDATE markers SET marker_name = ?, icon_id = ?, latitude = ?, longitude = ?, image = ? WHERE marker_id = ?"
   let file = req.files?.file;
   let data = [
@@ -88,7 +88,7 @@ app.post('/api/updateMarker',  (req, res) => {
 });
 
 
-app.get('/api/getMarkerInfo', (req, res) => {
+app.get('/api/fetch-placed-marker', (req, res) => {
   const query = `SELECT
                   markers.marker_id,
                   markers.marker_name,
@@ -114,7 +114,7 @@ app.get('/api/getMarkerInfo', (req, res) => {
   )
 });
 
-app.delete('/api/deleteMarkers', (req, res) => {
+app.delete('/api/delete-all-markers', (req, res) => {
   const query = "TRUNCATE TABLE markers"
 
   db.query(
@@ -129,7 +129,7 @@ app.delete('/api/deleteMarkers', (req, res) => {
   )
 })
 
-app.delete('/api/deleteMarker', (req, res) => {
+app.delete('/api/delete-selected-marker', (req, res) => {
   const query = "DELETE FROM markers WHERE marker_id = ?"
   const data = [
     req.body.marker_id
@@ -148,7 +148,7 @@ app.delete('/api/deleteMarker', (req, res) => {
 })
 
 
-app.post('/api/upload', (req, res) => {
+app.post('/api/upload-icon', (req, res) => {
   let file = req.files.file;
   let iconName = req.body.iconName;
   if (file.mimetype !== 'image/png') {
@@ -190,7 +190,7 @@ app.post('/api/upload', (req, res) => {
   });
 });
 
-app.get('/api/getIcons', (req, res) => {
+app.get('/api/get-uploaded-icons', (req, res) => {
   const query = 'SELECT * FROM icons';
 
   db.query(query, (err, result) => {
@@ -204,7 +204,7 @@ app.get('/api/getIcons', (req, res) => {
 
 /*********SIDEBAR REQUESTS*********/
 
-app.post('/api/getSidebarData', (req, res) => {
+app.post('/api/get-sidebar-data', (req, res) => {
   let address = req.body.address;
   // splitup address with separator ','
   let addressArray = address.split(',');
@@ -228,7 +228,7 @@ app.post('/api/getSidebarData', (req, res) => {
   );
 });
 
-app.post("/api/addPreplanningLocation", (req, res) => {
+app.post("/api/add-preplanning-location", (req, res) => {
   const payload = req.body.payload;
   const query = `INSERT INTO pre_planning (occupancyname, mut_aid_helotesfd, mut_aid_d7fr, mut_aid_leonspringsvfd, mut_aid_bc2fd, occupancyaddress, occupancycity, occupancystate, occupancyzip, occupancycountry, constructiontype, 
                                            hazards, hydrant_address, hydrant_distance, access, electric_meter, breaker_box, water, gas_shutoff, emergency_contact_number, other_notes,
@@ -282,7 +282,7 @@ app.post("/api/addPreplanningLocation", (req, res) => {
   )
 });
 
-app.post("/api/updatePreplanningLocation", (req, res) => {
+app.post("/api/update-preplanning-location", (req, res) => {
   const payload = req.body.payload;
   const id = req.body.id;
   const query = `UPDATE pre_planning SET 
@@ -329,7 +329,7 @@ app.post("/api/updatePreplanningLocation", (req, res) => {
   })
 });
 
-app.get("/api/getPreplanningLocations", (req, res) => {
+app.get("/api/get-preplanning-locations", (req, res) => {
   const query = "SELECT * FROM pre_planning";
 
   db.query(
@@ -343,7 +343,7 @@ app.get("/api/getPreplanningLocations", (req, res) => {
   );
 });
 
-app.get("/api/getPreplanningLocation/:id", (req, res) => {
+app.get("/api/get-preplanning-location/:id", (req, res) => {
   // grab id from url
   const id = req.params.id;
   db.query(
@@ -357,7 +357,7 @@ app.get("/api/getPreplanningLocation/:id", (req, res) => {
   )
 });
 
-app.post("/api/updateIconName", (req, res) => {
+app.post("/api/update-icon-name", (req, res) => {
   const id = req.body.id;
   const iconName = req.body.formData.iconName;
   const query = `UPDATE icons SET icon_name = ? WHERE icon_id = ?`;
