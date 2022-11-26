@@ -203,10 +203,11 @@ function PopupWindow(props) {
                 />
                 <div className="marker-image">
                   {selectedFile ? (
-                    <img style={{width: "30vw"}} src={preview} />
-                  ) : ( props.selectedMarker.file_name !== null || props.selectedMarker.file_name !== "undefined") ? (
-                    <img style={{width: "30vw"}} src={"/marker_images/" + props.selectedMarker.image} />
-                  ) : null }
+                      <img style={{width: "30vw"}} src={preview} />
+                    ) : (props.selectedMarker.image !== null) ? (
+                      <img style={{width: "30vw"}} src={"/marker_images/" + props.selectedMarker.image} />
+                    ) : <>No image selected</>
+                  }
                 </div>
               </Col>
             </Row>
