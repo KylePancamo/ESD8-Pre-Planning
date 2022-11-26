@@ -2,8 +2,8 @@ import Axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-import {useRecoilState} from 'recoil';
-import {imagesState} from "../atoms";
+import { useRecoilState } from "recoil";
+import { imagesState } from "../atoms";
 
 function Legend(props) {
   const [edit, setEdit] = useState(false);
@@ -20,7 +20,6 @@ function Legend(props) {
               <img src={"/icon_images/" + image.file_name} />
               {image.icon_name}
             </div>
-           
           );
         })}
       </div>
