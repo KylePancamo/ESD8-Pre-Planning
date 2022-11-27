@@ -76,18 +76,19 @@ function PopupWindow(props) {
             longitude: inputData.longitude,
             image: inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image,
           })
-          // update props.markers array with new icon
           props.setMarkers((markers) => {
-            return markers.map((marker) => {
+            let newMarkers = markers.map((marker) => {
               if (marker.marker_id === props.selectedMarker.marker_id) {
                 marker.file_name = selectedIcon.icon_name;
-                marker.marker_name = (markerName === "") ? marker.marker_name : markerName;
+                marker.marker_name = inputData.markerName;
                 marker.latitude = inputData.latitude;
                 marker.longitude = inputData.longitude;
                 marker.image = inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image;
               }
               return marker;
             });
+            localStorage.setItem("markers", JSON.stringify(newMarkers));
+            return newMarkers;
           });
         })
         .then(() => {

@@ -1,6 +1,6 @@
 import MapStandaloneSearchBox from "./MapStandaloneSearchBox";
 import MapDrawingManager from "./MapDrawingManager";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Popup from "../Popup/MarkerPopupWindow";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
@@ -31,15 +31,7 @@ function MapContainer(props) {
   const [activeMarker, setActiveMarker] = useState(false);
   const [markerLoc, setMarkerLoc] = useStateWithCallback(0);
   const [drawManagerMarker, setDrawManagerMarker] = useState();
-  const [markers, setMarkers] = useState([
-    {
-      marker_id: 0,
-      marker_name: "default",
-      latitude: 0,
-      longitude: 0,
-      file_name: "",
-    },
-  ]);
+  const [markers, setMarkers] = useState(undefined);
   const [selectedMarker, setSelectedMarker] = useState({
     marker_id: 0,
     marker_name: "default",
@@ -102,11 +94,23 @@ function MapContainer(props) {
   }, []);
 
   const placeMarkers = () => {
-    Axios.get("http://localhost:5000/api/fetch-placed-markers")
-      .then((res) => {
-        setMarkers(res.data);
-      })
-      .catch((err) => {});
+    let localMarkers = JSON.parse(localStorage.getItem("markers"));
+    // fetch data if local storage is empty
+    if (localMarkers == null && localStorage.getItem("dbMarkers")) {
+      console.log('fetching markers');
+      Axios.get("http://localhost:5000/api/fetch-placed-markers")
+        .then((res) => {
+          if (res.data.length > 0) {
+            setMarkers(res.data);
+          } else {
+            localStorage.setItem("dbMarkers", 0);
+          }
+        })
+        .catch((err) => {});
+    } else {
+      console.log('using local markers');
+      setMarkers(JSON.parse(localStorage.getItem("markers")));
+    }
   };
 
   const onUnmount = React.useCallback(function callback(map) {
@@ -138,6 +142,7 @@ function MapContainer(props) {
       .then((response) => {
         console.log(response);
         setMarkers([]);
+        localStorage.clear();
       })
       .catch((err) => {
         console.log(err);
@@ -158,26 +163,29 @@ function MapContainer(props) {
         styles: MapStyle,
       }}
     >
-      {markers.map((marker) => {
-        marker.position = {
-          lat: parseFloat(marker.latitude),
-          lng: parseFloat(marker.longitude),
-        };
-        return (
-          <Marker
-            position={marker.position}
-            onClick={() => {
-              if (markerClicked === false) {
-                setMarkerClicked(true);
-              }
-              setSelectedMarker(marker);
-            }}
-            icon={"/icon_images/" + marker.file_name}
-            key={marker.marker_id}
-            visible={markerVisibility}
-          />
-        );
-      })}
+      {markers ? (
+          markers.map((marker) => {
+          marker.position = {
+            lat: parseFloat(marker.latitude),
+            lng: parseFloat(marker.longitude),
+          };
+          return (
+            <Marker
+              position={marker.position}
+              onClick={() => {
+                if (markerClicked === false) {
+                  setMarkerClicked(true);
+                }
+                setSelectedMarker(marker);
+              }}
+              icon={"/icon_images/" + marker.file_name}
+              key={marker.marker_id}
+              visible={markerVisibility}
+            />
+          );
+          })
+        ) : null 
+    }
       <Popup
         show={markerClicked}
         onHide={() => setMarkerClicked(false)}
@@ -189,7 +197,7 @@ function MapContainer(props) {
       />
       <Marker position={center} onClick={() => handleOnClick()} />
 
-      <MapDrawingManager setMarkers={setMarkers} />
+      <MapDrawingManager markers={markers} setMarkers={setMarkers} />
 
       <MapStandaloneSearchBox
         bounds={bounds}
