@@ -57,7 +57,7 @@ function PopupWindow(props) {
 
     if (markerFoundOnMap)  {
       const formData = new FormData();
-      formData.append("file", inputRef.current?.files[0]);
+      formData.append("file", inputRef.current?.files[0] ? inputRef.current?.files[0] : null);
       formData.append("marker_id", inputData.selectedMarkerId);
       formData.append("icon_id", selectedIcon.icon_id);
       formData.append("marker_name", inputData.markerName);
@@ -68,14 +68,14 @@ function PopupWindow(props) {
       Axios.post("http://localhost:5000/api/update-map-marker", formData)
         .then((response) => {
           console.log(response);
-          props.setSelectedMarker((prevMarker) => ({
-            ...prevMarker,
+          props.setSelectedMarker({
+            ...props.selectedMarker,
             file_name: selectedIcon.icon_name,
-            marker_name: (markerName === "") ? prevMarker.marker_name : markerName,
+            marker_name: inputData.markerName,
             latitude: inputData.latitude,
             longitude: inputData.longitude,
             image: inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image,
-          }));
+          })
           // update props.markers array with new icon
           props.setMarkers((markers) => {
             return markers.map((marker) => {
@@ -131,7 +131,7 @@ function PopupWindow(props) {
   }, [selectedFile])
 
   const resetFormData = () => {
-    console.log(props.selectedMarker);
+    //console.log(props.selectedMarker);
     reset({
       markerName: props.selectedMarker.marker_name,
       latitude: props.selectedMarker.latitude,

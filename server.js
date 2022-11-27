@@ -76,12 +76,10 @@ app.post('/api/update-map-marker',  (req, res) => {
           file.mv("./public/marker_images/" + file.name, (err) => {
             if (err) {
               console.log(err);
-            } else {
-              res.status(200).send(result);
             }
           });
         }
-        
+        res.status(200).send(result);
       }
     }
   )
