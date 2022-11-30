@@ -16,7 +16,7 @@ function Legend(props) {
       <div className="legend-images">
         {images.map((image) => {
           return (
-            <div className="legend-item">
+            <div className="legend-item" key={image.icon_id}>
               <img src={"/icon_images/" + image.file_name} />
               {image.icon_name}
             </div>

@@ -1,13 +1,13 @@
 import MapStandaloneSearchBox from "./MapStandaloneSearchBox";
 import MapDrawingManager from "./MapDrawingManager";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Popup from "../Popup/MarkerPopupWindow";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
 import Axios from "axios";
 import "../../useStateWithCallback";
 import useStateWithCallback from "../../useStateWithCallback";
-import AdminPanel from "../AdminPanel/AdminPanel";
+import AdminPanel from "../AdminPanel/AdminPanelModal";
 import Form from "react-bootstrap/Form";
 
 const containerStyle = {
@@ -15,21 +15,8 @@ const containerStyle = {
   height: "100vh",
 };
 
-const center = {
-  lat: 29.615106009353045,
-  lng: -98.68537740890328,
-};
-
-const divStyle = {
-  background: `white`,
-  border: `1px solid #ccc`,
-  padding: 15,
-};
-
 function MapContainer(props) {
   const [libraries] = useState(["drawing", "places"]);
-  const [activeMarker, setActiveMarker] = useState(false);
-  const [markerLoc, setMarkerLoc] = useStateWithCallback(0);
   const [drawManagerMarker, setDrawManagerMarker] = useState();
   const [markers, setMarkers] = useState(undefined);
   const [selectedMarker, setSelectedMarker] = useState({
@@ -96,14 +83,12 @@ function MapContainer(props) {
   const placeMarkers = () => {
     let localMarkers = JSON.parse(localStorage.getItem("markers"));
     // fetch data if local storage is empty
-    if (localMarkers == null && localStorage.getItem("dbMarkers")) {
+    if (localMarkers == null) {
       console.log('fetching markers');
       Axios.get("http://localhost:5000/api/fetch-placed-markers")
         .then((res) => {
           if (res.data.length > 0) {
             setMarkers(res.data);
-          } else {
-            localStorage.setItem("dbMarkers", 0);
           }
         })
         .catch((err) => {});
@@ -133,10 +118,6 @@ function MapContainer(props) {
     },
   ];
 
-  const setLocation = (marker) => {
-    setMarkerLoc(marker);
-  };
-
   const FlushMarkers = () => {
     Axios.delete("http://localhost:5000/api/delete-all-markers")
       .then((response) => {
@@ -156,9 +137,6 @@ function MapContainer(props) {
       zoom={10}
       onLoad={onLoad}
       onUnmount={onUnmount}
-      onClick={() => {
-        setActiveMarker(false);
-      }}
       options={{
         styles: MapStyle,
       }}

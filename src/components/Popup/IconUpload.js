@@ -51,7 +51,7 @@ function FileUpload(props) {
   };
 
   return (
-    <div>
+    <>
       <Modal
         show={props.show}
         onHide={props.onHide}
@@ -117,7 +117,7 @@ function FileUpload(props) {
           <Button onClick={() => props.onHide()}>Close</Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </>
   );
 }
 

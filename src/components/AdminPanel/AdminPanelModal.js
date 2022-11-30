@@ -1,11 +1,11 @@
 import { useState } from "react";
-import FileUploads from "../Popup/FileUploads";
+import IconUpload from "../Popup/IconUpload";
 import GenericPopupWindow from "../Popup/GenericPopup";
 import Button from "react-bootstrap/Button";
 import IconEditWindow from "./IconEditWindow";
 import {useRecoilState} from 'recoil';
 import {imagesState} from "../../atoms";
-import LocationsModal from './LocationsModal';
+import LocationsModal from './ViewLocations/LocationsModal';
 
 function AdminPanel(props) {
   const [fileUploadPopup, setFileUploadPopup] = useState(false);
@@ -51,7 +51,7 @@ function AdminPanel(props) {
             >
               Upload File
             </Button>
-            <FileUploads
+            <IconUpload
               show={fileUploadPopup}
               onHide={() => {
                 setFileUploadPopup(false);

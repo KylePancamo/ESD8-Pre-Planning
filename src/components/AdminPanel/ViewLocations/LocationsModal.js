@@ -1,8 +1,8 @@
-import EditLocation from "./EditLocation";
-import AddLocation from "./AddLocation";
+import EditLocation from "./EditLocationModal";
+import AddLocation from "./AddLocationModal";
 import {useState} from 'react';
 import Axios from "axios";
-import GenericPopupWindow from "../Popup/GenericPopup";
+import GenericPopupWindow from "../../Popup/GenericPopup";
 import Button from "react-bootstrap/Button";
 
 function LocationsModal(props) {
@@ -10,7 +10,6 @@ function LocationsModal(props) {
   const [selectedEditLocation, setSelectedEditLocation] = useState();
   const [prePlanningLocations, setPrePlanningLocations] = useState([]);
   const [addLocationTrigger, setAddLocationTrigger] = useState(false);
-  const [currentEditLocation, setCurrentEditLocation] = useState({});
 
   const updateLocations = (newVal) => {
     setPrePlanningLocations((locations) => {
@@ -26,6 +25,7 @@ function LocationsModal(props) {
   };
 
   const fetchPreplanningLocations = () => {
+    console.log("fetching preplanning locations");
     Axios.get("http://localhost:5000/api/get-preplanning-locations")
       .then((response) => {
         setPrePlanningLocations(response.data);
@@ -36,7 +36,7 @@ function LocationsModal(props) {
   };
 
   return (
-    <div>
+    <>
       <GenericPopupWindow
         show={props.locationsButton}
         onHide={() => {
@@ -89,9 +89,6 @@ function LocationsModal(props) {
                         onClick={() => {
                           setEdit(true);
                           setSelectedEditLocation(location);
-                          setCurrentEditLocation({
-                            id: location.id,
-                          });
                         }}
                       >
                         Edit
@@ -110,7 +107,7 @@ function LocationsModal(props) {
         selectedEditLocation={selectedEditLocation}
         updateLocations={updateLocations}
       />
-    </div>
+    </>
   );
 }
 

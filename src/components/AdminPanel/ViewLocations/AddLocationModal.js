@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import GenericPopupWindow from "../Popup/GenericPopup";
+import GenericPopupWindow from "../../Popup/GenericPopup";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -7,47 +7,41 @@ import Container from "react-bootstrap/Container";
 import { useForm } from "react-hook-form";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
-import states from "./states";
-import fetchPreplanData from "./fetchPreplanData";
+import states from "../states";
 
-function EditLocation(props) {
+function AddLocation(props) {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const [locationEditResponse, setLocationEditResponse] = useState({});
-  const [preplanData, setpreplanData] = useState({});
+  const [locationAddedResponse, setLocationAddedResponse] = useState(false);
+  const [data, setData] = useState("");
 
   const onSubmit = (data) => {
-    Axios.post("http://localhost:5000/api/update-preplanning-location", {
+    Axios.post("http://localhost:5000/api/add-preplanning-location", {
       payload: data,
-      id: props.selectedEditLocation.id,
     })
       .then((response) => {
-        setLocationEditResponse(response.data);
-        props.updateLocations({
-          id: props.selectedEditLocation.id,
-          occupancyname: data.occupancyName,
-          occupancyaddress: data.streetAddress,
-        });
+        console.log(response);
+        setLocationAddedResponse(response.data);
       })
       .catch((error) => {
-        setLocationEditResponse(error.response?.data);
+        setLocationAddedResponse(error.response.data);
       });
   };
+
+  useEffect(() => {
+    reset();
+  }, [props.show]);
 
   return (
     <GenericPopupWindow
       show={props.show}
       onHide={() => props.onHide()}
-      contentClassName="edit-location-modal"
-      title="Edit Location"
-      onEntering={() => {
-        fetchPreplanData(setpreplanData, reset, props);
-        setLocationEditResponse({});
-      }}
+      contentClassName="add-location-modal"
+      title="Add Location"
     >
       <Form
         className="location-form"
@@ -74,7 +68,6 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Occupancy Name"
                 />
-                <Form.Text className="text-muted"></Form.Text>
                 {errors.occupancyName && (
                   <span style={{ color: "red" }}>
                     {errors.occupancyName.message}
@@ -199,7 +192,7 @@ function EditLocation(props) {
                   <option value="">State</option>
                   {states.map((state) => {
                     return (
-                      <option value={state.abbreviation}>
+                      <option value={state.abbreviation} key={state.abbreviation}>
                         {state.abbreviation} - {state.name}
                       </option>
                     );
@@ -476,14 +469,14 @@ function EditLocation(props) {
         <Button variant="primary" type="submit">
           Submit
         </Button>
-        {locationEditResponse?.status === "success" ? (
-          <div style={{ color: "green" }}>{locationEditResponse?.message}</div>
-        ) : locationEditResponse?.status === "error" ? (
-          <div style={{ color: "red" }}>{locationEditResponse?.message}</div>
+        {locationAddedResponse?.status === "success" ? (
+          <div style={{ color: "green" }}>{locationAddedResponse?.message}</div>
+        ) : locationAddedResponse?.status === "error" ? (
+          <div style={{ color: "red" }}>{locationAddedResponse?.message}</div>
         ) : null}
       </Form>
     </GenericPopupWindow>
   );
 }
 
-export default EditLocation;
+export default AddLocation;

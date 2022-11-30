@@ -2,7 +2,7 @@ import MapContainer from "./components/MapContainer/MapContainer";
 import Legend from "./components/Legend";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "./components/Sidebar/Sidebar";
-import FileUpload from "./components/Popup/FileUploads";
+import IconUpload from "./components/Popup/IconUpload";
 import Axios from "axios";
 import {useState, useEffect} from "react";
 import {useRecoilState} from 'recoil';
@@ -37,7 +37,7 @@ function App() {
         searchedSite={searchedSite}
         setSearchedSite={setSearchedSite}
       />
-      <FileUpload />
+      <IconUpload />
       <Legend />
     </div>
   );
