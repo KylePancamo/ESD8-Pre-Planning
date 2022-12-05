@@ -13,6 +13,7 @@ function Legend(props) {
 
   return (
     <div className="legend">
+      <center><h2>Legend</h2></center>
       <div className="legend-images">
         {images.map((image) => {
           return (
