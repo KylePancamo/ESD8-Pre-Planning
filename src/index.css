@@ -340,9 +340,9 @@ code {
 }
 
 .legend-images .legend-item {
-  flex: 1 0 40%;
+  flex: 1 0 25%;
   margin-bottom: 5px;
-  width: 3vw;
+  width: fit-content;
 }
 
 .locations-modal {

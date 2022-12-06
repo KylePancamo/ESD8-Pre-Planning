@@ -9,6 +9,7 @@ import Button from "react-bootstrap/Button";
 import Axios from "axios";
 import states from "../states";
 import { Autocomplete } from "@react-google-maps/api";
+import Alert from "react-bootstrap/Alert";
 
 
 function AddLocation(props) {
@@ -571,9 +572,13 @@ function AddLocation(props) {
           Submit
         </Button>
         {locationAddedResponse?.status === "success" ? (
-          <div style={{ color: "green" }}>{locationAddedResponse?.message}</div>
+          <Alert variant="success" className="m-2">
+              {locationAddedResponse?.message}
+          </Alert>
         ) : locationAddedResponse?.status === "error" ? (
-          <div style={{ color: "red" }}>{locationAddedResponse?.message}</div>
+          <Alert variant="success" className="m-2">
+              {locationAddedResponse?.message}
+          </Alert>
         ) : null}
       </Form>
     </GenericPopupWindow>
