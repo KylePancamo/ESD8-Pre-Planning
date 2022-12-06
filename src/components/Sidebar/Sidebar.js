@@ -6,19 +6,23 @@ import { Pencil } from "react-bootstrap-icons";
 import { Button } from "react-bootstrap";
 import Popup from "../Popup/GenericPopup"
 import Axios from "axios";
+import {useRecoilState} from 'recoil';
+import {searchSiteState} from "../../atoms";
 
 function Sidebar(props) {
   const [sidebarData, setSidebarData] = useState([]);
   const [siteIsSet, setSiteIsSet] = useState(false);
+  const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
+  
 
   const toggleSideBar = () => {
     props.setSideBarValue(!props.sideBarValue);
   };
 
   useEffect(() => {
-    console.log(props.searchedSite);
-    if (props.searchedSite !== "") {
-      Axios.post("http://localhost:5000/api/get-sidebar-data", {address: props.searchedSite})
+    console.log(searchedSite);
+    if (searchedSite !== "") {
+      Axios.post("http://localhost:5000/api/get-sidebar-data", {address: searchedSite})
       .then((response) => {
         console.log(response);
         if(response.data.length > 0) {
@@ -35,7 +39,7 @@ function Sidebar(props) {
         console.log(error);
       });
     }
-  }, [props.searchedSite]);
+  }, [searchedSite]);
 
   return (
     <div className="sidebar-wrapper">
@@ -62,7 +66,7 @@ function Sidebar(props) {
               X
             </button>
           </div>
-            {siteIsSet ?
+            {siteIsSet ? (
               <div className="sidebar-data-wrapper">
                 <Header 
                   sidebarData={sidebarData}
@@ -72,10 +76,12 @@ function Sidebar(props) {
                   sidebarData={sidebarData}
                 >
                 </Content>
-                <Footer />
               </div>
-              : <h2>No pre-plan data for this site!</h2>  
-            }
+              ) : (
+                <div style={{position: "relative", top: "50%", left: "25%"}}>
+                  Site not found. Please try again.
+                </div>
+              ) }
         </div>
       ) : null}
     </div>

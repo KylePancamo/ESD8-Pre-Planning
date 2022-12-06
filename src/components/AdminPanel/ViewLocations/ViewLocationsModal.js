@@ -68,6 +68,7 @@ function LocationsModal(props) {
                 <th>Occupancy Id</th>
                 <th>Occupancy Name</th>
                 <th>Occupancy Address</th>
+                <th>Occupancy City</th>
               </tr>
             </thead>
             <tbody>
@@ -77,6 +78,7 @@ function LocationsModal(props) {
                     <td>{location.id}</td>
                     <td>{location.occupancyname}</td>
                     <td>{location.occupancyaddress}</td>
+                    <td>{location.occupancycity}</td>
                     <td>
                       <Button
                         variant="info"
