@@ -251,7 +251,7 @@ code {
 
 .admin-panel-main {
   border-radius: 10px;
-  width: 100vw;
+  width: fit-content;
   margin-left:10px;
 }
 
@@ -259,7 +259,7 @@ code {
   position: fixed;
   right: 55%;
   color: white !important;
-  width: fit-content;
+  width: fit-content !important;
   height: fit-content;
   background-color: rgb(20, 28, 36) !important;
 }
