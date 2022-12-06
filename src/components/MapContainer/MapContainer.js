@@ -40,6 +40,7 @@ function MapContainer(props) {
   const [searchBox, setSearchBox] = useState(null);
   const [bounds, setBounds] = useState(null);
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
+  const [mapId, setMapId] = useState("satellite");
 
   const onPlacesChanged = () => {
     const places = searchBox.getPlaces();
@@ -140,11 +141,14 @@ function MapContainer(props) {
       center={center}
       zoom={10}
       onLoad={onLoad}
-      onUnmount={onUnmount}
       options={{
         styles: MapStyle,
       }}
+      onMapTypeIdChanged={() => {
+        setMapId(map ? map.getMapTypeId() : "roadmap");
+      }}
     >
+      {console.log(mapId)}
       {markers ? (
           markers.map((marker) => {
           marker.position = {
@@ -192,6 +196,9 @@ function MapContainer(props) {
           <Form.Check
             type="switch"
             label="Marker Visibility"
+            style={
+              mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
+            }
             checked={markerVisibility}
             onChange={() => setMarkerVisibility(!markerVisibility)}
           />
