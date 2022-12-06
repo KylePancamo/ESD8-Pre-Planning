@@ -9,18 +9,47 @@ import Button from "react-bootstrap/Button";
 import Axios from "axios";
 import states from "../states";
 import fetchPreplanData from "./fetchPreplanData";
+import { Autocomplete } from "@react-google-maps/api";  
+import Alert from "react-bootstrap/Alert";
 
 function EditLocation(props) {
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
   const [locationEditResponse, setLocationEditResponse] = useState({});
   const [preplanData, setpreplanData] = useState({});
 
+  const [searchBox, setSearchBox] = useState(null);
+
+  function onLoad(autocomplete) {
+    setSearchBox(autocomplete);
+  }
+
+  function onPlaceChanged() {
+    if (searchBox != null) {
+      const place = searchBox.getPlace();
+      const formattedAddress = place.formatted_address;
+      let addressArray = formattedAddress.split(',');
+
+      let occupancyaddress = addressArray[0].trim();
+      let city = addressArray[1].trim();
+      let state = addressArray[2].split(' ')[1].trim();
+      let zip = addressArray[2].split(' ')[2].trim();
+      setValue("streetAddress", occupancyaddress);
+      setValue("city", city);
+      setValue("state", state);
+      setValue("zipCode", zip);
+    } else {
+      alert("Please enter text");
+    }
+  }
+
   const onSubmit = (data) => {
+    console.log(data);
     Axios.post("http://localhost:5000/api/update-preplanning-location", {
       payload: data,
       id: props.selectedEditLocation.id,
@@ -172,6 +201,12 @@ function EditLocation(props) {
             </Row>
             <Row className="row">
               <Col>
+                <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Search for Address Location"
+                  />
+                </Autocomplete>
                 <Form.Label>
                   Street Address
                 </Form.Label>
@@ -545,9 +580,13 @@ function EditLocation(props) {
           Submit
         </Button>
         {locationEditResponse?.status === "success" ? (
-          <div style={{ color: "green" }}>{locationEditResponse?.message}</div>
+          <Alert variant="success" className="m-2">
+              {locationEditResponse?.message}
+          </Alert>
         ) : locationEditResponse?.status === "error" ? (
-          <div style={{ color: "red" }}>{locationEditResponse?.message}</div>
+          <Alert variant="success" className="m-2">
+              {locationEditResponse?.message}
+          </Alert>
         ) : null}
       </Form>
     </GenericPopupWindow>

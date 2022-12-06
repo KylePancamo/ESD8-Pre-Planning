@@ -35,7 +35,7 @@ app.post('/api/insert-placed-marker', (req, res) => {
     req.body.position.lat.toFixed(8),
     req.body.position.lng.toFixed(8)
   ]
-  const query = "INSERT INTO markers(marker_name, latitude, longitude, icon_id) VALUES ('test', ?, ?, 10)"
+  const query = "INSERT INTO markers(marker_name, latitude, longitude, icon_id) VALUES ('Enter a new marker name', ?, ?, 10)"
   db.query(
     query, data, (err, result) => {
       if (err) {
@@ -43,7 +43,7 @@ app.post('/api/insert-placed-marker', (req, res) => {
       } else {
         const payload = {
           marker_id: result.insertId,
-          marker_name: "test",
+          marker_name: "Enter a new marker name",
           latitude: req.body.position.lat.toFixed(8),
           longitude: req.body.position.lng.toFixed(8),
           file_name: "/icon_images/edit_location_FILL0_wght400_GRAD0_opsz48.png",
@@ -209,7 +209,9 @@ app.post('/api/get-sidebar-data', (req, res) => {
   let addressArray = address.split(',');
 
   let occupancyaddress = addressArray[0].trim();
+  console.log(occupancyaddress);
   let city = addressArray[1].trim();
+  console.log(city);
   const query = `SELECT * FROM pre_planning WHERE occupancyaddress = ? AND occupancycity = ?`;
   const data = [
     occupancyaddress,
@@ -284,6 +286,8 @@ app.post("/api/add-preplanning-location", (req, res) => {
 app.post("/api/update-preplanning-location", (req, res) => {
   const payload = req.body.payload;
   const id = req.body.id;
+  console.log(payload);
+  console.log(id);
   const query = `UPDATE pre_planning SET 
                   occupancyname = ?, mut_aid_helotesfd = ?, mut_aid_d7fr = ?, mut_aid_leonspringsvfd = ?, 
                   mut_aid_bc2fd = ?, occupancyaddress = ?, occupancycity = ?, occupancystate = ?, occupancyzip = ?,

@@ -12,7 +12,6 @@ function Header(props) {
     <div className="sidebar-header">
       <p className="sidebar-header__title">{props.sidebarData.occupancyname}</p>
       <p className="sidebar-header__subtitle">{addressLineOne}</p>
-      <p className="sidebar-header__subtitle2">{addressLineTwo}</p>
     </div>
   );
 }
