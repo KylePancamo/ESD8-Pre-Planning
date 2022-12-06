@@ -9,6 +9,9 @@ import "../../useStateWithCallback";
 import useStateWithCallback from "../../useStateWithCallback";
 import AdminPanel from "../AdminPanel/AdminPanelModal";
 import Form from "react-bootstrap/Form";
+import {useRecoilState} from 'recoil';
+import {searchSiteState} from "../../atoms";
+
 
 const containerStyle = {
   width: "100vw",
@@ -36,11 +39,12 @@ function MapContainer(props) {
   const [markerVisibility, setMarkerVisibility] = useState(true);
   const [searchBox, setSearchBox] = useState(null);
   const [bounds, setBounds] = useState(null);
+  const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
 
   const onPlacesChanged = () => {
     const places = searchBox.getPlaces();
     const bounds = new window.google.maps.LatLngBounds();
-    props.setSearchedSite(places[0].formatted_address);
+    setSearchedSite(places[0].formatted_address);
 
     places.forEach((place) => {
       if (place.geometry.viewport) {
