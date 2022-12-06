@@ -8,17 +8,43 @@ import { useForm } from "react-hook-form";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
 import states from "../states";
+import { Autocomplete } from "@react-google-maps/api";
+
 
 function AddLocation(props) {
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
   const [locationAddedResponse, setLocationAddedResponse] = useState(false);
-  const [data, setData] = useState("");
 
+  const [searchBox, setSearchBox] = useState(null);
+
+  function onLoad(autocomplete) {
+    setSearchBox(autocomplete);
+  }
+
+  function onPlaceChanged() {
+    if (searchBox != null) {
+      const place = searchBox.getPlace();
+      const formattedAddress = place.formatted_address;
+      let addressArray = formattedAddress.split(',');
+
+      let occupancyaddress = addressArray[0].trim();
+      let city = addressArray[1].trim();
+      let state = addressArray[2].split(' ')[1].trim();
+      let zip = addressArray[2].split(' ')[2].trim();
+      setValue("streetAddress", occupancyaddress);
+      setValue("city", city);
+      setValue("state", state);
+      setValue("zipCode", zip);
+    } else {
+      alert("Please enter text");
+    }
+  }
   const onSubmit = (data) => {
     Axios.post("http://localhost:5000/api/add-preplanning-location", {
       payload: data,
@@ -166,6 +192,24 @@ function AddLocation(props) {
             </Row>
             <Row className="row">
               <Col>
+              <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+                <input
+                  type="text"
+                  placeholder="Search for Tide Information"
+                  style={{
+                    boxSizing: `border-box`,
+                    border: `1px solid transparent`,
+                    width: `240px`,
+                    height: `32px`,
+                    padding: `0 12px`,
+                    borderRadius: `3px`,
+                    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+                    fontSize: `14px`,
+                    outline: `none`,
+                    textOverflow: `ellipses`
+                  }}
+                />
+              </Autocomplete>
                 <Form.Label>
                   Street Address
                 </Form.Label>
