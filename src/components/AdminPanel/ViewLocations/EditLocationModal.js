@@ -64,6 +64,9 @@ function EditLocation(props) {
             </Row>
             <Row className="row">
               <Col>
+                  <Form.Label>
+                    Occupancy Name
+                  </Form.Label>
                 <Form.Control
                   {...register("occupancyName", {
                     required: {
@@ -74,7 +77,6 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Occupancy Name"
                 />
-                <Form.Text className="text-muted"></Form.Text>
                 {errors.occupancyName && (
                   <span style={{ color: "red" }}>
                     {errors.occupancyName.message}
@@ -82,6 +84,9 @@ function EditLocation(props) {
                 )}
               </Col>
               <Col>
+                <Form.Label>
+                  Occupancy Type
+                </Form.Label>
                 <Form.Control
                   {...register("occupancyType", {
                     required: {
@@ -99,6 +104,9 @@ function EditLocation(props) {
                 )}
               </Col>
               <Col>
+                <Form.Label>
+                  Contact Name
+                </Form.Label>
                 <Form.Control
                   {...register("contactName", {
                     required: {
@@ -116,6 +124,9 @@ function EditLocation(props) {
                 )}
               </Col>
               <Col>
+                <Form.Label>
+                  Emergency Contact
+                </Form.Label>
                 <Form.Control
                   {...register("emergencyContact", {
                     required: {
@@ -135,6 +146,9 @@ function EditLocation(props) {
             </Row>
             <Row className="row" style={{ width: "25.8%" }}>
               <Col>
+                <Form.Label>
+                  Contruction Type
+                </Form.Label>
                 <Form.Control
                   {...register("constructionType", {
                     required: { value: true, message: "Please enter a number" },
@@ -154,10 +168,13 @@ function EditLocation(props) {
         <Form.Group className="address-group">
           <Container>
             <Row className="row">
-              <Form.Label>Address</Form.Label>
+              <Form.Label style={{ fontWeight: "bold" }}>Address</Form.Label>
             </Row>
             <Row className="row">
               <Col>
+                <Form.Label>
+                  Street Address
+                </Form.Label>
                 <Form.Control
                   {...register("streetAddress", {
                     required: {
@@ -177,6 +194,9 @@ function EditLocation(props) {
             </Row>
             <Row className="row">
               <Col>
+                <Form.Label>
+                  City
+                </Form.Label>
                 <Form.Control
                   {...register("city", {
                     required: { value: true, message: "Please enter a City" },
@@ -190,6 +210,9 @@ function EditLocation(props) {
                 )}
               </Col>
               <Col>
+                <Form.Label>
+                  State
+                </Form.Label>
                 <Form.Select
                   {...register("state", {
                     required: { value: true, message: "Please select a state" },
@@ -212,6 +235,9 @@ function EditLocation(props) {
             </Row>
             <Row className="row">
               <Col>
+                <Form.Label>
+                  Zip Code
+                </Form.Label>
                 <Form.Control
                   {...register("zipCode", {
                     required: {
@@ -228,6 +254,9 @@ function EditLocation(props) {
                 )}
               </Col>
               <Col>
+                <Form.Label>
+                  Country
+                </Form.Label>
                 <Form.Control
                   {...register("country", {
                     required: {
@@ -250,10 +279,13 @@ function EditLocation(props) {
         <Form.Group className="mutual-aid-group">
           <Container>
             <Row className="row">
-              <Form.Label>Mutual Aid Information</Form.Label>
+              <Form.Label style={{ fontWeight: "bold" }}>Mutual Aid Information</Form.Label>
             </Row>
             <Row className="row">
               <Col>
+                <Form.Label>
+                  Mutual Aid
+                </Form.Label>
                 <Form.Control
                   {...register("mutual_aid1", {
                     required: { value: true, message: "Please enter a number" },
@@ -263,6 +295,9 @@ function EditLocation(props) {
                 />
               </Col>
               <Col>
+                <Form.Label>
+                  Mutual Aid
+                </Form.Label>
                 <Form.Control
                   {...register("mutual_aid2", {
                     required: { value: true, message: "Please enter a number" },
@@ -274,6 +309,9 @@ function EditLocation(props) {
             </Row>
             <Row className="row">
               <Col>
+                <Form.Label>
+                  Mutual Aid
+                </Form.Label>
                 <Form.Control
                   {...register("mutual_aid3", {
                     required: { value: true, message: "Please enter a number" },
@@ -283,6 +321,9 @@ function EditLocation(props) {
                 />
               </Col>
               <Col>
+                <Form.Label>
+                  Mutual Aid
+                </Form.Label>
                 <Form.Control
                   {...register("mutual_aid4", {
                     required: { value: true, message: "Please enter a number" },
@@ -297,10 +338,13 @@ function EditLocation(props) {
         <Form.Group className="occupancy-specific-group">
           <Container>
             <Row className="row">
-              <Form.Label>Occupancy Specific Information</Form.Label>
+              <Form.Label style={{ fontWeight: "bold" }}>Occupancy Specific Information</Form.Label>
             </Row>
             <Row className="row">
               <Col>
+                <Form.Label>
+                  Hazard
+                </Form.Label>
                 <Form.Control
                   {...register("hazards", {
                     required: { value: true, message: "Please enter a Hazard" },
@@ -317,6 +361,9 @@ function EditLocation(props) {
             </Row>
             <Row className="row">
               <Col>
+                <Form.Label>
+                  Hydrant Address
+                </Form.Label>
                 <Form.Control
                   {...register("hydrantAddress", {
                     required: {
@@ -334,6 +381,9 @@ function EditLocation(props) {
                 )}
               </Col>
               <Col>
+                <Form.Label>
+                  Hydrant Distance (feet)
+                </Form.Label>
                 <Form.Control
                   {...register("hydrantDistance", {
                     required: { value: true, message: "Please enter a number" },
@@ -350,6 +400,9 @@ function EditLocation(props) {
             </Row>
             <Row className="row">
               <Col>
+                <Form.Label>
+                  Access Information
+                </Form.Label>
                 <Form.Control
                   {...register("accessInformation", {
                     required: {
@@ -371,6 +424,9 @@ function EditLocation(props) {
             </Row>
             <Row className="row">
               <Col>
+                <Form.Label>
+                  Electric Meter Location
+                </Form.Label>
                 <Form.Control
                   {...register("electricMeterLoc", {
                     required: {
@@ -389,6 +445,9 @@ function EditLocation(props) {
                 )}
               </Col>
               <Col>
+                <Form.Label>
+                  Breaker Box Location
+                </Form.Label>
                 <Form.Control
                   {...register("breakerBoxLoc", {
                     required: {
@@ -407,6 +466,9 @@ function EditLocation(props) {
                 )}
               </Col>
               <Col>
+                <Form.Label>
+                  Water Shutoff Location
+                </Form.Label>
                 <Form.Control
                   {...register("waterLoc", {
                     required: {
@@ -426,6 +488,9 @@ function EditLocation(props) {
                 )}
               </Col>
               <Col>
+                <Form.Label>
+                  Gas Shutoff Location
+                </Form.Label>
                 <Form.Control
                   {...register("gasShutoffLoc", {
                     required: {
@@ -450,10 +515,13 @@ function EditLocation(props) {
         <Form.Group className="misc-notes-group">
           <Container>
             <Row className="row">
-              <Form.Label>Miscellaneous Notes</Form.Label>
+              <Form.Label style={{ fontWeight: "bold" }}>Miscellaneous Notes</Form.Label>
             </Row>
             <Row className="row">
               <Col>
+                <Form.Label>
+                  Notes
+                </Form.Label>
                 <Form.Control
                   {...register("notes", {
                     required: {
