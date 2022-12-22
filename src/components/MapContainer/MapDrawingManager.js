@@ -12,7 +12,7 @@ function MapDrawingManager({
       onMarkerComplete={(marker) => {
         const position = marker.position;
         marker.setIcon(
-          "/icon_images/edit_location_FILL0_wght400_GRAD0_opsz48.png"
+          "/icon_images/edit_location_alt_FILL0_wght400_GRAD0_opsz48.png"
         ); 
         // Make marker transition little nicer with timeout
         setTimeout(() => {
@@ -34,7 +34,7 @@ function MapDrawingManager({
                     longitude: parseFloat(response.data.payload.longitude),
                     icon_id: 10,
                     image: null,
-                    file_name: "edit_location_FILL0_wght400_GRAD0_opsz48.png",
+                    file_name: "edit_location_alt_FILL0_wght400_GRAD0_opsz48.png",
                   }
                 ]
                 localStorage.setItem("markers", JSON.stringify(newMarkers));

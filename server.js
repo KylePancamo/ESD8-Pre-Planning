@@ -35,7 +35,7 @@ app.post('/api/insert-placed-marker', (req, res) => {
     req.body.position.lat.toFixed(8),
     req.body.position.lng.toFixed(8)
   ]
-  const query = "INSERT INTO markers(marker_name, latitude, longitude, icon_id) VALUES ('Enter a new marker name', ?, ?, 10)"
+  const query = "INSERT INTO markers(marker_name, latitude, longitude, icon_id) VALUES ('Enter a new marker name', ?, ?, 6)"
   db.query(
     query, data, (err, result) => {
       if (err) {

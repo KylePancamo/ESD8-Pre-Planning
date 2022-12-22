@@ -318,31 +318,59 @@ code {
   left: 1vw;
 }
 
-.legend {
-  position: fixed;
-  height:fit-content;
-  width: fit-content;
-  top: 65vh;
-  right: 5vw;
-  background-color: rgb(255, 255, 255);
-  border: 3px solid;
-  border-color: rgb(0, 0, 0);
+.icon-legend {
+  position:fixed;
+  right: 7vw;
+  bottom: 10vh;
+  background-color:rgba(255, 255, 255, 0.25);
+  border: 3px solid #000;
 }
 
-.legend-images {
+.icon-legend-header {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.icon-legend-items {
+  width: 500px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  justify-items: flex-end;
-  align-items: flex-start;
+  
   flex-wrap: wrap;
 }
 
-.legend-images .legend-item {
-  flex: 1 0 25%;
-  margin-bottom: 5px;
-  width: fit-content;
+.icon-legend-items>* {
+  flex: 1 1 33.3333%;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.icon-legend-item {
+  margin-bottom: 8px;
+}
+
+.icon-legend-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.icon-legend-text {
+  font-size: 15px;
+}
+
+.icon-legend-item:nth-child(4n) {
+  margin-right: 0;
+}
+
+@media (max-width: 768px) {
+  .icon-legend-items {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
 }
 
 .locations-modal {
