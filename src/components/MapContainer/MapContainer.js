@@ -65,6 +65,11 @@ function MapContainer(props) {
     props.setSideBarValue(true);
   };
 
+  const clearPlaces = () => {
+    setSearchedSite("");
+    props.setSideBarValue(false);
+  }
+
   const onSBLoad = (ref) => {
     setSearchBox(ref);
   };
@@ -189,6 +194,7 @@ function MapContainer(props) {
         bounds={bounds}
         onPlacesChanged={onPlacesChanged}
         onSBLoad={onSBLoad}
+        clearPlaces={clearPlaces}
       />
       <AdminPanel flushMarkers={() => FlushMarkers()} />
       <div className="marker-visiblity">

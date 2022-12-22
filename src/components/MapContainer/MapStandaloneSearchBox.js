@@ -1,26 +1,36 @@
 import React from "react";
 import { StandaloneSearchBox } from "@react-google-maps/api";
 import Form from "react-bootstrap/Form";
-function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad }) {
+import {AiOutlineClose, AiOutlineSearch} from "react-icons/ai";
+
+function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces }) {
+  
   return (
     <StandaloneSearchBox
       bounds={bounds}
       onPlacesChanged={onPlacesChanged}
       onLoad={onSBLoad}
     >
-      <Form.Control
-        type="text"
-        placeholder="Search for a location"
-        style={{
-          boxSizing: `border-box`,
-          boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-          textOverflow: `ellipses`,
-          position: `absolute`,
-          left: `40vw`,
-          top: `5%`,
-          width: `18vw`,
-        }}
-      />
+        <div className="search">
+          <div className="searchInputs">
+            <div className="searchIcon">
+              <button onClick={clearPlaces}>
+                <AiOutlineClose/>
+              </button>
+            </div>
+            <Form.Control
+              type="text"
+              placeholder="Search for a location"
+            />
+            <div className="searchIcon">
+              <button 
+                style={{backgroundColor: "white", fontSize: "20px"}} >
+                <AiOutlineSearch />
+              </button>
+            </div>
+          </div>
+        </div>
+      
     </StandaloneSearchBox>
   );
 }

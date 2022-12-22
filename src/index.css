@@ -322,7 +322,7 @@ code {
   position:fixed;
   right: 7vw;
   bottom: 10vh;
-  background-color:rgba(255, 255, 255, 0.25);
+  background-color:rgba(255, 255, 255, 1);
   border: 3px solid #000;
 }
 
@@ -335,7 +335,6 @@ code {
 .icon-legend-items {
   width: 500px;
   display: flex;
-  
   flex-wrap: wrap;
 }
 
@@ -431,4 +430,41 @@ code {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.searchInputs {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  margin-top: 55px;
+  display: flex;
+  left: 40vw;
+  border: 1px solid #000;
+  border-radius: 3px;
+}
+
+input:focus {
+  outline: none;
+}
+
+.search input {
+  border: 0;
+  border-radius: 2px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  font-size: 18px;
+  padding: 15px;
+  height: 30px;
+  width: 300px;
+}
+.searchIcon button{
+  height: 30px;
+  width: 25px;
+  background-color: rgb(255, 0, 0);
+  border: 0 none;
+  display: grid;
+  place-items: center;
+}
+
+.searchIcon button:hover {
+  cursor: pointer;
 }
