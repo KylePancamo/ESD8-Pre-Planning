@@ -62,7 +62,7 @@ function IconEditWindow(props) {
       }}
       onExit={() => setIconUpdateStatus({ variant: "", message: "" })}
     >
-      <Form>
+      <Form onSubmit={(e) => e.preventDefault()}>
         <Form.Group>
           <Form.Label>
             Current Icon Name: <b>{props.selectedIcon?.icon_name}</b>
