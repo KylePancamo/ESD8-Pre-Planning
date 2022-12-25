@@ -54,7 +54,6 @@ function PopupWindow(props) {
       (marker) => marker.marker_id === props.selectedMarker.marker_id
     );
 
-
     if (markerFoundOnMap)  {
       const formData = new FormData();
       formData.append("file", inputRef.current?.files[0] ? inputRef.current?.files[0] : null);
@@ -83,6 +82,7 @@ function PopupWindow(props) {
                 marker.marker_name = inputData.markerName;
                 marker.latitude = inputData.latitude;
                 marker.longitude = inputData.longitude;
+                marker.icon_id = selectedIcon.icon_id;
                 marker.image = inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image;
               }
               return marker;

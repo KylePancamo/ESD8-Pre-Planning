@@ -27,6 +27,7 @@ function MapContainer(props) {
     marker_name: "default",
     latitude: 0,
     longitude: 0,
+    icon_id: 0,
     file_name: "",
   });
 
@@ -100,6 +101,7 @@ function MapContainer(props) {
         .then((res) => {
           if (res.data.payload.length > 0) {
             setMarkers(res.data.payload);
+            localStorage.setItem("markers", JSON.stringify(res.data.payload));
           }
         })
         .catch((err) => {});
@@ -154,14 +156,12 @@ function MapContainer(props) {
         setMapId(map ? map.getMapTypeId() : "roadmap");
       }}
     >
-      {console.log(mapId)}
       {markers ? (
           markers.map((marker) => {
           marker.position = {
             lat: parseFloat(marker.latitude),
             lng: parseFloat(marker.longitude),
           };
-          console.log(marker);
           return (
             <Marker
               position={marker.position}

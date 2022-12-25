@@ -58,7 +58,7 @@ app.post('/api/insert-placed-marker', (req, res) => {
             marker_name: "Enter a new marker name",
             latitude: req.body.payload.position.lat.toFixed(8),
             longitude: req.body.payload.position.lng.toFixed(8),
-            iconId,
+            icon_id: iconId,
             file_name: "edit_location_FILL0_wght400_GRAD0_opsz48.png",
           }
           result.payload = payload;
