@@ -4,6 +4,7 @@ import {
   } from "@react-google-maps/api";
 import Axios from "axios";
 import { useEffect } from "react";
+import config from "../../config/config";
 function MapDrawingManager({
     markers,
     setMarkers,
@@ -17,7 +18,7 @@ function MapDrawingManager({
   const checkFileExists = async () => {
       const response = await Axios.get('http://localhost:5000/api/check-file', {
         params: {
-          fileName: 'edit_location_alt_FILL0_wght400_GRAD0_opsz48.png',
+          fileName: config.DEFAULT_MARKER_NAME,
         },
       }).then((response) => {
         if (response?.data.status === "success") {
@@ -32,9 +33,8 @@ function MapDrawingManager({
     <DrawingManager
       onMarkerComplete={(marker) => {
         if (fileExists) {
-          console.log('file exists')
           marker.setIcon(
-            "/icon_images/edit_location_alt_FILL0_wght400_GRAD0_opsz48.png"
+            "/icon_images/" + config.DEFAULT_MARKER_NAME
           ); 
           
         }
@@ -43,7 +43,7 @@ function MapDrawingManager({
         marker.setMap(null);
         const payload = {
           position: position,
-          fileName: "edit_location_alt_FILL0_wght400_GRAD0_opsz48.png",
+          fileName: config.DEFAULT_MARKER_NAME,
           fileExists: fileExists,
         }
         Axios.post("http://localhost:5000/api/insert-placed-marker", {
@@ -62,7 +62,7 @@ function MapDrawingManager({
                     longitude: parseFloat(response.data.payload.longitude),
                     icon_id: response.data.payload.icon_id,
                     image: null,
-                    file_name: fileExists ? "edit_location_alt_FILL0_wght400_GRAD0_opsz48.png" : null,
+                    file_name: fileExists ? config.DEFAULT_MARKER_NAME : null,
                   }
                 ]
                 localStorage.setItem("markers", JSON.stringify(newMarkers));
@@ -77,7 +77,7 @@ function MapDrawingManager({
                   longitude: parseFloat(response.data.payload.longitude),
                   icon_id: response.data.payload.icon_id,
                   image: null,
-                  file_name: fileExists ? "edit_location_alt_FILL0_wght400_GRAD0_opsz48.png" : null,
+                  file_name: fileExists ? config.DEFAULT_MARKER_NAME : null,
                 }]
                 localStorage.setItem("markers", JSON.stringify(newMarker));
                 return newMarker;
