@@ -19,9 +19,11 @@ function MarkerDeletion({
         console.log(response);
         // remove marker from props.markers array
         props.setMarkers((markers) => {
-          return markers.filter(
+          let newMarkers = markers.filter(
             (marker) => marker.marker_id !== props.selectedMarker.marker_id
           );
+          localStorage.setItem("markers", JSON.stringify(newMarkers));
+          return newMarkers;
         });
       })
       .catch((err) => {
