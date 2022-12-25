@@ -412,7 +412,8 @@ app.get('/api/check-file', (req, res) => {
           console.log(err.message);
         } else {
           if (result.length === 0) {
-            // if the file doesn't exist in the database, add it to the database with icon_id of 0
+            // if the file doesn't exist in the database but exists on the system
+            // add it to the database
             db.query(
               `INSERT INTO icons (file_name, icon_name) VALUES (?, ?)`, [fileName, 'default'], (err, result) => {
                 if (err) {
@@ -422,7 +423,7 @@ app.get('/api/check-file', (req, res) => {
                   console.log("File added to database. Updating markers...");
                   // query markers and update icon_id to the insertId
                   db.query(
-                    `UPDATE markers SET icon_id = ? WHERE icon_id = ?`, [insertId, 0], (err, result) => {
+                    `UPDATE markers SET icon_id = ? WHERE icon_id = ? OR icon_id = ?`, [insertId, 0, -1], (err, result) => {
                       if (err) {
                         console.log(err.message);
                       } else {
