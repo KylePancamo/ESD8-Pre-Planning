@@ -240,7 +240,7 @@ code {
 .admin-panel-leftbar {
   display: flex;
   flex-direction: column;
-  min-width: fit-content;
+  min-width: 1vw;
   height: 100%;
   border-radius: 10px;
 }

@@ -37,6 +37,14 @@ function AdminPanel(props) {
         <div className="admin-panel">
           <div className="admin-panel-leftbar">
             <Button
+              variant="warning"
+              onClick={() => {
+                localStorage.clear();
+              }}
+            >
+              Clear Cache
+            </Button>
+            <Button
               variant="danger"
               onClick={() => {
                 props.flushMarkers();
