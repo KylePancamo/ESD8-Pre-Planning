@@ -92,13 +92,14 @@ function MapContainer(props) {
 
   const placeMarkers = () => {
     let localMarkers = JSON.parse(localStorage.getItem("markers"));
+    console.log(localMarkers);
     // fetch data if local storage is empty
     if (localMarkers == null) {
       console.log('fetching markers');
       Axios.get("http://localhost:5000/api/fetch-placed-markers")
         .then((res) => {
-          if (res.data.length > 0) {
-            setMarkers(res.data);
+          if (res.data.payload.length > 0) {
+            setMarkers(res.data.payload);
           }
         })
         .catch((err) => {});
@@ -160,6 +161,7 @@ function MapContainer(props) {
             lat: parseFloat(marker.latitude),
             lng: parseFloat(marker.longitude),
           };
+          console.log(marker);
           return (
             <Marker
               position={marker.position}
@@ -169,7 +171,7 @@ function MapContainer(props) {
                 }
                 setSelectedMarker(marker);
               }}
-              icon={"/icon_images/" + marker.file_name}
+              icon={(marker.file_name === null) ? undefined : "/icon_images/" + marker.file_name}
               key={marker.marker_id}
               visible={markerVisibility}
             />

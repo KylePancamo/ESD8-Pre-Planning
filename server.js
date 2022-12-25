@@ -31,28 +31,42 @@ db.connect((err) => {
 
 
 app.post('/api/insert-placed-marker', (req, res) => {
-  const data = [
-    req.body.position.lat.toFixed(8),
-    req.body.position.lng.toFixed(8)
-  ]
-  const query = "INSERT INTO markers(marker_name, latitude, longitude, icon_id) VALUES ('Enter a new marker name', ?, ?, 6)"
+  const fileExists = req.body.payload.fileExists;
+  const fileName = req.body.payload.fileName;
   db.query(
-    query, data, (err, result) => {
-      if (err) {
-        console.log(err.message)
-      } else {
-        const payload = {
-          marker_id: result.insertId,
-          marker_name: "Enter a new marker name",
-          latitude: req.body.position.lat.toFixed(8),
-          longitude: req.body.position.lng.toFixed(8),
-          file_name: "/icon_images/edit_location_FILL0_wght400_GRAD0_opsz48.png",
-        }
-        result.payload = payload;
-        res.status(200).send(result);
-      }
+    "SELECT * FROM icons WHERE file_name = ?", [fileName], (err, result) => {
+
+    let iconId;
+    if (result.length > 0) {
+      iconId = result[0].icon_id;
+    } else {
+      iconId = fileExists ? 0 : -1;
     }
-  )
+    const data = [
+      req.body.payload.position.lat.toFixed(8),
+      req.body.payload.position.lng.toFixed(8),
+      iconId,
+    ]
+    const query = "INSERT INTO markers(marker_name, latitude, longitude, icon_id) VALUES ('Enter a new marker name', ?, ?, ?)"
+    db.query(
+      query, data, (err, result) => {
+        if (err) {
+          console.log(err.message)
+        } else {
+          const payload = {
+            marker_id: result.insertId,
+            marker_name: "Enter a new marker name",
+            latitude: req.body.payload.position.lat.toFixed(8),
+            longitude: req.body.payload.position.lng.toFixed(8),
+            iconId,
+            file_name: "edit_location_FILL0_wght400_GRAD0_opsz48.png",
+          }
+          result.payload = payload;
+          res.status(200).send(result);
+        }
+      }
+    )
+  });
 });
 
 app.post('/api/update-map-marker',  (req, res) => {
@@ -88,25 +102,26 @@ app.post('/api/update-map-marker',  (req, res) => {
 
 app.get('/api/fetch-placed-markers', (req, res) => {
   const query = `SELECT
-                  markers.marker_id,
-                  markers.marker_name,
-                  markers.latitude,
-                  markers.longitude,
-                  markers.icon_id,
-                  markers.image,
-                  icons.file_name
-                FROM markers
-                JOIN icons
-                  ON markers.icon_id = icons.icon_id`;
+                markers.marker_id,
+                markers.marker_name,
+                markers.latitude,
+                markers.longitude,
+                markers.icon_id,
+                markers.image,
+                icons.file_name
+              FROM markers
+              LEFT JOIN icons
+                ON markers.icon_id = icons.icon_id`;
   
   db.query(
     query, 
     (err, result) => {
       if (err) {
         console.log(err.message)
+        res.status(500).send({status: 'error', message: 'An unexpected error occurred'})
       } else {
         console.log(result);
-        res.status(200).send(result);
+        res.status(200).send({status: 'success', message: 'Successfully fetched markers', payload: result});
       }
     }
   )
@@ -205,6 +220,10 @@ app.get('/api/get-uploaded-icons', (req, res) => {
 
 app.post('/api/get-sidebar-data', (req, res) => {
   let address = req.body.address;
+  
+  if (typeof address !== 'string') {
+    return res.status(400).send({message: 'Address must be a string'});
+  }
   // splitup address with separator ','
   let addressArray = address.split(',');
 
@@ -222,8 +241,9 @@ app.post('/api/get-sidebar-data', (req, res) => {
     query, data, (err, result) => {
       if (err) {
         console.log(err.message);
+        res.status(400).send({status: 'error', message: 'Data was not able to be retrieved'});
       } else {
-        res.status(200).send(result);
+        res.status(200).send({status: 'success', message: 'Data was retrieved', payload: result});
       }
     }
   );
@@ -379,6 +399,48 @@ app.post("/api/update-icon-name", (req, res) => {
   })
 })
 
+app.get('/api/check-file', (req, res) => {
+  let fileName = req.query.fileName;
+
+  if (fs.existsSync(`./public/icon_images/${fileName}`)) {
+    // if file exists on the system, check to see if it exists in the database.
+    // if it doesn't exist in the database, add it to the database,
+    // else do nothing
+    db.query(
+      `SELECT * FROM icons WHERE file_name = ?`, [fileName], (err, result) => {
+        if (err) {
+          console.log(err.message);
+        } else {
+          if (result.length === 0) {
+            // if the file doesn't exist in the database, add it to the database with icon_id of 0
+            db.query(
+              `INSERT INTO icons (file_name, icon_name) VALUES (?, ?)`, [fileName, 'default'], (err, result) => {
+                if (err) {
+                  console.log(err.message);
+                } else {
+                  const insertId = result.insertId;
+                  console.log("File added to database. Updating markers...");
+                  // query markers and update icon_id to the insertId
+                  db.query(
+                    `UPDATE markers SET icon_id = ? WHERE icon_id = ?`, [insertId, 0], (err, result) => {
+                      if (err) {
+                        console.log(err.message);
+                      } else {
+                        console.log("Markers updated");
+                        res.status(200).send({status: "success", message: "File exists"});
+                      }
+                    })
+                }
+              })
+          } else {
+            res.status(200).send({status: "success", message: "File exists"});
+          }
+        }
+      });
+  } else {
+    res.sendStatus(404);
+  }
+})
 /*********SIDEBAR REQUESTS*********/
 
 const PORT = 5000;
