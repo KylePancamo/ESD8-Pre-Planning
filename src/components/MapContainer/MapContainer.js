@@ -11,7 +11,8 @@ import AdminPanel from "../AdminPanel/AdminPanelModal";
 import Form from "react-bootstrap/Form";
 import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
-
+import {sideBarDataState} from "../../atoms";
+import {siteIsSetState} from "../../atoms";
 
 const containerStyle = {
   width: "100vw",
@@ -66,8 +67,12 @@ function MapContainer(props) {
     props.setSideBarValue(true);
   };
 
+  const [sidebarData, setSidebarData] = useRecoilState(sideBarDataState);
+  const [siteIsSet, setSiteIsSet] = useRecoilState(siteIsSetState);
   const clearPlaces = () => {
     setSearchedSite("");
+    setSidebarData([])
+    setSiteIsSet(false);
     props.setSideBarValue(false);
   }
 

@@ -4,23 +4,29 @@ import Form from "react-bootstrap/Form";
 import {AiOutlineClose, AiOutlineSearch} from "react-icons/ai";
 
 function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces }) {
-  
+  const searchBoxRef = React.useRef(null);
+
   return (
     <StandaloneSearchBox
       bounds={bounds}
       onPlacesChanged={onPlacesChanged}
       onLoad={onSBLoad}
+      
     >
         <div className="search">
           <div className="searchInputs">
             <div className="searchIcon">
-              <button onClick={clearPlaces}>
+              <button onClick={() => {
+                searchBoxRef.current.value = "";
+                clearPlaces();
+              }}>
                 <AiOutlineClose/>
               </button>
             </div>
             <Form.Control
               type="text"
               placeholder="Search for a location"
+              ref={searchBoxRef}
             />
             <div className="searchIcon">
               <button 
