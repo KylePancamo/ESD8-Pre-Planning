@@ -4,22 +4,15 @@ const router = express.Router();
 const db = require('../mysql');
 
 router.post('/', (req, res) => {
-    let address = req.body.address;
+    let googleFormattedAddress = req.body.address;
     
-    if (typeof address !== 'string') {
+    if (typeof googleFormattedAddress !== 'string') {
       return res.status(400).send({message: 'Address must be a string'});
     }
-    // splitup address with separator ','
-    let addressArray = address.split(',');
-  
-    let occupancyaddress = addressArray[0].trim();
-    console.log(occupancyaddress);
-    let city = addressArray[1].trim();
-    console.log(city);
-    const query = `SELECT * FROM pre_planning WHERE occupancyaddress = ? AND occupancycity = ?`;
+
+    const query = `SELECT * FROM pre_planning WHERE google_formatted_address = ?`;
     const data = [
-      occupancyaddress,
-      city,
+      googleFormattedAddress
     ]
   
     db.query(

@@ -4,11 +4,13 @@ const router = express.Router();
 const db = require("../mysql");
 
 router.post("/", (req, res) => {
-    const payload = req.body.payload;
-    const query = `INSERT INTO pre_planning (occupancyname, mut_aid_helotesfd, mut_aid_d7fr, mut_aid_leonspringsvfd, mut_aid_bc2fd, occupancyaddress, occupancycity, occupancystate, occupancyzip, occupancycountry, constructiontype, 
+    const payload = req.body.payload.data;
+    const googleFormattedAddress = req.body.payload.formattedAddress.trim();
+    const query = `INSERT INTO pre_planning (google_formatted_address, occupancyname, mut_aid_helotesfd, mut_aid_d7fr, mut_aid_leonspringsvfd, mut_aid_bc2fd, occupancyaddress, occupancycity, occupancystate, occupancyzip, occupancycountry, constructiontype, 
                                              hazards, hydrant_address, hydrant_distance, access, electric_meter, breaker_box, water, gas_shutoff, emergency_contact_number, other_notes,
-                                             occupancytype, contactname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+                                             occupancytype, contactname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
     const data = [
+      googleFormattedAddress,
       payload.occupancyName,
       parseInt(payload.mutual_aid1),
       parseInt(payload.mutual_aid2),
@@ -35,7 +37,7 @@ router.post("/", (req, res) => {
     ];
   
     db.query(
-      `SELECT * FROM pre_planning WHERE occupancyaddress = ? AND occupancycity = ?`, [payload.streetAddress, payload.city], (err, result) => {
+      `SELECT * FROM pre_planning WHERE google_formatted_address = ?`, [googleFormattedAddress], (err, result) => {
         if (err) {
           console.log(err.message);
         } else {

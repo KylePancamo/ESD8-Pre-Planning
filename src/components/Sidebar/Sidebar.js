@@ -8,11 +8,13 @@ import Popup from "../Popup/GenericPopup"
 import Axios from "axios";
 import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
+import {sideBarDataState} from "../../atoms";
+import {siteIsSetState} from "../../atoms";
 
 function Sidebar(props) {
-  const [sidebarData, setSidebarData] = useState([]);
-  const [siteIsSet, setSiteIsSet] = useState(false);
+  const [siteIsSet, setSiteIsSet] = useRecoilState(siteIsSetState);
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
+  const [sidebarData, setSidebarData] = useRecoilState(sideBarDataState);
   
 
   const toggleSideBar = () => {
@@ -23,10 +25,10 @@ function Sidebar(props) {
     if (searchedSite !== "") {
       Axios.post("http://localhost:5000/api/get-sidebar-data", {address: searchedSite})
       .then((response) => {
-        console.log(response);
-        if(response.data.length > 0) {
+        console.log(response.data.payload);
+        if(response.data.payload.length > 0) {
           setSiteIsSet(true);
-          setSidebarData(response.data[0]);
+          setSidebarData(response.data.payload[0]);
           console.log(response);
         } else {
           setSiteIsSet(false);

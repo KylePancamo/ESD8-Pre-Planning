@@ -10,6 +10,16 @@ export const searchSiteState = atom({
     default: {},
 })
 
+export const sideBarDataState = atom({
+    key: 'sideBarData',
+    default: [],
+})
+
+export const siteIsSetState = atom({
+    key: 'siteIsSet',
+    default: false,
+})
+
 export const boundsState = atom({
     key: 'bounds',
     default: null,

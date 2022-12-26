@@ -23,6 +23,7 @@ function AddLocation(props) {
   const [locationAddedResponse, setLocationAddedResponse] = useState(false);
 
   const [searchBox, setSearchBox] = useState(null);
+  const [formattedAddress, setFormattedAddress] = useState(null);
 
   function onLoad(autocomplete) {
     setSearchBox(autocomplete);
@@ -32,23 +33,28 @@ function AddLocation(props) {
     if (searchBox != null) {
       const place = searchBox.getPlace();
       const formattedAddress = place.formatted_address;
+      setFormattedAddress(formattedAddress);
+
       let addressArray = formattedAddress.split(',');
 
       let occupancyaddress = addressArray[0].trim();
       let city = addressArray[1].trim();
       let state = addressArray[2].split(' ')[1].trim();
-      let zip = addressArray[2].split(' ')[2].trim();
+      let zip = addressArray[2].split(' ')[2] ? addressArray[2].split(' ')[2].trim() : null;
       setValue("streetAddress", occupancyaddress);
       setValue("city", city);
       setValue("state", state);
-      setValue("zipCode", zip);
+      zip ? setValue("zipCode", zip) : setValue("zipCode", null);
     } else {
       alert("Please enter text");
     }
   }
   const onSubmit = (data) => {
     Axios.post("http://localhost:5000/api/add-preplanning-location", {
-      payload: data,
+      payload: {
+        data: data,
+        formattedAddress: formattedAddress,
+      }
     })
       .then((response) => {
         console.log(response);
