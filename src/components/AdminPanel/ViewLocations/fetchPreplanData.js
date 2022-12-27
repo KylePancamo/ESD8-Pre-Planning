@@ -2,7 +2,7 @@ import Axios from "axios";
 
 const fetchPreplanData = (setpreplanData, reset, props) => {
     Axios.get(
-      "http://localhost:5000/api/get-preplanning-location/" +
+      "http://localhost:5000/api/get-preplanning-locations/" +
         props.selectedEditLocation?.id
     )
       .then((response) => {
