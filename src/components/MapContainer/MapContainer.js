@@ -6,9 +6,9 @@ import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
 import Axios from "axios";
 import "../../useStateWithCallback";
-import useStateWithCallback from "../../useStateWithCallback";
 import AdminPanel from "../AdminPanel/AdminPanelModal";
 import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
 import {sideBarDataState} from "../../atoms";
@@ -193,7 +193,11 @@ function MapContainer(props) {
         setMarkers={setMarkers}
         drawManagerMarker={drawManagerMarker}
       />
-      <Marker position={center} onClick={() => handleOnClick()} />
+      <Marker 
+        position={center} 
+        onClick={() => handleOnClick()}
+        icon={"map-pin.png"}
+        />
 
       <MapDrawingManager markers={markers} setMarkers={setMarkers} />
 
@@ -216,6 +220,16 @@ function MapContainer(props) {
             onChange={() => setMarkerVisibility(!markerVisibility)}
           />
         </Form>
+      </div>
+      <div className="goto-center">
+        <Button
+          onClick={() => {
+            map.panTo(center);
+            map.setZoom(15);
+          }}
+        >
+          Goto Center
+        </Button>
       </div>
     </GoogleMap>
   ) : (

@@ -428,6 +428,12 @@ code {
   top: 18vh;
 }
 
+.goto-center {
+  position: absolute;
+  left: 1vw;
+  top: 22vh;
+}
+
 .file-uploads {
   display: flex;
   flex-direction: row;
