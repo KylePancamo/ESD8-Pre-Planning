@@ -40,7 +40,9 @@ function MapDrawingManager({
         }
         const position = marker.position;
         // Make marker transition little nicer with timeout
-        marker.setMap(null);
+        setTimeout(() => {
+          marker.setMap(null);
+        })
         const payload = {
           position: position,
           fileName: config.DEFAULT_MARKER_NAME,
