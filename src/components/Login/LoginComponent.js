@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { Link, useNavigate  } from 'react-router-dom';
 
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     function validateForm() {
         return username.length > 0 && password.length > 0;
@@ -12,6 +14,7 @@ export default function Login() {
 
     function handleSubmit(event) {
         event.preventDefault();
+        navigate('/map');
     }
 
     return (
