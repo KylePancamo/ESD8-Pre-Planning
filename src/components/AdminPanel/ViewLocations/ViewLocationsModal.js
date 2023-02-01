@@ -1,17 +1,18 @@
 import EditLocation from "./EditLocationModal";
 import AddLocation from "./AddLocationModal";
-import {useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import Axios from "axios";
 import GenericPopupWindow from "../../Popup/GenericPopup";
 import Button from "react-bootstrap/Button";
+import React from "react";
 
 function LocationsModal(props) {
   const [edit, setEdit] = useState(false);
   const [selectedEditLocation, setSelectedEditLocation] = useState();
   const [prePlanningLocations, setPrePlanningLocations] = useState([]);
   const [addLocationTrigger, setAddLocationTrigger] = useState(false);
-
-  const updateLocations = (newVal) => {
+  console.log("View locations rendered");
+  const updateLocations = useCallback((newVal) => {
     setPrePlanningLocations((locations) => {
       return locations.map((location) => {
         if (location.id === newVal.id) {
@@ -22,31 +23,35 @@ function LocationsModal(props) {
         return location;
       });
     });
-  };
+  }, []);
 
-  const fetchPreplanningLocations = () => {
-    console.log("fetching preplanning locations");
-    Axios.get("http://localhost:5000/api/get-preplanning-locations")
+  // useCallback for setEdit useState
+  const updateEdit = useCallback((newVal) => {
+    setEdit(newVal);
+  }, []);
+
+  useEffect(() => {
+    console.log(prePlanningLocations.length)
+    if (!prePlanningLocations.length) {
+      Axios.get("http://localhost:5000/api/get-preplanning-locations")
       .then((response) => {
         setPrePlanningLocations(response.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  };
+    }
+  }, [prePlanningLocations.length])
 
   return (
     <>
       <GenericPopupWindow
-        show={props.locationsButton}
+        show={props.locationsButton && prePlanningLocations.length}
         onHide={() => {
           props.setLocationsButton(false);
         }}
         title="Locations"
         contentClassName="locations-modal"
-        onEntering={() => {
-          fetchPreplanningLocations();
-        }}
       >
         <div className="locations-modal-container">
           <Button
@@ -56,10 +61,12 @@ function LocationsModal(props) {
           >
             Add Location
           </Button>
-          <AddLocation
-            show={addLocationTrigger}
-            onHide={() => setAddLocationTrigger(false)}
-          />
+          {addLocationTrigger ? (
+            <AddLocation
+              show={addLocationTrigger}
+              onHide={() => setAddLocationTrigger(false)}
+            />
+          ) : null}
         </div>
         <div className="location">
           <table className="tables">
@@ -103,14 +110,16 @@ function LocationsModal(props) {
           </table>
         </div>
       </GenericPopupWindow>
-      <EditLocation
-        show={edit}
-        onHide={() => setEdit(false)}
-        selectedEditLocation={selectedEditLocation}
-        updateLocations={updateLocations}
-      />
+      {edit ? (
+        <EditLocation
+          show={edit}
+          onHide={updateEdit}
+          selectedEditLocation={selectedEditLocation}
+          updateLocations={updateLocations}
+        />
+      ) : null}
     </>
   );
 }
 
-export default LocationsModal;
+export default React.memo(LocationsModal);

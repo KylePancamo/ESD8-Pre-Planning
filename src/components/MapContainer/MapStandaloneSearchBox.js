@@ -16,7 +16,8 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
         <div className="search">
           <div className="searchInputs">
             <div className="searchIcon">
-              <button onClick={() => {
+              <button onClick={(e) => {
+                e.preventDefault();
                 searchBoxRef.current.value = "";
                 clearPlaces();
               }}>
@@ -41,4 +42,4 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
   );
 }
 
-export default MapStandaloneSearchBox;
+export default React.memo(MapStandaloneSearchBox);

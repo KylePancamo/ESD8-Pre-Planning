@@ -70,11 +70,13 @@ function EditLocation(props) {
   return (
     <GenericPopupWindow
       show={props.show}
-      onHide={() => props.onHide()}
+      onHide={() => props.onHide(false)}
       contentClassName="edit-location-modal"
       title="Edit Location"
       onEntering={() => {
-        fetchPreplanData(setpreplanData, reset, props);
+        fetchPreplanData(reset, props);
+      }}
+      onExit={() => {
         setLocationEditResponse({});
       }}
     >
@@ -593,4 +595,4 @@ function EditLocation(props) {
   );
 }
 
-export default EditLocation;
+export default React.memo(EditLocation);

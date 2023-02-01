@@ -1,12 +1,11 @@
 import Axios from "axios";
 
-const fetchPreplanData = (setpreplanData, reset, props) => {
+const fetchPreplanData = (reset, props) => {
     Axios.get(
       "http://localhost:5000/api/get-preplanning-locations/" +
         props.selectedEditLocation?.id
     )
       .then((response) => {
-        setpreplanData(response.data[0]);
         reset({
             occupancyName: response.data[0].occupancyname,
             emergencyContact: response.data[0].emergency_contact_number,

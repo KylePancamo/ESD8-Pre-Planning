@@ -199,12 +199,30 @@ function AddLocation(props) {
             </Row>
             <Row className="row">
               <Col>
-              <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
-                <Form.Control
-                  type="text"
-                  placeholder="Search for Address Location"
-                />
-              </Autocomplete>
+                <Form.Label>
+                  Google Street Address
+                </Form.Label>
+                <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+                  <Form.Group>
+                    <Form.Control
+                      {...register("googleAddress", {
+                        required: {
+                          value: true,
+                          message: "Please search for a google address."
+                        }
+                      })}
+                      type="text"
+                      placeholder="Search Google Street Address"
+                    />
+                    <Form.Text className="text-muted">
+                      Please search for a google address before submitting.
+                    </Form.Text>
+                  </Form.Group>
+                </Autocomplete>
+              </Col>
+            </Row>
+            <Row className="row">
+              <Col>
                 <Form.Label>
                   Street Address
                 </Form.Label>
@@ -591,4 +609,4 @@ function AddLocation(props) {
   );
 }
 
-export default AddLocation;
+export default React.memo(AddLocation);

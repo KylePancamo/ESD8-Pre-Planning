@@ -6,6 +6,7 @@ import IconEditWindow from "./IconEditWindow";
 import {useRecoilState} from 'recoil';
 import {imagesState} from "../../atoms";
 import ViewLocationsModal from './ViewLocations/ViewLocationsModal';
+import React from "react";
 
 function AdminPanel(props) {
   const [fileUploadPopup, setFileUploadPopup] = useState(false);
@@ -72,11 +73,13 @@ function AdminPanel(props) {
             >
               View Locations
             </Button>
-            <ViewLocationsModal
-              show={locationsButton}
-              setLocationsButton={setLocationsButton}
-              locationsButton={locationsButton}
-            />
+            {locationsButton ? (
+              <ViewLocationsModal
+                show={locationsButton}
+                setLocationsButton={setLocationsButton}
+                locationsButton={locationsButton}
+              />
+            ) : null }
           </div>
           <div className="admin-panel-main">
             <h2>List of Images:</h2>
@@ -121,16 +124,18 @@ function AdminPanel(props) {
           </div>
         </div>
       </GenericPopupWindow>
-      <IconEditWindow
-        show={iconEditState}
-        onHide={() => setIconEditState(false)}
-        selectedIcon={selectedIcon}
-        setSelectedIcon={setSelectedIcon}
-        contentClassName="modal-edit-icon"
-        setImages={setImages}
-      />
+      {iconEditState ? (
+        <IconEditWindow
+          show={iconEditState}
+          onHide={() => setIconEditState(false)}
+          selectedIcon={selectedIcon}
+          setSelectedIcon={setSelectedIcon}
+          contentClassName="modal-edit-icon"
+          setImages={setImages}
+        />
+      ) : null}
     </div>
   );
 }
 
-export default AdminPanel;
+export default React.memo(AdminPanel);
