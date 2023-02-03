@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 
-const db = require('../mysql');
+const createDBConnection = require("../mysql");
+
 
 router.get('/', (req, res) => {
+    const db = createDBConnection(process.env.MYSQL_DATABASE);
     let fileName = req.query.fileName;
-  
+
     if (fs.existsSync(`./public/icon_images/${fileName}`)) {
       // if file exists on the system, check to see if it exists in the database.
       // if it doesn't exist in the database, add it to the database,

@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('../mysql');
+const createDBConnection = require("../mysql");
+
 
 router.post('/', (req, res) => {
+    const db = createDBConnection(process.env.MYSQL_DATABASE);
     let googleFormattedAddress = req.body.address;
     
     if (typeof googleFormattedAddress !== 'string') {

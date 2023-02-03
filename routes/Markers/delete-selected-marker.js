@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('../mysql');
+const createDBConnection = require("../mysql");
+
 
 router.delete('/', (req, res) => {
+    const db = createDBConnection(process.env.MYSQL_DATABASE);
     const query = "DELETE FROM markers WHERE marker_id = ?"
     const data = [
       req.body.marker_id

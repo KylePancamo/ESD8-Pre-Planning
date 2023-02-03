@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router({mergeParams: true});
 
-const db = require("../mysql");
+const createDBConnection = require("../mysql");
+
 
 router.get("/", (req, res) => {
+    const db = createDBConnection(process.env.MYSQL_DATABASE);
     const query = "SELECT * FROM pre_planning";
   
     db.query(
@@ -18,6 +20,8 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
+   const db = createDBConnection(process.env.MYSQL_DATABASE);
+
     // grab id from url
     const id = req.params.id;
     db.query(

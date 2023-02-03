@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const db = require("../mysql");
+const createDBConnection = require("../mysql");
+
 
 router.post("/", (req, res) => {
+    const db = createDBConnection(process.env.MYSQL_DATABASE);
     const payload = req.body.payload.data;
     const googleFormattedAddress = req.body.payload.formattedAddress.trim();
     const query = `INSERT INTO pre_planning (google_formatted_address, occupancyname, mut_aid_helotesfd, mut_aid_d7fr, mut_aid_leonspringsvfd, mut_aid_bc2fd, occupancyaddress, occupancycity, occupancystate, occupancyzip, occupancycountry, constructiontype, 

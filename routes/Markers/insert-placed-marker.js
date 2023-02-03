@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('../mysql');
+const createDBConnection = require("../mysql");
 
 router.post('/', (req, res) => {
+    const db = createDBConnection(process.env.MYSQL_DATABASE);
     const fileExists = req.body.payload.fileExists;
     const fileName = req.body.payload.fileName;
     db.query(

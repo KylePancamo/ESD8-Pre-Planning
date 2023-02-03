@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('../mysql');
+const createDBConnection = require("../mysql");
+
 
 router.post('/',  (req, res) => {
+    const db = createDBConnection(process.env.MYSQL_DATABASE);
     let query = "UPDATE markers SET marker_name = ?, icon_id = ?, latitude = ?, longitude = ?, image = ? WHERE marker_id = ?"
     let file = req.files?.file;
     let data = [
