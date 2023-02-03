@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate  } from 'react-router-dom';
+import { useAuth } from '../hooks/AuthProvider';
+import Axios from 'axios';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import { isExpired, decodeToken } from "react-jwt";
+
 
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     function validateForm() {
         return username.length > 0 && password.length > 0;
@@ -14,7 +20,16 @@ export default function Login() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        navigate('/map');
+        Axios.post("http://localhost:5000/api/login", {username, password}, {
+            withCredentials: true
+        }
+        ).then((response) => {
+            const token = response.data.token;
+            const decodedToken = decodeToken(token);
+            login(decodedToken.username);
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     return (

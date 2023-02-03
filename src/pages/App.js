@@ -1,12 +1,12 @@
-import MapContainer from "./components/MapContainer/MapContainer";
-import Legend from "./components/Legend";
+import MapContainer from "../components/MapContainer/MapContainer";
+import Legend from "../components/Legend";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Sidebar from "./components/Sidebar/Sidebar";
-import IconUpload from "./components/Popup/IconUpload";
+import Sidebar from "../components/Sidebar/Sidebar";
+import IconUpload from "../components/Popup/IconUpload";
 import Axios from "axios";
 import {useState, useEffect} from "react";
 import {useRecoilState} from 'recoil';
-import {imagesState} from "./atoms";
+import {imagesState} from "../atoms";
 
 function App() {
   const [sideBarValue, setSideBarValue] = useState(false);

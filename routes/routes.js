@@ -13,6 +13,8 @@ module.exports = (app) => {
     const getPreplanningLocation = require('./Preplanning/get-preplanning-locations');
     const updateIconName = require('./Icons/update-icon-name');
     const checkFile = require('./Markers/check-file');
+    const login = require('./Auth/login');
+    const getUser = require('./Auth/get-user');
 
     // mount routes here
     app.use('/api/insert-placed-marker', insertMarkers);
@@ -28,4 +30,6 @@ module.exports = (app) => {
     app.use('/api/get-preplanning-locations', getPreplanningLocation);
     app.use('/api/update-icon-name', updateIconName);
     app.use('/api/check-file', checkFile);
+    app.use('/api/login', login);
+    app.use('/api/get-user', getUser);
 }
