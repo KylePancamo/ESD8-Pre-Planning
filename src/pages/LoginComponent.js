@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/AuthProvider';
 import Axios from 'axios';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { isExpired, decodeToken } from "react-jwt";
-
+import '../Login.css';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -52,7 +52,7 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Form.Group>
-                <Button block size="lg" type="submit" disabled={!validateForm()}>
+                <Button class="button" block size="lg" type="submit" disabled={!validateForm()} >
                     Login
                 </Button>
             </Form>
