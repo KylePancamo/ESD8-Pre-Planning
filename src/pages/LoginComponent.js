@@ -34,6 +34,7 @@ export default function Login() {
 
     return (
         <div className="Login">
+            <h1>ESD8 Fire Department Pre-Planning Site</h1>
             <Form onSubmit={handleSubmit}>
                 <Form.Group size="lg" controlId="username">
                     <Form.Label>Username</Form.Label>
@@ -52,7 +53,7 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Form.Group>
-                <Button class="button" block size="lg" type="submit" disabled={!validateForm()} >
+                <Button block size="lg" type="submit" disabled={!validateForm()} >
                     Login
                 </Button>
             </Form>
