@@ -34,7 +34,18 @@ export default function Login() {
     }
 
     return (
-        <div className="Login">
+        <div className="Login" style={
+            {
+                alignment: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100vh',
+                width: '100vw',
+                backgroundColor: 'gray'
+            }
+        }>
             <h1>ESD8 Fire Department Pre-Planning Site</h1>
             <img src={Logo} alt="ESD8 Logo" />
             <Form onSubmit={handleSubmit}>
