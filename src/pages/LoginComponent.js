@@ -7,6 +7,7 @@ import Axios from 'axios';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { isExpired, decodeToken } from "react-jwt";
 import '../Login.css';
+import Logo from '../esd8_logo.png';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -35,6 +36,7 @@ export default function Login() {
     return (
         <div className="Login">
             <h1>ESD8 Fire Department Pre-Planning Site</h1>
+            <img src={Logo} alt="ESD8 Logo" />
             <Form onSubmit={handleSubmit}>
                 <Form.Group size="lg" controlId="username">
                     <Form.Label>Username</Form.Label>
