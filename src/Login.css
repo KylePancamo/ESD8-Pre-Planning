@@ -1,11 +1,22 @@
 .Login {
-    alignment: 'center';
-    display: 'flex';
-    flex-direction: 'column';
-    align-items: 'center';
-    justify-content: 'center';
-    height: '100vh';
-    width: '100vw';
-    background-color: 'gray';
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-image:url("http://www.esd8.org/wp-content/uploads/2021/03/151028175_10157928257330677_7403522402550924133_o.jpg");
+}
 
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-form-container {
+    background-color: white;
+    font-weight: bold;
 }
