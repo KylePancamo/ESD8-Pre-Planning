@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Link, useNavigate  } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthProvider';
 import Axios from 'axios';
-import ProgressBar from 'react-bootstrap/ProgressBar';
-import { isExpired, decodeToken } from "react-jwt";
+import { decodeToken } from "react-jwt";
 import '../Login.css';
 import Logo from '../esd8_logo.png';
 
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
     const { login } = useAuth();
 
     function validateForm() {

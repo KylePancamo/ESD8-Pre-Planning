@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './pages/App';
 import Login from './pages/LoginComponent';
-import { BrowserRouter } from "react-router-dom";
 import {
   createBrowserRouter,
   createRoutesFromElements,
