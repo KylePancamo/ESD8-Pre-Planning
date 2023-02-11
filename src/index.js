@@ -17,7 +17,7 @@ import { ProtectedLayout } from './components/Layouts/ProtectedLayout';
 import { AuthProviderLayout } from './components/Layouts/AuthProviderLayout';
 import Axios from 'axios';
 import HomeLayout from './components/Layouts/HomeLayout';
-
+import PageNotFound from './pages/404NotFound';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +29,7 @@ const router = createBrowserRouter(
         });
         return defer({ response });
       }}
+      errorElement={<PageNotFound/>}
     >
       <Route element={<HomeLayout/>} >
         <Route path ="/" element={<Login/>} />
