@@ -53,6 +53,8 @@ function EditLocation(props) {
     Axios.post("http://localhost:5000/api/update-preplanning-location", {
       payload: data,
       id: props.selectedEditLocation.id,
+    }, {
+      withCredentials: true,
     })
       .then((response) => {
         setLocationEditResponse(response.data);

@@ -102,7 +102,9 @@ function MapContainer(props) {
     // fetch data if local storage is empty
     if (localMarkers == null) {
       console.log('fetching markers');
-      Axios.get("http://localhost:5000/api/fetch-placed-markers")
+      Axios.get("http://localhost:5000/api/fetch-placed-markers", {
+        withCredentials: true,
+      })
         .then((res) => {
           if (res.data.payload.length > 0) {
             setMarkers(res.data.payload);
@@ -137,7 +139,9 @@ function MapContainer(props) {
   ];
 
   const FlushMarkers = () => {
-    Axios.delete("http://localhost:5000/api/delete-all-markers")
+    Axios.delete("http://localhost:5000/api/delete-all-markers", {
+      withCredentials: true,
+    })
       .then((response) => {
         console.log(response);
         setMarkers([]);

@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
+const isAuthorized = require('../Auth/authorization');
+const getUser = require('../Auth/getUser');
+
+
 const createDBConnection = require("../mysql");
 
 
-router.post('/',  (req, res) => {
+router.post('/', getUser, isAuthorized, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
     let query = "UPDATE markers SET marker_name = ?, icon_id = ?, latitude = ?, longitude = ?, image = ? WHERE marker_id = ?"
     let file = req.files?.file;

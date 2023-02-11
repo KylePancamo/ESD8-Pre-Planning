@@ -3,7 +3,10 @@ const router = express.Router();
 
 const createDBConnection = require("../mysql");
 
-router.post("/", (req, res) => {
+const isAuthorized = require('../Auth/authorization');
+const getUser = require('../Auth/getUser');
+
+router.post("/", getUser, isAuthorized, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
     const payload = req.body.payload;
     const id = req.body.id;
