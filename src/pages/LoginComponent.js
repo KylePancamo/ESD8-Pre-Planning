@@ -38,11 +38,11 @@ export default function Login() {
             <div className="login-form-container">
                 <img src={Logo} alt="ESD8 Logo" />
             
-            <Form className="login-form" onSubmit={handleSubmit} style={{
-                backgroundColor: 'white',
-            }}>
+            <Form className="login-form" onSubmit={handleSubmit}>
                 <Form.Group size="lg" controlId="username">
-                    <Form.Label>Username</Form.Label>
+                    <Form.Label style={{
+                        fontFamily: 'Arial',
+                    }}>Username</Form.Label>
                     <Form.Control
                         autoFocus
                         type="username"
@@ -51,14 +51,16 @@ export default function Login() {
                     />
                 </Form.Group>
                 <Form.Group size="lg" controlId="password">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label style={{
+                        fontFamily: 'Arial',
+                    }}>Password</Form.Label>
                     <Form.Control
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Form.Group>
-                <Button block size="lg" type="submit" disabled={!validateForm()} >
+                <Button className="login-button" type="submit" disabled={!validateForm()}>
                     Login
                 </Button>
             </Form>
