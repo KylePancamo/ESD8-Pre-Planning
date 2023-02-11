@@ -18,7 +18,6 @@ function MarkerDeletion({
       withCredentials: true,
     }, { data })
       .then((response) => {
-        console.log(response);
         // remove marker from props.markers array
         props.setMarkers((markers) => {
           let newMarkers = markers.filter(

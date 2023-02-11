@@ -18,9 +18,9 @@ router.delete('/', getUser, isAuthorized, (req, res) => {
       query, data,
       (err, result) => {
         if (err) {
-          console.log(err);
+          res.status(500).send({status: "error", message: "Error deleting marker"});
         } else {
-          res.status(200).send(result);
+          res.status(200).send({status: "success", message: "Marker deleted"});
         }
       }
     )

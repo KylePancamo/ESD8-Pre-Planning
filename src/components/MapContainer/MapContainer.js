@@ -143,7 +143,6 @@ function MapContainer(props) {
       withCredentials: true,
     })
       .then((response) => {
-        console.log(response);
         setMarkers([]);
         localStorage.clear();
       })

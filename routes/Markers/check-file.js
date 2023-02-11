@@ -33,6 +33,7 @@ router.get('/', (req, res) => {
                       `UPDATE markers SET icon_id = ? WHERE icon_id = ? OR icon_id = ?`, [insertId, 0, -1], (err, result) => {
                         if (err) {
                           console.log(err.message);
+                          res.status(500).send({status: "error", message: "Error updating markers"});
                         } else {
                           console.log("Markers updated");
                           res.status(200).send({status: "success", message: "File exists"});
@@ -46,7 +47,7 @@ router.get('/', (req, res) => {
           }
         });
     } else {
-      res.sendStatus(404);
+      res.status(404).send({status: "error", message: "File not found"});
     }
 });
 

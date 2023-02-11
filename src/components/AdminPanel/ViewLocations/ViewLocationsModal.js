@@ -35,7 +35,8 @@ function LocationsModal(props) {
     if (!prePlanningLocations.length) {
       Axios.get("http://localhost:5000/api/get-preplanning-locations")
       .then((response) => {
-        setPrePlanningLocations(response.data);
+
+        setPrePlanningLocations(response.data.result);
       })
       .catch((err) => {
         console.log(err);

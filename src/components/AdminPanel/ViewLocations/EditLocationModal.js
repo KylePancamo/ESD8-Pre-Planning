@@ -56,6 +56,7 @@ function EditLocation(props) {
       withCredentials: true,
     })
       .then((response) => {
+        console.log(response.data);
         setLocationEditResponse(response.data);
         props.updateLocations({
           id: props.selectedEditLocation.id,

@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
               file_name: "edit_location_alt_FILL0_wght400_GRAD0_opsz48.png",
             }
             result.payload = payload;
-            res.status(200).send(result);
+            res.status(200).send({status: 'success', message: 'Successfully inserted marker', payload})
           }
         }
       )

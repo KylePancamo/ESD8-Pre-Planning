@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
         if (err) {
           console.log(err.message);
         } else {
-          res.status(200).send(result);
+          res.status(200).send({status: "success", message: "Preplanning locations retrieved", result});
         }
       }
     );
@@ -29,7 +29,7 @@ router.get("/:id", (req, res) => {
         if (err) {
           console.log(err.message);
         } else {
-          res.status(200).send(result);
+          res.status(200).send({status: "success", message: "Preplanning locations retrieved", result});
         }
       }
     )

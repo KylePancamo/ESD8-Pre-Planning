@@ -33,7 +33,7 @@ router.post('/', getUser, isAuthorized, (req, res) => {
               }
             });
           }
-          res.status(200).send(result);
+          res.status(200).send({status: "success", message: "Marker updated successfully"});
         }
       }
     )

@@ -51,13 +51,11 @@ function AddLocation(props) {
   }
   const onSubmit = (data) => {
     Axios.post("http://localhost:5000/api/add-preplanning-location", {
-      withCredentials: true,
-    }, {
       payload: {
         data: data,
         formattedAddress: formattedAddress,
-      }
-    })
+      },
+    }, { withCredentials: true })
       .then((response) => {
         console.log(response);
         setLocationAddedResponse(response.data);
