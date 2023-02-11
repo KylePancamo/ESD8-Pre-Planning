@@ -25,7 +25,7 @@ router.post("/", (req, res) => {
             if (result.length > 0) {
                 //bcrypt.compare(password, result[0].password, (error, response) => {
                 //    if (response) {
-                        const token = jwt.sign({ username }, process.env.SECRET_KEY_JWT, { expiresIn: "1hr" });
+                        const token = jwt.sign({ username }, process.env.SECRET_KEY_JWT, { expiresIn: "24hr" });
                         res.cookie("token", token, { httpOnly: true });
                         res.send({ message: 'Logged in successfully', token } )
                 //    } else {
