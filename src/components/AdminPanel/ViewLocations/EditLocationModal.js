@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import GenericPopupWindow from "../../Popup/GenericPopup";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -21,7 +21,6 @@ function EditLocation(props) {
     formState: { errors },
   } = useForm();
   const [locationEditResponse, setLocationEditResponse] = useState({});
-  const [preplanData, setpreplanData] = useState({});
 
   const [searchBox, setSearchBox] = useState(null);
 
