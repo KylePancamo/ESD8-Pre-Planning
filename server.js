@@ -4,7 +4,6 @@ const cors = require('cors');
 require('dotenv').config();
 const routes = require('./routes/routes');
 var fileupload = require('express-fileupload');
-const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 
@@ -13,6 +12,7 @@ app.use(cors({
   origin: ["http://localhost:3000"],
   credentials: true,
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
