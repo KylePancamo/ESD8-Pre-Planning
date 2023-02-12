@@ -5,12 +5,12 @@ import { preplanningLocationsState } from '../atoms';
 function usePrePlanningLocations() {
   const [prePlanningLocations, setPrePlanningLocations] = useRecoilState(preplanningLocationsState);
 
-  const updateLocations = useCallback((newVal) => {
+  const updateLocations = useCallback((newVal, id) => {
     setPrePlanningLocations((locations) => {
       return locations.map((location) => {
-        if (location.id === newVal.id) {
-          location.occupancyname = newVal.occupancyname;
-          location.occupancyaddress = newVal.occupancyaddress;
+        if (location.id === id) {
+          location = newVal;
+          location.id = id;
         }
 
         return location;

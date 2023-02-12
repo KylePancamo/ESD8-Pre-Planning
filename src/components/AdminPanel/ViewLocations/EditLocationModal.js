@@ -86,10 +86,30 @@ function EditLocation(props) {
 
         setLocationEditResponse(response.data);
         props.updateLocations({
-          id: props.selectedEditLocation.id,
           occupancyname: data.occupancyName,
+          occupancytype: data.occupancyType,
+          hazards: data.hazards,
+          other_notes: data.notes,
+          access: data.accessInformation,
+          breaker_box: data.breakerBoxLoc,
+          constructiontype: data.constructionType,
+          contactname: data.contactName,
+          electric_meter: data.electricMeterLoc,
+          emergency_contact_number: data.emergencyContact,
+          gas_shutoff: data.gasShutoffLoc,
+          hydrant_address: data.hydrantAddress,
+          hydrant_distance: data.hydrantDistance,
+          mut_aid_bc2fd: data.mutual_aid1,
+          mut_aid_d7fr: data.mutual_aid2,
+          mut_aid_helotesfd: data.mutual_aid3,
+          google_formatted_address: searchBox.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address, 
+          mut_aid_leonspringsvfd: data.mutual_aid4,
           occupancyaddress: data.streetAddress,
-        });
+          occupancycity: data.city,
+          occupancystate: data.state,
+          occupancyzip: data.zipCode,
+          water: data.waterLoc,
+        }, props.selectedEditLocation.id);
       })
       .catch((error) => {
         setLocationEditResponse(error.response?.data);
