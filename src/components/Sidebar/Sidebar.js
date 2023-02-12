@@ -20,14 +20,10 @@ function Sidebar(props) {
   const [editLocation, setEditLocation] = useState(false);
   const [preplanningLocations, updateLocations] = usePrePlanningLocations();
 
-  console.log(sidebarData)
-
   const updateEdit = useCallback(() => {
     setEditLocation(false);
   })
-
   
-
   const toggleSideBar = () => {
     props.setSideBarValue(!props.sideBarValue);
   };
@@ -36,12 +32,9 @@ function Sidebar(props) {
     if (searchedSite !== "") {
       Axios.post("http://localhost:5000/api/get-sidebar-data", {address: searchedSite})
       .then((response) => {
-        console.log(response.data.payload);
         if(response.data.payload.length > 0) {
           setSiteIsSet(true);
-          console.log(response.data.payload[0])
           setSidebarData(response.data.payload[0]);
-          console.log(response);
         } else {
           setSiteIsSet(false);
           setSidebarData([]);
