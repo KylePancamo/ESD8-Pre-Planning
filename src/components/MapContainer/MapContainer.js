@@ -98,7 +98,6 @@ function MapContainer(props) {
 
   const placeMarkers = () => {
     let localMarkers = JSON.parse(localStorage.getItem("markers"));
-    console.log(localMarkers);
     // fetch data if local storage is empty
     if (localMarkers == null) {
       console.log('fetching markers');
@@ -211,28 +210,30 @@ function MapContainer(props) {
         clearPlaces={clearPlaces}
       />
       <AdminPanel flushMarkers={() => FlushMarkers()} />
-      <div className="marker-visiblity">
-        <Form>
-          <Form.Check
-            type="switch"
-            label="Marker Visibility"
-            style={
-              mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
-            }
-            checked={markerVisibility}
-            onChange={() => setMarkerVisibility(!markerVisibility)}
-          />
-        </Form>
-      </div>
-      <div className="goto-center">
-        <Button
-          onClick={() => {
-            map.panTo(center);
-            map.setZoom(15);
-          }}
-        >
-          Goto Center
-        </Button>
+      <div className="utility-items">
+        <div className="marker-visiblity">
+          <Form>
+            <Form.Check
+              type="switch"
+              label="Marker Visibility"
+              style={
+                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
+              }
+              checked={markerVisibility}
+              onChange={() => setMarkerVisibility(!markerVisibility)}
+            />
+          </Form>
+        </div>
+        <div className="goto-center">
+          <Button
+            onClick={() => {
+              map.panTo(center);
+              map.setZoom(15);
+            }}
+          >
+            Goto Center
+          </Button>
+        </div>
       </div>
     </GoogleMap>
   ) : (

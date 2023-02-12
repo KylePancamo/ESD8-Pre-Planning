@@ -442,16 +442,16 @@ code {
   left: 55%;
 }
 
-.marker-visiblity {
+.utility-items {
   position: absolute;
   left: 1vw;
   top: 18vh;
+  display: flex;
+  flex-direction: column
 }
 
-.goto-center {
-  position: absolute;
-  left: 1vw;
-  top: 22vh;
+.utility-items > div {
+  margin-top: 10px;
 }
 
 .file-uploads {
