@@ -7,7 +7,7 @@ export const imagesState = atom({
 
 export const searchSiteState = atom({
     key: 'searchSiteState',
-    default: {},
+    default: "",
 })
 
 export const sideBarDataState = atom({
@@ -28,4 +28,9 @@ export const boundsState = atom({
 export const searchBoxState = atom({
     key: 'searchBox',
     default: null,
+})
+
+export const preplanningLocationsState = atom({
+    key: 'preplanningLocations',
+    default: [],
 })
