@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
 export const imagesState = atom({
-    key: 'nameState',
+    key: 'imagesState',
     default: [],
 });
 
