@@ -454,6 +454,48 @@ code {
   margin-top: 10px;
 }
 
+.preplan-locations {
+  position: absolute;
+  bottom: 10%;
+  margin-left: 5vw;
+  border: 3px solid rgb(0, 0, 0);
+  padding: 15px;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #F5F5F5; /* Use a light gray background */
+}
+
+.preplan-locations__title {
+  color: #444444; /* Use a darker gray for the title text */
+}
+
+.preplan-locations__table {
+  border-collapse: separate;
+  border-spacing: 0px 15px;
+  width: 100%;
+  font-size: 18px;
+}
+
+.preplan-locations__table tbody tr:hover {
+  background-color: #ec0d23; /* Use a white background for the table rows */
+  transition: background-color 0.3s ease; /* Add a subtle hover effect */
+  cursor: pointer;
+}
+
+.preplan-locations__table tr:nth-of-type(even) {
+  background-color: #f584627c; /* Use a lighter gray background for alternating rows */
+}
+
+.preplan-locations__table tr:nth-of-type(odd) {
+  background-color: #f5ad386d;
+}
+
+.preplan-locations__table-cell {
+  padding: 5px 10px;
+  border-radius: 2px;
+}
+
+
 .file-uploads {
   display: flex;
   flex-direction: row;

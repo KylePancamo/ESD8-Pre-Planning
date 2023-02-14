@@ -3,8 +3,7 @@ import { StandaloneSearchBox } from "@react-google-maps/api";
 import Form from "react-bootstrap/Form";
 import {AiOutlineClose, AiOutlineSearch} from "react-icons/ai";
 
-function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces }) {
-  const searchBoxRef = React.useRef(null);
+function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces, searchBoxRef }) {
 
   return (
     <StandaloneSearchBox

@@ -1,5 +1,6 @@
 import MapStandaloneSearchBox from "./MapStandaloneSearchBox";
 import MapDrawingManager from "./MapDrawingManager";
+
 import React, { useState } from "react";
 import Popup from "../Popup/MarkerPopupWindow";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
@@ -13,6 +14,7 @@ import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
 import {sideBarDataState} from "../../atoms";
 import {siteIsSetState} from "../../atoms";
+import {preplanningLocationsState} from "../../atoms";
 
 const containerStyle = {
   width: "100vw",
@@ -42,11 +44,15 @@ function MapContainer(props) {
   const [searchBox, setSearchBox] = useState(null);
   const [bounds, setBounds] = useState(null);
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
+  const [preplanningLocations, updateLocations] = useRecoilState(preplanningLocationsState);
   const [mapId, setMapId] = useState("satellite");
+  const searchBoxRef = React.useRef(null);
 
   const onPlacesChanged = () => {
     const places = searchBox.getPlaces();
     const bounds = new window.google.maps.LatLngBounds();
+    console.log(places);
+    
     setSearchedSite(places[0].formatted_address);
 
     places.forEach((place) => {
@@ -60,9 +66,11 @@ function MapContainer(props) {
     const nextMarkers = places.map((place) => ({
       position: place.geometry.location,
     }));
+
     const nextCenter =
       nextMarkers.length > 0 ? nextMarkers[0].position : center;
-
+      console.log(nextCenter.lat());
+      console.log(nextCenter.lng());
     setCenter(nextCenter);
     props.setSideBarValue(true);
   };
@@ -208,6 +216,7 @@ function MapContainer(props) {
         onPlacesChanged={onPlacesChanged}
         onSBLoad={onSBLoad}
         clearPlaces={clearPlaces}
+        searchBoxRef={searchBoxRef}
       />
       <AdminPanel flushMarkers={() => FlushMarkers()} />
       <div className="utility-items">
@@ -234,6 +243,24 @@ function MapContainer(props) {
             Goto Center
           </Button>
         </div>
+      </div>
+      <div className="preplan-locations">
+      <b className="preplan-locations__title">Preplan Locations</b>
+        <table className="preplan-locations__table">
+          <tbody>
+            {preplanningLocations.map((location) => {
+              return (
+                <tr key={location.id}>
+                  <td onClick={() => {
+                    setCenter({lat: parseFloat(location.latitude), lng: parseFloat(location.longitude)});
+                    setSearchedSite(location.google_formatted_address);
+                    props.setSideBarValue(true);
+                  }} className="preplan-locations__table-cell">{location.occupancyname}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
       </div>
     </GoogleMap>
   ) : (

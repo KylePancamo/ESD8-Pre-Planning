@@ -5,7 +5,6 @@ import Button from "react-bootstrap/Button";
 import IconEditWindow from "./IconEditWindow";
 import {useRecoilState} from 'recoil';
 import {imagesState} from "../../atoms";
-import ViewLocationsModal from './ViewLocations/ViewLocationsModal';
 import React from "react";
 
 function AdminPanel(props) {
@@ -66,20 +65,6 @@ function AdminPanel(props) {
                 setFileUploadPopup(false);
               }}
             />
-            <Button
-              onClick={() => {
-                setLocationsButton(true);
-              }}
-            >
-              View Locations
-            </Button>
-            {locationsButton ? (
-              <ViewLocationsModal
-                show={locationsButton}
-                setLocationsButton={setLocationsButton}
-                locationsButton={locationsButton}
-              />
-            ) : null }
           </div>
           <div className="admin-panel-main">
             <h2>List of Images:</h2>

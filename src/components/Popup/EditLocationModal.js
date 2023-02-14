@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import GenericPopupWindow from "../../Popup/GenericPopup";
+import GenericPopupWindow from "./GenericPopup";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -7,7 +7,7 @@ import Container from "react-bootstrap/Container";
 import { useForm } from "react-hook-form";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
-import states from "../states";
+import states from "./states";
 import fetchPreplanData from "./fetchPreplanData";
 import { Autocomplete } from "@react-google-maps/api";  
 import Alert from "react-bootstrap/Alert";
@@ -29,6 +29,8 @@ function EditLocation(props) {
     setSearchBox(autocomplete);
   }
 
+  console.log(props.selectedEditLocation);
+
   function onPlaceChanged() {
     if (searchBox != null) {
       const place = searchBox.getPlace();
@@ -49,6 +51,7 @@ function EditLocation(props) {
   }
 
   const onSubmit = (data) => {
+    console.log(data);
     Axios.post("http://localhost:5000/api/update-preplanning-location", {
       payload: data,
       googleAddress: searchBox.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address,
@@ -76,6 +79,8 @@ function EditLocation(props) {
           mut_aid_d7fr: data.mutual_aid2,
           mut_aid_helotesfd: data.mutual_aid3,
           google_formatted_address: searchBox.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address, 
+          latitude: props.selectedEditLocation.latitude,
+          longitude: props.selectedEditLocation.longitude,
           mut_aid_leonspringsvfd: data.mutual_aid4,
           occupancyaddress: data.streetAddress,
           occupancycity: data.city,
@@ -103,6 +108,8 @@ function EditLocation(props) {
           mut_aid_d7fr: data.mutual_aid2,
           mut_aid_helotesfd: data.mutual_aid3,
           google_formatted_address: searchBox.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address, 
+          latitude: props.selectedEditLocation.latitude,
+          longitude: props.selectedEditLocation.longitude,
           mut_aid_leonspringsvfd: data.mutual_aid4,
           occupancyaddress: data.streetAddress,
           occupancycity: data.city,

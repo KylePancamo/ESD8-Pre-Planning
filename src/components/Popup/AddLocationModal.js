@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import GenericPopupWindow from "../../Popup/GenericPopup";
+import GenericPopupWindow from "./GenericPopup";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -7,12 +7,12 @@ import Container from "react-bootstrap/Container";
 import { useForm } from "react-hook-form";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
-import states from "../states";
+import states from "./states";
 import { Autocomplete } from "@react-google-maps/api";
 import Alert from "react-bootstrap/Alert";
 
 
-function AddLocation(props) {
+function AddLocation({ show, onHide, address }) {
   const {
     register,
     handleSubmit,
@@ -67,14 +67,26 @@ function AddLocation(props) {
 
   useEffect(() => {
     reset();
-  }, [props.show]);
+  }, [show]);
 
   return (
     <GenericPopupWindow
-      show={props.show}
-      onHide={() => props.onHide()}
+      show={show}
+      onHide={() => onHide()}
       contentClassName="add-location-modal"
       title="Add Location"
+      onEntering={() => {
+        let addressArray = address.split(',');
+
+        let occupancyaddress = addressArray[0].trim();
+        let city = addressArray[1].trim();
+        let state = addressArray[2].split(' ')[1].trim();
+        let zip = addressArray[2].split(' ')[2] ? addressArray[2].split(' ')[2].trim() : null;
+        setValue("streetAddress", occupancyaddress);
+        setValue("city", city);
+        setValue("state", state);
+        zip ? setValue("zipCode", zip) : setValue("zipCode", "");
+      }}
     >
       <Form
         className="location-form"

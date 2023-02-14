@@ -10,8 +10,9 @@ import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
 import {sideBarDataState} from "../../atoms";
 import {siteIsSetState} from "../../atoms";
-import EditLocation from "../AdminPanel/ViewLocations/EditLocationModal";
+import EditLocation from "../Popup/EditLocationModal";
 import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
+import AddLocationModal from "../Popup/AddLocationModal";
 
 function Sidebar(props) {
   const [siteIsSet, setSiteIsSet] = useRecoilState(siteIsSetState);
@@ -19,6 +20,9 @@ function Sidebar(props) {
   const [sidebarData, setSidebarData] = useRecoilState(sideBarDataState);
   const [editLocation, setEditLocation] = useState(false);
   const [preplanningLocations, updateLocations] = usePrePlanningLocations();
+  const [addLocationButton, setAddLocationButton] = useState(false);
+
+  console.log(searchedSite);
 
   const updateEdit = useCallback(() => {
     setEditLocation(false);
@@ -91,8 +95,25 @@ function Sidebar(props) {
                 </Content>
               </div>
               ) : searchedSite !== "" ? (
-                <div style={{position: "relative", top: "50%", left: "25%"}}>
-                  <p>Site not found. Please try again.</p>
+                <div style={{
+                  width: "fit-content",
+                  display: "flex",
+                  flexDirection: "column",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)"
+                }}>
+                  <p style={{
+                    textAlign: "center",
+                    marginBottom: "10px"
+                    
+                  }}><b>{searchedSite}</b> <br/> not found in the database. Please search a different site or add the site.</p>
+                  <Button onClick={() => {
+                    setAddLocationButton(true);
+                  }}>
+                    Add Site
+                  </Button>
                 </div>
               ) : (
                 <div style={{position: "relative", top: "50%", left: "25%"}}>
@@ -110,6 +131,11 @@ function Sidebar(props) {
           updateLocations={updateLocations}
         />
       ) : null}
+      <AddLocationModal
+        show={addLocationButton}
+        onHide={() => setAddLocationButton(false)}
+        address={searchedSite}
+      />
 
     </div>
   );
