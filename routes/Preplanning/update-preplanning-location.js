@@ -9,11 +9,13 @@ const getUser = require('../Auth/getUser');
 router.post("/", getUser, isAuthorized, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
     const payload = req.body.payload;
+    const google_formatted_address = req.body.googleAddress;
+    console.log(google_formatted_address);
     const id = req.body.id;
     console.log(payload);
     console.log(id);
     const query = `UPDATE pre_planning SET 
-                    occupancyname = ?, mut_aid_helotesfd = ?, mut_aid_d7fr = ?, mut_aid_leonspringsvfd = ?, 
+                    google_formatted_address = ?, occupancyname = ?, mut_aid_helotesfd = ?, mut_aid_d7fr = ?, mut_aid_leonspringsvfd = ?, 
                     mut_aid_bc2fd = ?, occupancyaddress = ?, occupancycity = ?, occupancystate = ?, occupancyzip = ?,
                     occupancycountry = ?, constructiontype = ?, hazards = ?, hydrant_address = ?, 
                     hydrant_distance = ?, access = ?, electric_meter = ?, breaker_box = ?, water = ?, 
@@ -21,6 +23,7 @@ router.post("/", getUser, isAuthorized, (req, res) => {
                     contactname = ? WHERE id = ?`;
   
     const data = [
+      google_formatted_address,
       payload.occupancyName,
       parseInt(payload.mutual_aid1),
       parseInt(payload.mutual_aid2),

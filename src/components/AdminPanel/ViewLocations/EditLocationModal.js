@@ -18,6 +18,7 @@ function EditLocation(props) {
     handleSubmit,
     reset,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm();
   const [locationEditResponse, setLocationEditResponse] = useState({});
@@ -37,7 +38,7 @@ function EditLocation(props) {
       let occupancyaddress = addressArray[0].trim();
       let city = addressArray[1].trim();
       let state = addressArray[2].split(' ')[1].trim();
-      let zip = addressArray[2].split(' ')[2].trim();
+      let zip = addressArray[2].split(' ')[2] != undefined ? addressArray[2].split(' ')[2].trim() : "";
       setValue("streetAddress", occupancyaddress);
       setValue("city", city);
       setValue("state", state);
@@ -48,15 +49,41 @@ function EditLocation(props) {
   }
 
   const onSubmit = (data) => {
-    console.log(data);
     Axios.post("http://localhost:5000/api/update-preplanning-location", {
       payload: data,
+      googleAddress: searchBox.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address,
       id: props.selectedEditLocation.id,
     }, {
       withCredentials: true,
     })
       .then((response) => {
-        console.log(response.data);
+        props.setSelectedEditLocaton({
+          ...props.selectedEditLocation,
+          occupancyname: data.occupancyName,
+          occupancytype: data.occupancyType,
+          hazards: data.hazards,
+          other_notes: data.notes,
+          access: data.accessInformation,
+          breaker_box: data.breakerBoxLoc,
+          constructiontype: data.constructionType,
+          contactname: data.contactName,
+          electric_meter: data.electricMeterLoc,
+          emergency_contact_number: data.emergencyContact,
+          gas_shutoff: data.gasShutoffLoc,
+          hydrant_address: data.hydrantAddress,
+          hydrant_distance: data.hydrantDistance,
+          mut_aid_bc2fd: data.mutual_aid1,
+          mut_aid_d7fr: data.mutual_aid2,
+          mut_aid_helotesfd: data.mutual_aid3,
+          google_formatted_address: searchBox.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address, 
+          mut_aid_leonspringsvfd: data.mutual_aid4,
+          occupancyaddress: data.streetAddress,
+          occupancycity: data.city,
+          occupancystate: data.state,
+          occupancyzip: data.zipCode,
+          water: data.waterLoc,
+        })
+
         setLocationEditResponse(response.data);
         props.updateLocations({
           id: props.selectedEditLocation.id,

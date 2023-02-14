@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Header from "./Header";
 import Content from "./Content";
 import Footer from "./Footer";
@@ -10,11 +10,22 @@ import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
 import {sideBarDataState} from "../../atoms";
 import {siteIsSetState} from "../../atoms";
+import EditLocation from "../AdminPanel/ViewLocations/EditLocationModal";
+import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
 
 function Sidebar(props) {
   const [siteIsSet, setSiteIsSet] = useRecoilState(siteIsSetState);
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
   const [sidebarData, setSidebarData] = useRecoilState(sideBarDataState);
+  const [editLocation, setEditLocation] = useState(false);
+  const [preplanningLocations, updateLocations] = usePrePlanningLocations();
+
+  console.log(sidebarData)
+
+  const updateEdit = useCallback(() => {
+    setEditLocation(false);
+  })
+
   
 
   const toggleSideBar = () => {
@@ -28,6 +39,7 @@ function Sidebar(props) {
         console.log(response.data.payload);
         if(response.data.payload.length > 0) {
           setSiteIsSet(true);
+          console.log(response.data.payload[0])
           setSidebarData(response.data.payload[0]);
           console.log(response);
         } else {
@@ -69,6 +81,13 @@ function Sidebar(props) {
           </div>
             {siteIsSet ? (
               <div className="sidebar-data-wrapper">
+                <Button 
+                  size="sm" 
+                  className="sidebar-edit-location"
+                  onClick={() => setEditLocation(true)}
+                >
+                  Edit
+                </Button>
                 <Header 
                   sidebarData={sidebarData}
                 >
@@ -78,13 +97,27 @@ function Sidebar(props) {
                 >
                 </Content>
               </div>
+              ) : searchedSite !== "" ? (
+                <div style={{position: "relative", top: "50%", left: "25%"}}>
+                  <p>Site not found. Please try again.</p>
+                </div>
               ) : (
                 <div style={{position: "relative", top: "50%", left: "25%"}}>
-                  Site not found. Please try again.
+                  <p>Please search for a site.</p>
                 </div>
-              ) }
+             )}
         </div>
       ) : null}
+      {editLocation ? (
+        <EditLocation
+          show={editLocation}
+          onHide={updateEdit}
+          selectedEditLocation={sidebarData}
+          setSelectedEditLocaton={setSidebarData}
+          updateLocations={updateLocations}
+        />
+      ) : null}
+
     </div>
   );
 }
