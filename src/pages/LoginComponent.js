@@ -10,6 +10,7 @@ import Logo from '../esd8_logo.png';
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const { login } = useAuth();
 
     function validateForm() {
@@ -24,6 +25,10 @@ export default function Login() {
         ).then((response) => {
             const token = response.data.token;
             const decodedToken = decodeToken(token);
+            if (!decodedToken) {
+                setError("Invalid username or password");
+                return;
+            }
             login(decodedToken.username);
         }).catch((err) => {
             console.log(err);
@@ -60,6 +65,11 @@ export default function Login() {
                 <Button className="login-button" type="submit" disabled={!validateForm()}>
                     Login
                 </Button>
+                {error ? (
+                    <div className="error-message">
+                        {error}
+                    </div>
+                ) : null }
             </Form>
             </div>
         </div>

@@ -58,3 +58,10 @@ input[type="password"] {
 .login-button:disabled {
     background-color: red;
 }
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
