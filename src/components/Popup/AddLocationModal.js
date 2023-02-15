@@ -10,6 +10,8 @@ import Axios from "axios";
 import states from "./states";
 import { Autocomplete } from "@react-google-maps/api";
 import Alert from "react-bootstrap/Alert";
+import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
+import { preplanningLocationsState } from "../../atoms";
 
 
 function AddLocation({ show, onHide, address }) {
@@ -23,13 +25,14 @@ function AddLocation({ show, onHide, address }) {
   const [locationAddedResponse, setLocationAddedResponse] = useState(false);
 
   const [searchBox, setSearchBox] = useState(null);
-  const [formattedAddress, setFormattedAddress] = useState(null);
+  const [formattedAddress, setFormattedAddress] = useState(address.location);
+  const { addNewLocation } = usePrePlanningLocations();
 
   function onLoad(autocomplete) {
     setSearchBox(autocomplete);
   }
 
-  function onPlaceChanged() {
+  function onPlaceChanged() { 
     if (searchBox != null) {
       const place = searchBox.getPlace();
       const formattedAddress = place.formatted_address;
@@ -53,12 +56,39 @@ function AddLocation({ show, onHide, address }) {
     Axios.post("http://localhost:5000/api/add-preplanning-location", {
       payload: {
         data: data,
-        formattedAddress: formattedAddress,
+        address: address,
       },
     }, { withCredentials: true })
       .then((response) => {
         console.log(response);
         setLocationAddedResponse(response.data);
+        addNewLocation({
+          occupancyname: data.occupancyName,
+          occupancytype: data.occupancyType,
+          hazards: data.hazards,
+          other_notes: data.notes,
+          access: data.accessInformation,
+          breaker_box: data.breakerBoxLoc,
+          constructiontype: data.constructionType,
+          contactname: data.contactName,
+          electric_meter: data.electricMeterLoc,
+          emergency_contact_number: data.emergencyContact,
+          gas_shutoff: data.gasShutoffLoc,
+          hydrant_address: data.hydrantAddress,
+          hydrant_distance: data.hydrantDistance,
+          mut_aid_bc2fd: data.mutual_aid1,
+          mut_aid_d7fr: data.mutual_aid2,
+          mut_aid_helotesfd: data.mutual_aid3,
+          google_formatted_address: searchBox.getPlace() ? searchBox.getPlace().formatted_address : address.location, 
+          latitude: searchBox.getPlace() ? searchBox.getPlace().geometry.location.lat() : address.latitude,
+          longitude: searchBox.getPlace() ? searchBox.getPlace().geometry.location.lng() : address.longitude,
+          mut_aid_leonspringsvfd: data.mutual_aid4,
+          occupancyaddress: data.streetAddress,
+          occupancycity: data.city,
+          occupancystate: data.state,
+          occupancyzip: data.zipCode,
+          water: data.waterLoc,
+        });
       })
       .catch((error) => {
         setLocationAddedResponse(error.response.data);
@@ -76,15 +106,16 @@ function AddLocation({ show, onHide, address }) {
       contentClassName="add-location-modal"
       title="Add Location"
       onEntering={() => {
-        let addressArray = address.split(',');
+        let addressArray = address.location.split(',');
 
-        let occupancyaddress = addressArray[0].trim();
-        let city = addressArray[1].trim();
-        let state = addressArray[2].split(' ')[1].trim();
-        let zip = addressArray[2].split(' ')[2] ? addressArray[2].split(' ')[2].trim() : null;
+        let occupancyaddress = addressArray[0] ? addressArray[0].trim() : "";
+        let city = addressArray[1] ? addressArray[1].trim() : "";
+        let state = addressArray[2] ? addressArray[2].split(' ')[1].trim() : "";
+        let zip = addressArray[2] ? addressArray[2].split(' ')[2].trim() : "";
         setValue("streetAddress", occupancyaddress);
         setValue("city", city);
         setValue("state", state);
+        setValue("googleAddress", address.location)
         zip ? setValue("zipCode", zip) : setValue("zipCode", "");
       }}
     >
@@ -144,7 +175,7 @@ function AddLocation({ show, onHide, address }) {
               </Col>
               <Col>
                 <Form.Label>
-                  Contanct Name
+                  Contact Name
                 </Form.Label>
                 <Form.Control
                   {...register("contactName", {
@@ -226,9 +257,16 @@ function AddLocation({ show, onHide, address }) {
                       type="text"
                       placeholder="Search Google Street Address"
                     />
+                    {errors.googleAddress ? (
+                      <span style={{ color: "red" }}>
+                        {errors.googleAddress.message}
+                      </span>
+                    ) : 
                     <Form.Text className="text-muted">
                       Please search for a google address before submitting.
                     </Form.Text>
+                    }
+                    
                   </Form.Group>
                 </Autocomplete>
               </Col>

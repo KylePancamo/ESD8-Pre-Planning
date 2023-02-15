@@ -10,12 +10,14 @@ const getUser = require('../Auth/getUser');
 router.post("/", getUser, isAuthorized, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
     const payload = req.body.payload.data;
-    const googleFormattedAddress = req.body.payload.formattedAddress.trim();
-    const query = `INSERT INTO pre_planning (google_formatted_address, occupancyname, mut_aid_helotesfd, mut_aid_d7fr, mut_aid_leonspringsvfd, mut_aid_bc2fd, occupancyaddress, occupancycity, occupancystate, occupancyzip, occupancycountry, constructiontype, 
+    const address = req.body.payload.address;
+    const query = `INSERT INTO pre_planning (google_formatted_address, latitude, longitude, occupancyname, mut_aid_helotesfd, mut_aid_d7fr, mut_aid_leonspringsvfd, mut_aid_bc2fd, occupancyaddress, occupancycity, occupancystate, occupancyzip, occupancycountry, constructiontype, 
                                              hazards, hydrant_address, hydrant_distance, access, electric_meter, breaker_box, water, gas_shutoff, emergency_contact_number, other_notes,
-                                             occupancytype, contactname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+                                             occupancytype, contactname) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
     const data = [
-      googleFormattedAddress,
+      address.location,
+      address.latitude,
+      address.longitude,
       payload.occupancyName,
       parseInt(payload.mutual_aid1),
       parseInt(payload.mutual_aid2),
@@ -42,7 +44,7 @@ router.post("/", getUser, isAuthorized, (req, res) => {
     ];
   
     db.query(
-      `SELECT * FROM pre_planning WHERE google_formatted_address = ?`, [googleFormattedAddress], (err, result) => {
+      `SELECT * FROM pre_planning WHERE google_formatted_address = ?`, [address.location], (err, result) => {
         if (err) {
           console.log(err.message);
         } else {
