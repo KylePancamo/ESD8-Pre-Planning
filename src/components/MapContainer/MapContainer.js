@@ -51,9 +51,12 @@ function MapContainer(props) {
   const onPlacesChanged = () => {
     const places = searchBox.getPlaces();
     const bounds = new window.google.maps.LatLngBounds();
-    console.log(places);
     
-    setSearchedSite(places[0].formatted_address);
+    setSearchedSite({
+      location: places[0].formatted_address,
+      latitude: places[0].geometry.location.lat(),
+      longitude: places[0].geometry.location.lng(),
+    });
 
     places.forEach((place) => {
       if (place.geometry.viewport) {
@@ -253,7 +256,11 @@ function MapContainer(props) {
                 <tr key={location.id}>
                   <td onClick={() => {
                     setCenter({lat: parseFloat(location.latitude), lng: parseFloat(location.longitude)});
-                    setSearchedSite(location.google_formatted_address);
+                    setSearchedSite({
+                      location: location.google_formatted_address,
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                    });
                     props.setSideBarValue(true);
                   }} className="preplan-locations__table-cell">{location.occupancyname}</td>
                 </tr>

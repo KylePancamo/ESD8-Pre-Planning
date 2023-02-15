@@ -7,7 +7,7 @@ export const imagesState = atom({
 
 export const searchSiteState = atom({
     key: 'searchSiteState',
-    default: "",
+    default: {},
 })
 
 export const sideBarDataState = atom({

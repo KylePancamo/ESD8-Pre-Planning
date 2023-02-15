@@ -33,8 +33,8 @@ function Sidebar(props) {
   };
 
   useEffect(() => {
-    if (searchedSite !== "") {
-      Axios.post("http://localhost:5000/api/get-sidebar-data", {address: searchedSite})
+    if (searchedSite.location !== "") {
+      Axios.post("http://localhost:5000/api/get-sidebar-data", {address: searchedSite.location})
       .then((response) => {
         if(response.data.payload.length > 0) {
           setSiteIsSet(true);
@@ -49,7 +49,7 @@ function Sidebar(props) {
         console.log(error);
       });
     }
-  }, [searchedSite]);
+  }, [searchedSite.location]);
 
   return (
     <div className="sidebar-wrapper">
@@ -94,7 +94,7 @@ function Sidebar(props) {
                 >
                 </Content>
               </div>
-              ) : searchedSite !== "" ? (
+              ) : searchedSite.location !== "" ? (
                 <div style={{
                   width: "fit-content",
                   display: "flex",
@@ -108,7 +108,7 @@ function Sidebar(props) {
                     textAlign: "center",
                     marginBottom: "10px"
                     
-                  }}><b>{searchedSite}</b> <br/> not found in the database. Please search a different site or add the site.</p>
+                  }}><b>{searchedSite.location}</b> <br/> not found in the database. Please search a different site or add the site.</p>
                   <Button onClick={() => {
                     setAddLocationButton(true);
                   }}>
