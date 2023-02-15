@@ -458,22 +458,22 @@ code {
   position: absolute;
   bottom: 10%;
   margin-left: 5vw;
-  border: 3px solid rgb(0, 0, 0);
-  padding: 15px;
   max-height: 200px;
   overflow-y: auto;
-  background-color: #F5F5F5; /* Use a light gray background */
+}
+.preplan-locations {
+  scrollbar-width: none;
 }
 
-.preplan-locations__title {
-  color: #444444; /* Use a darker gray for the title text */
+.preplan-locations::-webkit-scrollbar {
+  display: none;
 }
 
 .preplan-locations__table {
   border-collapse: separate;
-  border-spacing: 0px 15px;
-  width: 100%;
+  border-spacing: 10px 15px;
   font-size: 18px;
+  table-layout: fixed;
 }
 
 .preplan-locations__table tbody tr:hover {
@@ -493,8 +493,9 @@ code {
 .preplan-locations__table-cell {
   padding: 5px 10px;
   border-radius: 2px;
+  max-width: 150px;
+  word-wrap: break-word;
 }
-
 
 .file-uploads {
   display: flex;

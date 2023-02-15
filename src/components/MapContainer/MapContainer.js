@@ -15,6 +15,7 @@ import {searchSiteState} from "../../atoms";
 import {sideBarDataState} from "../../atoms";
 import {siteIsSetState} from "../../atoms";
 import {preplanningLocationsState} from "../../atoms";
+import PreplanningLocationsUI from "./PreplanningLocationsUI";
 
 const containerStyle = {
   width: "100vw",
@@ -44,7 +45,6 @@ function MapContainer(props) {
   const [searchBox, setSearchBox] = useState(null);
   const [bounds, setBounds] = useState(null);
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
-  const [preplanningLocations, updateLocations] = useRecoilState(preplanningLocationsState);
   const [mapId, setMapId] = useState("satellite");
   const searchBoxRef = React.useRef(null);
 
@@ -247,28 +247,10 @@ function MapContainer(props) {
           </Button>
         </div>
       </div>
-      <div className="preplan-locations">
-      <b className="preplan-locations__title">Preplan Locations</b>
-        <table className="preplan-locations__table">
-          <tbody>
-            {preplanningLocations.map((location) => {
-              return (
-                <tr key={location.id}>
-                  <td onClick={() => {
-                    setCenter({lat: parseFloat(location.latitude), lng: parseFloat(location.longitude)});
-                    setSearchedSite({
-                      location: location.google_formatted_address,
-                      latitude: location.latitude,
-                      longitude: location.longitude,
-                    });
-                    props.setSideBarValue(true);
-                  }} className="preplan-locations__table-cell">{location.occupancyname}</td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+      <PreplanningLocationsUI
+        setSideBarValue={props.setSideBarValue}
+        setCenter={setCenter}
+      />
     </GoogleMap>
   ) : (
     <></>
