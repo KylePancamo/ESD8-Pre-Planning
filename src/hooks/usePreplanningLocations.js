@@ -16,9 +16,15 @@ function usePrePlanningLocations() {
         return location;
       });
     });
-  }, []);
+  }, [prePlanningLocations]);
 
-  return [prePlanningLocations, updateLocations];
+  const addNewLocation = useCallback((newVal) => {
+    setPrePlanningLocations((locations) => {
+      return [...locations, newVal];
+    });
+  }, [prePlanningLocations])
+
+  return {prePlanningLocations, updateLocations, addNewLocation};
 }
 
 export default usePrePlanningLocations;

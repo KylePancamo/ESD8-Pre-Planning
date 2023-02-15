@@ -19,7 +19,7 @@ function Sidebar(props) {
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
   const [sidebarData, setSidebarData] = useRecoilState(sideBarDataState);
   const [editLocation, setEditLocation] = useState(false);
-  const [preplanningLocations, updateLocations] = usePrePlanningLocations();
+  const { preplanningLocations, updateLocations }= usePrePlanningLocations();
   const [addLocationButton, setAddLocationButton] = useState(false);
 
   console.log(searchedSite);
