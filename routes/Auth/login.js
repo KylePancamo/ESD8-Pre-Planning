@@ -15,14 +15,14 @@ router.post("/", (req, res) => {
         return res.status(400).json({ message: "All fields are required" });
     }
 
-    const query = `SELECT a.id, a.username, r.name, BIT_OR(p.security_hex) as permissions
+    const query = `SELECT a.id, a.username, r.name, COALESCE(BIT_OR(p.security_hex), 0) as permissions
                     FROM accounts a
                     JOIN user_roles ur ON a.id = ur.user_id
                     JOIN roles r ON r.id = ur.role_id
-                    JOIN role_permissions rp ON rp.role_id = r.id
-                    JOIN permissions p ON p.id = rp.permission_id
+                    LEFT JOIN role_permissions rp ON rp.role_id = r.id
+                    LEFT JOIN permissions p ON p.id = rp.permission_id
                     WHERE a.username = ?
-                    GROUP BY a.id, a.username, a.password;`;
+                    GROUP BY a.id, a.username, r.name;`;
 
     db.query(
         query,
