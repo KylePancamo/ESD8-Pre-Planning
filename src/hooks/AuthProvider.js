@@ -7,6 +7,7 @@ export const AuthProvider = ({ children, response }) => {
     if (!response.data.username) {
         console.log(response.data);
     }
+    const [userData, setUserData] = useState(response.data ? response.data : null);
     const [user, setUser] = useState(response.data.username ? response.data.username : null);
     const navigate = useNavigate();
 
@@ -22,6 +23,7 @@ export const AuthProvider = ({ children, response }) => {
 
     const value = useMemo(
         () => ({
+          userData,
           user,
           login,
           logout
