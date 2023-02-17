@@ -35,8 +35,9 @@ router.post("/", (req, res) => {
                 //bcrypt.compare(password, result[0].password, (error, response) => {
                 //    if (response) {
                         const permissions = parseInt(result[0].permissions.toString('hex'), 16);
-                        result[0].permissions = permissions;
-                        const token = jwt.sign(result[0], process.env.SECRET_KEY_JWT, { expiresIn: "24hr" });
+                        const userData = {...result[0]};
+                        userData.permissions = permissions;
+                        const token = jwt.sign(userData, process.env.SECRET_KEY_JWT, { expiresIn: "24hr" });
                         res.cookie("token", token, { httpOnly: true });
                         res.send({ message: 'Logged in successfully', token } )
                 //    } else {
