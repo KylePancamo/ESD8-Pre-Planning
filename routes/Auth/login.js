@@ -31,7 +31,7 @@ router.post("/", (req, res) => {
             if (err) {
                 res.send({ err: err });
             }
-            if (result.length > 0) {
+            if (result?.length > 0) {
                 //bcrypt.compare(password, result[0].password, (error, response) => {
                 //    if (response) {
                         const permissions = parseInt(result[0].permissions.toString('hex'), 16);
