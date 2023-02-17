@@ -14,6 +14,11 @@ import EditLocation from "../Popup/EditLocationModal";
 import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
 import AddLocationModal from "../Popup/AddLocationModal";
 
+import { useAuth } from "../../hooks/AuthProvider";
+import { permission } from "../../permissions";
+import { hasPermissions } from '../helpers';
+
+
 function Sidebar(props) {
   const [siteIsSet, setSiteIsSet] = useRecoilState(siteIsSetState);
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
@@ -21,8 +26,7 @@ function Sidebar(props) {
   const [editLocation, setEditLocation] = useState(false);
   const { preplanningLocations, updateLocations }= usePrePlanningLocations();
   const [addLocationButton, setAddLocationButton] = useState(false);
-
-  console.log(searchedSite);
+  const { userData } = useAuth();
 
   const updateEdit = useCallback(() => {
     setEditLocation(false);
@@ -31,6 +35,50 @@ function Sidebar(props) {
   const toggleSideBar = () => {
     props.setSideBarValue(!props.sideBarValue);
   };
+
+  const canEditLocation = hasPermissions(userData.permissions, permission.MODIFY);
+
+  function renderEditLocationButton() {
+    return (
+      <Button
+        size="sm"
+        className="sidebar-edit-location"
+        onClick={() => setEditLocation(true)}
+      >
+        Edit
+      </Button>
+    );
+  }
+
+  function renderEditLocationModal() {
+    return (
+      <EditLocation
+        show={editLocation}
+        onHide={updateEdit}
+        selectedEditLocation={sidebarData}
+        setSelectedEditLocaton={setSidebarData}
+        updateLocations={updateLocations}
+      />
+    );
+  }
+
+  function renderAddLocationButton() {
+    return (
+      <Button onClick={() => setAddLocationButton(true) }>
+        Add Site
+      </Button>
+    );
+  }
+
+  function renderAddLocationModal() {
+    return (
+      <AddLocationModal
+        show={addLocationButton}
+        onHide={() => setAddLocationButton(false)}
+        address={searchedSite}
+      />
+    );
+  }
 
   useEffect(() => {
     if (searchedSite.location !== "") {
@@ -78,13 +126,8 @@ function Sidebar(props) {
           </div>
             {siteIsSet ? (
               <div className="sidebar-data-wrapper">
-                <Button 
-                  size="sm" 
-                  className="sidebar-edit-location"
-                  onClick={() => setEditLocation(true)}
-                >
-                  Edit
-                </Button>
+                {canEditLocation && renderEditLocationButton()}
+                {editLocation && renderEditLocationModal()}
                 <Header 
                   sidebarData={sidebarData}
                 >
@@ -109,11 +152,8 @@ function Sidebar(props) {
                     marginBottom: "10px"
                     
                   }}><b>{searchedSite.location}</b> <br/> not found in the database. Please search a different site or add the site.</p>
-                  <Button onClick={() => {
-                    setAddLocationButton(true);
-                  }}>
-                    Add Site
-                  </Button>
+                  {canEditLocation && renderAddLocationButton()}
+                  {addLocationButton && renderAddLocationModal()}
                 </div>
               ) : (
                 <div style={{position: "relative", top: "50%", left: "25%"}}>
@@ -122,21 +162,6 @@ function Sidebar(props) {
              )}
         </div>
       ) : null}
-      {editLocation ? (
-        <EditLocation
-          show={editLocation}
-          onHide={updateEdit}
-          selectedEditLocation={sidebarData}
-          setSelectedEditLocaton={setSidebarData}
-          updateLocations={updateLocations}
-        />
-      ) : null}
-      <AddLocationModal
-        show={addLocationButton}
-        onHide={() => setAddLocationButton(false)}
-        address={searchedSite}
-      />
-
     </div>
   );
 }

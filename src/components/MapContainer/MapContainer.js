@@ -16,6 +16,9 @@ import {sideBarDataState} from "../../atoms";
 import {siteIsSetState} from "../../atoms";
 import {preplanningLocationsState} from "../../atoms";
 import PreplanningLocationsUI from "./PreplanningLocationsUI";
+import { useAuth } from "../../hooks/AuthProvider";
+import { permission } from "../../permissions";
+import { hasPermissions } from '../helpers';
 
 const containerStyle = {
   width: "100vw",
@@ -46,6 +49,8 @@ function MapContainer(props) {
   const [bounds, setBounds] = useState(null);
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
   const [mapId, setMapId] = useState("satellite");
+  const { userData } = useAuth();
+  console.log(userData);
   const searchBoxRef = React.useRef(null);
 
   const onPlacesChanged = () => {
@@ -213,8 +218,9 @@ function MapContainer(props) {
         onClick={() => handleOnClick()}
         icon={"map-pin.png"}
         />
-
-      <MapDrawingManager markers={markers} setMarkers={setMarkers} />
+      {hasPermissions(userData.permissions, permission.MODIFY) ? (
+        <MapDrawingManager markers={markers} setMarkers={setMarkers} />
+      ) : null}
 
       <MapStandaloneSearchBox
         bounds={bounds}
