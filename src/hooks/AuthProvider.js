@@ -8,11 +8,10 @@ export const AuthProvider = ({ children, response }) => {
         console.log(response.data);
     }
     const [userData, setUserData] = useState(response.data ? response.data : null);
-    const [user, setUser] = useState(response.data.username ? response.data.username : null);
     const navigate = useNavigate();
 
-    const login = (username) => {
-        setUser(username);
+    const login = (decodedToken) => {
+        setUserData(decodedToken);
         navigate('/map');
     }
 
@@ -24,11 +23,10 @@ export const AuthProvider = ({ children, response }) => {
     const value = useMemo(
         () => ({
           userData,
-          user,
           login,
           logout
         }),
-        [user]
+        [userData.username]
       );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
