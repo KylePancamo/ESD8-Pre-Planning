@@ -15,13 +15,14 @@ router.post("/", (req, res) => {
         return res.status(400).json({ message: "All fields are required" });
     }
 
-    const query = `SELECT a.id, a.username, r.name AS role_name, p.name AS permission_type, p.id AS permission
-                FROM accounts AS a
-                JOIN user_roles AS ur ON a.id = ur.user_id
-                JOIN roles AS r ON ur.role_id = r.id
-                JOIN role_permissions AS rp ON r.id = rp.role_id
-                JOIN permissions AS p ON rp.permission_id = p.id
-                WHERE a.username = ?`;
+    const query = `SELECT a.id, a.username, r.name, BIT_OR(p.security_hex) as permissions
+                    FROM accounts a
+                    JOIN user_roles ur ON a.id = ur.user_id
+                    JOIN roles r ON r.id = ur.role_id
+                    JOIN role_permissions rp ON rp.role_id = r.id
+                    JOIN permissions p ON p.id = rp.permission_id
+                    WHERE a.username = ?
+                    GROUP BY a.id, a.username, a.password;`;
 
     db.query(
         query,
@@ -33,6 +34,8 @@ router.post("/", (req, res) => {
             if (result.length > 0) {
                 //bcrypt.compare(password, result[0].password, (error, response) => {
                 //    if (response) {
+                        const permissions = parseInt(result[0].permissions.toString('hex'), 16);
+                        result[0].permissions = permissions;
                         const token = jwt.sign(result[0], process.env.SECRET_KEY_JWT, { expiresIn: "24hr" });
                         res.cookie("token", token, { httpOnly: true });
                         res.send({ message: 'Logged in successfully', token } )
