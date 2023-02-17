@@ -197,6 +197,7 @@ function MapContainer(props) {
           })
         ) : null 
     }
+    {markerClicked ? (
       <Popup
         show={markerClicked}
         onHide={() => setMarkerClicked(false)}
@@ -206,6 +207,7 @@ function MapContainer(props) {
         setMarkers={setMarkers}
         drawManagerMarker={drawManagerMarker}
       />
+      ) : null}
       <Marker 
         position={center} 
         onClick={() => handleOnClick()}
