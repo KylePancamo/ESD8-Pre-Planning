@@ -18,20 +18,24 @@ function AdminPortal() {
     return (
         <div className="admin-background">
             <div className="admin-wrapper">
-                <div className="admin-form-wrapper">
-                    <h2>Admin Portal</h2>
-                    <button onClick={(e) => {
-                        e.preventDefault();
-                        setPortalType("userRoles")
-                    }}>
-                        Modify User Roles
-                    </button>
-                    <button onClick={(e) => {
-                        e.preventDefault();
-                        setPortalType("roleTypes")
-                    }}>
-                        Modify Role Types
-                    </button>
+                <div className="admin-wrapper-leftmemu">
+                    <span className="text-center">Admin Portal</span>
+                    <div className="sidebar-divider">
+                        <ul className="sidebar-nav">
+                            <li className="sidebar-item" onClick={(e) => {
+                                e.preventDefault();
+                                setPortalType("userRoles")
+                            }}>
+                                <span className="sidebar-item-link">Modify User Roles</span>
+                            </li>
+                            <li className="sidebar-item" onClick={(e) => {
+                                e.preventDefault();
+                                setPortalType("roleTypes")
+                            }}>
+                                <span className="sidebar-item-link">Modify Role Types</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div className="loaded-component">
                     <div className="loaded-component-container">
