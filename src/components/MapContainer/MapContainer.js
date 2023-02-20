@@ -49,8 +49,7 @@ function MapContainer(props) {
   const [bounds, setBounds] = useState(null);
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
   const [mapId, setMapId] = useState("satellite");
-  const { userData } = useAuth();
-  console.log(userData);
+  const { userData, logout } = useAuth();
   const searchBoxRef = React.useRef(null);
 
   const onPlacesChanged = () => {
@@ -259,6 +258,14 @@ function MapContainer(props) {
         setSideBarValue={props.setSideBarValue}
         setCenter={setCenter}
       />
+        <button onClick={async () => {
+          const response = await Axios.get("http://localhost:5000/api/logout", { withCredentials: true });
+          if (response.data.status === "success") {
+            logout();
+          }
+        }} class="logout-btn">
+          Logout
+        </button>
     </GoogleMap>
   ) : (
     <></>

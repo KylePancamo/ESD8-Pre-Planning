@@ -8,7 +8,7 @@ export const ProtectedLayout = () => {
   const { userData } = useAuth();
   const outlet = useOutlet();
 
-  if (!userData.username) {
+  if (!userData?.username) {
     // user is not authenticated
     return <Navigate to="/" />;
   }
@@ -24,3 +24,24 @@ export const ProtectedLayout = () => {
     </>
   );
 };
+
+export const AdminLayout = () => {
+  const { userData } = useAuth();
+  const outlet = useOutlet();
+
+  if (!userData?.username) {
+    // user is not authenticated
+    return <Navigate to="/" />;
+  }
+
+  if (!hasPermissions(userData.permissions, permission.MODIFY)) {
+    // navigate to unauthorized page
+    return <Unauthorized />
+  }
+
+  return (
+    <>
+      {outlet}
+    </>
+  );
+}

@@ -5,7 +5,7 @@ const HomeLayout = () => {
     const { userData } = useAuth();
     const outlet = useOutlet();
 
-    if (userData.username) {
+    if (userData?.username) {
         return <Navigate to="/map" replace />;
     }
 
