@@ -16,6 +16,9 @@ module.exports = (app) => {
     const login = require('./Auth/login');
     const logout = require('./Auth/logout');
     const getUser = require('./Auth/get-user');
+    const getUserRoles = require('./Auth/get-user-roles');
+    const getRoles = require('./Auth/get-roles');
+    const updateUserRole = require('./Auth/update-user-role');
 
     // mount routes here
     app.use('/api/insert-placed-marker', insertMarkers);
@@ -34,4 +37,7 @@ module.exports = (app) => {
     app.use('/api/login', login);
     app.use('/api/logout', logout);
     app.use('/api/get-user', getUser);
+    app.use('/api/get-user-roles', getUserRoles);
+    app.use('/api/get-roles', getRoles);
+    app.use('/api/update-user-role', updateUserRole);
 }

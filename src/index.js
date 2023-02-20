@@ -18,7 +18,7 @@ import { AuthProviderLayout } from './components/Layouts/AuthProviderLayout';
 import Axios from 'axios';
 import HomeLayout from './components/Layouts/HomeLayout';
 import PageNotFound from './pages/404NotFound';
-import AdminPortal from './pages/AdminPortal';
+import AdminPortal from './pages/AdminPortal/AdminPortal';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
