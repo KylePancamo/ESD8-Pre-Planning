@@ -4,53 +4,90 @@
     background-size: cover;
   }
 
-.admin-wrapper {
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-}
-  
-.admin-form-wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: fit-content;
-    min-width: fit-content;
-    min-height: 86.5vh;
-    padding: 50px 25px;
-    gap: 20px;
-    background-color: rgba(29, 46, 56, 0.5);
+.admin-wrapper-leftmemu {
+    width: 260px;
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    z-index: 10;
+    background: #313a46
 }
 
-.admin-form-wrapper button {
-    background-image: linear-gradient(to bottom right, #ffffff, #000000);
-    color: white;
-    border: none;
-    border-radius: 3px;
-    padding: 6px 10px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    transition: transform 0.1s ease;
-    transform-origin: center center;
+.admin-wrapper-leftmemu .text-center {
+  background-color: #313a46;
+  display: block;
+  line-height: 70px;
+  width: 260px;
+  position: fixed;
+  top: 0;
+  max-height: 100%;
+  color: white;
 }
 
-.admin-form-wrapper button:hover {
-    background-image: linear-gradient(to bottom right, #000000, #ffffff);
+.sidebar-item-link {
+  display: block;
+  padding: 10px 30px;
+  font-size: .9375rem;
+  position: relative;
+  transition: all .4s;
+  list-style: none;
 }
+.sidebar-item-link:hover {
+  cursor: pointer;
+  background-color: #252f50;
+  transform: scaleX(1.1) scaleY(1.1);
+}
+
+.sidebar-item-link::before {
+  content: "";
+  width: 3px;
+  background-color: #1b1d23;
+  transform: scaleX(0);
+  transition: transform .4s;
+}
+
+.sidebar-divider {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  left: 0;
+  top: 70px;
+  bottom: 0;
+  right: 0;
+}
+
+
+.sidebar-nav, .sidebar-nav ul {
+    list-style-type: none;
+}
+
+.sidebar-nav {
+  padding-left: 0;
+}
+
+.sidebar-item {
+  display: block;
+  padding: 10px 30px;
+  font-size: .9375rem;
+  position: relative;
+  transition: all .4s;
+  list-style: none;
+  color: #8391a2;
+}
+
 
 .loaded-component { 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
-    padding: 2vh 2vw 2vh 2vw;
+  margin-left: 260px;
+  overflow: hidden;
+  padding: 70px 12px 65px;
+  height: 100vh;
 }
 
 .loaded-component-container {
     height: 100%;
     width: 100%;
     background-color: rgba(75, 91, 106, 0.5);
+    padding: 20px;
 }
 
 .role-types-container,
