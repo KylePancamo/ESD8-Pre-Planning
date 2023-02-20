@@ -13,11 +13,12 @@ import {
 import {
   RecoilRoot,
 } from 'recoil';
-import { ProtectedLayout } from './components/Layouts/ProtectedLayout';
+import { ProtectedLayout, AdminLayout } from './components/Layouts/ProtectedLayout';
 import { AuthProviderLayout } from './components/Layouts/AuthProviderLayout';
 import Axios from 'axios';
 import HomeLayout from './components/Layouts/HomeLayout';
 import PageNotFound from './pages/404NotFound';
+import AdminPortal from './pages/AdminPortal';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +38,9 @@ const router = createBrowserRouter(
       <Route element={<ProtectedLayout/>} >
         <Route path = "/map" element = {<App />}/>
       </Route>
+      <Route element={<AdminLayout/>} >
+          <Route path ="/adminportal" element = {<AdminPortal />} />
+        </Route>
     </Route>
   )
 );

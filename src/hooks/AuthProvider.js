@@ -17,6 +17,7 @@ export const AuthProvider = ({ children, response }) => {
 
     // call this function to sign out logged in user
     const logout = () => {
+        setUserData(null);
         navigate("/", { replace: true });
     };
 
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children, response }) => {
           login,
           logout
         }),
-        [userData.username]
+        [userData?.username]
       );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

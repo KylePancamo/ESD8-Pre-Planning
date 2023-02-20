@@ -14,6 +14,7 @@ module.exports = (app) => {
     const updateIconName = require('./Icons/update-icon-name');
     const checkFile = require('./Markers/check-file');
     const login = require('./Auth/login');
+    const logout = require('./Auth/logout');
     const getUser = require('./Auth/get-user');
 
     // mount routes here
@@ -31,5 +32,6 @@ module.exports = (app) => {
     app.use('/api/update-icon-name', updateIconName);
     app.use('/api/check-file', checkFile);
     app.use('/api/login', login);
+    app.use('/api/logout', logout);
     app.use('/api/get-user', getUser);
 }
