@@ -137,7 +137,7 @@ function Sidebar(props) {
                 >
                 </Content>
               </div>
-              ) : searchedSite.location !== "" ? (
+              ) : searchedSite.location ? (
                 <div style={{
                   width: "fit-content",
                   display: "flex",
