@@ -574,3 +574,8 @@ input:focus {
 .searchIcon button:hover {
   cursor: pointer;
 }
+
+button:hover {
+  cursor: pointer;
+  transform: scaleX(1.1) scaleY(1.1);
+}
