@@ -508,6 +508,36 @@ code {
   align-items: center;
 }
 
+.logout-btn {
+  position: absolute;
+  left: 50vw;
+  top: 1vh;
+  background-image: linear-gradient(to bottom right, #1b1d23, #bebb1c);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-image: linear-gradient(to bottom right, #25313b, #bebb1c);
+}
+
+.logout-icon {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border: 2px solid white;
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg);
+}
+
 .searchInputs {
   background-color: rgba(0, 0, 0, 0.5);
   position: absolute;
@@ -543,4 +573,9 @@ input:focus {
 
 .searchIcon button:hover {
   cursor: pointer;
+}
+
+button:hover {
+  cursor: pointer;
+  transform: scaleX(1.1) scaleY(1.1);
 }

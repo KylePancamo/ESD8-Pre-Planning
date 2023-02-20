@@ -15,17 +15,29 @@ router.post("/", (req, res) => {
         return res.status(400).json({ message: "All fields are required" });
     }
 
+    const query = `SELECT a.id, a.username, r.name, COALESCE(BIT_OR(p.security_hex), 0) as permissions
+                    FROM accounts a
+                    JOIN user_roles ur ON a.id = ur.user_id
+                    JOIN roles r ON r.id = ur.role_id
+                    LEFT JOIN role_permissions rp ON rp.role_id = r.id
+                    LEFT JOIN permissions p ON p.id = rp.permission_id
+                    WHERE a.username = ?
+                    GROUP BY a.id, a.username, r.name;`;
+
     db.query(
-        "SELECT password FROM accounts WHERE username = ?",
+        query,
         username,
         (err, result) => {
             if (err) {
                 res.send({ err: err });
             }
-            if (result.length > 0) {
+            if (result?.length > 0) {
                 //bcrypt.compare(password, result[0].password, (error, response) => {
                 //    if (response) {
-                        const token = jwt.sign({ username }, process.env.SECRET_KEY_JWT, { expiresIn: "24hr" });
+                        const permissions = parseInt(result[0].permissions.toString('hex'), 16);
+                        const userData = {...result[0]};
+                        userData.permissions = permissions;
+                        const token = jwt.sign(userData, process.env.SECRET_KEY_JWT, { expiresIn: "24hr" });
                         res.cookie("token", token, { httpOnly: true });
                         res.send({ message: 'Logged in successfully', token } )
                 //    } else {

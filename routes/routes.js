@@ -14,7 +14,11 @@ module.exports = (app) => {
     const updateIconName = require('./Icons/update-icon-name');
     const checkFile = require('./Markers/check-file');
     const login = require('./Auth/login');
+    const logout = require('./Auth/logout');
     const getUser = require('./Auth/get-user');
+    const getUserRoles = require('./Auth/get-user-roles');
+    const getRoles = require('./Auth/get-roles');
+    const updateUserRole = require('./Auth/update-user-role');
 
     // mount routes here
     app.use('/api/insert-placed-marker', insertMarkers);
@@ -31,5 +35,9 @@ module.exports = (app) => {
     app.use('/api/update-icon-name', updateIconName);
     app.use('/api/check-file', checkFile);
     app.use('/api/login', login);
+    app.use('/api/logout', logout);
     app.use('/api/get-user', getUser);
+    app.use('/api/get-user-roles', getUserRoles);
+    app.use('/api/get-roles', getRoles);
+    app.use('/api/update-user-role', updateUserRole);
 }

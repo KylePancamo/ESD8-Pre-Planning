@@ -7,26 +7,27 @@ export const AuthProvider = ({ children, response }) => {
     if (!response.data.username) {
         console.log(response.data);
     }
-    const [user, setUser] = useState(response.data.username ? response.data.username : null);
+    const [userData, setUserData] = useState(response.data ? response.data : null);
     const navigate = useNavigate();
 
-    const login = (username) => {
-        setUser(username);
+    const login = (decodedToken) => {
+        setUserData(decodedToken);
         navigate('/map');
     }
 
     // call this function to sign out logged in user
     const logout = () => {
+        setUserData(null);
         navigate("/", { replace: true });
     };
 
     const value = useMemo(
         () => ({
-          user,
+          userData,
           login,
           logout
         }),
-        [user]
+        [userData?.username]
       );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

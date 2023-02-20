@@ -16,6 +16,9 @@ import {sideBarDataState} from "../../atoms";
 import {siteIsSetState} from "../../atoms";
 import {preplanningLocationsState} from "../../atoms";
 import PreplanningLocationsUI from "./PreplanningLocationsUI";
+import { useAuth } from "../../hooks/AuthProvider";
+import { permission } from "../../permissions";
+import { hasPermissions } from '../helpers';
 
 const containerStyle = {
   width: "100vw",
@@ -46,6 +49,7 @@ function MapContainer(props) {
   const [bounds, setBounds] = useState(null);
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
   const [mapId, setMapId] = useState("satellite");
+  const { userData, logout } = useAuth();
   const searchBoxRef = React.useRef(null);
 
   const onPlacesChanged = () => {
@@ -197,6 +201,7 @@ function MapContainer(props) {
           })
         ) : null 
     }
+    {markerClicked ? (
       <Popup
         show={markerClicked}
         onHide={() => setMarkerClicked(false)}
@@ -206,13 +211,15 @@ function MapContainer(props) {
         setMarkers={setMarkers}
         drawManagerMarker={drawManagerMarker}
       />
+      ) : null}
       <Marker 
         position={center} 
         onClick={() => handleOnClick()}
         icon={"map-pin.png"}
         />
-
-      <MapDrawingManager markers={markers} setMarkers={setMarkers} />
+      {hasPermissions(userData.permissions, permission.MODIFY) ? (
+        <MapDrawingManager markers={markers} setMarkers={setMarkers} />
+      ) : null}
 
       <MapStandaloneSearchBox
         bounds={bounds}
@@ -251,6 +258,14 @@ function MapContainer(props) {
         setSideBarValue={props.setSideBarValue}
         setCenter={setCenter}
       />
+        <button onClick={async () => {
+          const response = await Axios.get("http://localhost:5000/api/logout", { withCredentials: true });
+          if (response.data.status === "success") {
+            logout();
+          }
+        }} class="logout-btn">
+          Logout
+        </button>
     </GoogleMap>
   ) : (
     <></>

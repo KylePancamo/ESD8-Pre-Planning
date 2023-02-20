@@ -1,0 +1,113 @@
+.admin-background {
+    background-image: url("./adminbackground.jpg");
+    min-height: 100vh;
+    background-size: cover;
+  }
+
+.admin-wrapper {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+  
+.admin-form-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: fit-content;
+    min-width: fit-content;
+    min-height: 86.5vh;
+    padding: 50px 25px;
+    gap: 20px;
+    background-color: rgba(29, 46, 56, 0.5);
+}
+
+.admin-form-wrapper button {
+    background-image: linear-gradient(to bottom right, #ffffff, #000000);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 6px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    transition: transform 0.1s ease;
+    transform-origin: center center;
+}
+
+.admin-form-wrapper button:hover {
+    background-image: linear-gradient(to bottom right, #000000, #ffffff);
+}
+
+.loaded-component { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    padding: 2vh 2vw 2vh 2vw;
+}
+
+.loaded-component-container {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(75, 91, 106, 0.5);
+}
+
+.role-types-container,
+.user-roles-container {
+  margin: 50px;
+}
+  
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+  
+.search-container input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  width: 300px;
+}
+
+.table-container {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(101, 84, 49, 0.5);
+}
+  
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  color: white;
+}
+  
+.table-container th {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+  
+.table-container td {
+  border-bottom: 1px solid #ffffff;
+  padding: 10px;
+}
+
+.table-container button {
+  background-image: linear-gradient(to bottom right, #1b1d23, #194e7d);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.table-container select {
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

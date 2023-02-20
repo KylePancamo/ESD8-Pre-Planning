@@ -29,7 +29,7 @@ export default function Login() {
                 setError("Invalid username or password");
                 return;
             }
-            login(decodedToken.username);
+            login(decodedToken);
         }).catch((err) => {
             console.log(err);
         });

@@ -11,6 +11,9 @@ import Axios from "axios";
 import {useForm} from 'react-hook-form';
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import {useAuth} from "../../hooks/AuthProvider";
+import {permission} from "../../permissions";
+import { hasPermissions } from '../helpers';
 
 function PopupWindow(props) {
   let inputRef = useRef(null);
@@ -19,6 +22,8 @@ function PopupWindow(props) {
     icon_id: 0,
     icon_name: "",
   });
+  const {userData} = useAuth();
+  console.log(userData)
 
   const [markerSaved, setMarkerSaved] = useState(false);
   const [markerDeleted, setMarkerDeleted] = useState(false);
@@ -299,6 +304,7 @@ function PopupWindow(props) {
         </Container>
       </Modal.Body>
       <Modal.Footer>
+        {hasPermissions(userData.permissions, permission.MODIFY)  ? (
         <Button
           onClick={deleteMarkerPopup}
           variant={"danger"}
@@ -306,8 +312,11 @@ function PopupWindow(props) {
         >
           Delete Marker
         </Button>
+        ) : null}
         <Button onClick={props.onHide}>Close</Button>
-        <Button onClick={handleSubmit((data) => handleMarkerSaving(data))}>Save</Button>
+        {hasPermissions(userData.permissions, permission.MODIFY)  ? (
+          <Button onClick={handleSubmit((data) => handleMarkerSaving(data))}>Save</Button>
+        ) : null}
       </Modal.Footer>
       <MarkerDeletion
         markerSaved={markerSaved} 
