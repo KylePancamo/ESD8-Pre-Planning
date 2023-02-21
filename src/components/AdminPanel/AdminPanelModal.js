@@ -9,7 +9,7 @@ import React from "react";
 
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
-import { hasPermissions } from '../helpers';
+import { hasPermissions } from '../../helpers';
 
 
 function AdminPanel(props) {

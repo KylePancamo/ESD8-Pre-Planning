@@ -13,7 +13,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import {useAuth} from "../../hooks/AuthProvider";
 import {permission} from "../../permissions";
-import { hasPermissions } from '../helpers';
+import { hasPermissions } from '../../helpers';
 
 function PopupWindow(props) {
   let inputRef = useRef(null);

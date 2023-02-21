@@ -18,7 +18,7 @@ import {preplanningLocationsState} from "../../atoms";
 import PreplanningLocationsUI from "./PreplanningLocationsUI";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
-import { hasPermissions } from '../helpers';
+import { hasPermissions } from '../../helpers';
 
 const containerStyle = {
   width: "100vw",
