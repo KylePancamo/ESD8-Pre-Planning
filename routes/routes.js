@@ -19,6 +19,7 @@ module.exports = (app) => {
     const getUserRoles = require('./Auth/get-user-roles');
     const getRoles = require('./Auth/get-roles');
     const updateUserRole = require('./Auth/update-user-role');
+    const getRolePermissions = require('./Auth/get-role-permissions');
 
     // mount routes here
     app.use('/api/insert-placed-marker', insertMarkers);
@@ -40,4 +41,5 @@ module.exports = (app) => {
     app.use('/api/get-user-roles', getUserRoles);
     app.use('/api/get-roles', getRoles);
     app.use('/api/update-user-role', updateUserRole);
+    app.use('/api/get-role-permissions', getRolePermissions);
 }
