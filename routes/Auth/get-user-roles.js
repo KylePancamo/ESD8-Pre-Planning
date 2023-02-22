@@ -14,7 +14,7 @@ router.get("/", getUser, (req, res) => {
         FROM accounts a
         JOIN user_roles ur ON a.id = ur.user_id
         JOIN roles r ON r.id = ur.role_id
-        GROUP BY a.id, a.username, r.name;
+        GROUP BY a.id, a.username, r.id, r.name;
     `
 
     db.query(query, user.username, (err, result) => {
