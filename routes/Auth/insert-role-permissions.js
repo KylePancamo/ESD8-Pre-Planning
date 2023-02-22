@@ -7,7 +7,9 @@ const getUser = require('./getUser');
 router.post("/", (req, res) => {
     const db = createDBConnection("auth");
 
-    const roleId = req.body.role.id;
+    const role = req.body.role;
+    const roleId = role.id;
+    const permissionString = req.body.key;
     const addedPermissions = req.body.addedPermissions;
     const addedPermissionsString = addedPermissions.toString(16);
 
@@ -22,8 +24,8 @@ router.post("/", (req, res) => {
             res.send({ status: 'error', err: err });
             return;
         }
-        const values = result.map(result => [roleId, result.id])
-        const insertQuery = `INSERT INTO role_permissions (role_id, permission_id) VALUES ?;`
+        const values = result.map(result => [roleId, result.id, role.name + ': ' + result.name])
+        const insertQuery = `INSERT INTO role_permissions (role_id, permission_id, description) VALUES ?;`
         db.query(insertQuery, [values], (err, result) => {
             if (err) {
                 res.send({ status: 'error', err: err });

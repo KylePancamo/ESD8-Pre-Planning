@@ -6,11 +6,11 @@ const createDBConnection = require("../mysql");
 router.get("/", (req, res) => {
     const db = createDBConnection("auth");
 
-    const query = `SELECT r.id, r.name, BIT_OR(p.security_hex) as combined_permissions
-                    FROM roles r
-                    JOIN role_permissions rp ON r.id = rp.role_id
-                    JOIN permissions p ON p.id = rp.permission_id
-                    GROUP BY r.id, r.name;`
+    const query = `SELECT r.id, r.name, COALESCE(BIT_OR(p.security_hex), 0) as combined_permissions
+                FROM roles r
+                LEFT JOIN role_permissions rp ON r.id = rp.role_id
+                LEFT JOIN permissions p ON p.id = rp.permission_id
+                GROUP BY r.id, r.name;`
 
     db.query(query, (err, result) => {
         if (err) {

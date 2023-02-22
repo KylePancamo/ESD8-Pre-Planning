@@ -88,7 +88,7 @@
     background-color: rgba(75, 91, 106, 0.5);
     padding: 20px;
 }
-
+.create-role-container,
 .role-types-container,
 .user-roles-container {
   margin: 50px;

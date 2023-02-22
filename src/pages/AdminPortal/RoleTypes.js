@@ -5,12 +5,12 @@ import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 import { permission } from "../../permissions"
 import { hasPermissions } from "../../helpers"
-
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 
 function RoleTypes() {
   const [rolePermissions, setRolePermissions] = useState([]);
+  const [updateStatus, setUpdateStatus] = useState({text: '', statusType: '', status: undefined});
   const updatePermissions = (role, newPermissions) => {
     setRolePermissions((prevRolePermissions) => {
       return prevRolePermissions.map((currRole) =>
@@ -29,9 +29,10 @@ function RoleTypes() {
     fetchRolePermissions();
   }, [])
 
-  const handlePermissionChange = async (e, role) => {
+  const handlePermissionChange = async (e, role, key) => {
     const isChecked = e.target.checked;
     const permissionValue = e.target.value;
+    console.log(key);
     let newPermissions = role.combined_permissions;
 
     if (isChecked) {
@@ -44,72 +45,149 @@ function RoleTypes() {
     const removedPermissions = ~newPermissions & role.combined_permissions;
 
     if (addedPermissions) {
-      const response = await Axios.post('http://localhost:5000/api/insert-role-permissions', {role, addedPermissions});
+      const response = await Axios.post('http://localhost:5000/api/insert-role-permissions', {role, addedPermissions, key});
       if (response.data.status === 'success') {
         updatePermissions(role, newPermissions);
+        setUpdateStatus({
+          text: 'Successfully added ' + key + ' permission to ' + role.name, 
+          statusType: 'added',
+          status: true
+        })
+      } else {
+        setUpdateStatus({
+          text: 'Error adding ' + key + ' permissions to ' + role.name,
+          statusType: 'added',
+          status: false
+        })
       }
     } else if (removedPermissions) {
       const response = await Axios.post('http://localhost:5000/api/delete-role-permissions', {role, removedPermissions});
       if (response.data.status === 'success') {
         updatePermissions(role, newPermissions);
+        setUpdateStatus({text: 
+          'Successfully removed ' + key + ' permission: ' + role.name,
+          statusType: 'removed',
+          status: true
+        })
+      } else {
+        setUpdateStatus({
+          text: 'Error adding ' + key + ' permissions to ' + role.name,
+          statusType: 'removed',
+          status: false
+      })
       }
     }
   }
 
-  useEffect(() => {
-    console.log(rolePermissions)
-  }, [rolePermissions])
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredRoles = useMemo(
+    () =>
+      rolePermissions.filter((role) =>
+        role.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [rolePermissions, searchTerm]
+  );
 
   return (
-    <div className='role-types-container'>
-      <h2>Role Types</h2>
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Role</th>
-              <th>Permissions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rolePermissions.map((role) => (
+    <>
+      <div className='role-types-container'>
+        <h2>Role Types</h2>
+        <div className='search-container'>
+                <input
+                  type='text'
+                  placeholder='Search users'
+                  value={searchTerm}
+                  onChange={(e) => {
+                      setSearchTerm(e.target.value)
+                  }}
+                />
+              </div>
+        <div className="table-container">
+          <table>
+            <thead>
               <tr>
-                <td>{role.name}</td>
-                <td>
-                  <DropdownButton id="dropdown-item-button" title="Roles">
-                    {Object.entries(permission).map(([key, value]) => (
-                      <Dropdown.ItemText>
-                        {role.name === "admin" ? (
-                            <Form.Check
-                              key={key}
-                              type="checkbox"
-                              label={key}
-                              value={value}
-                              defaultChecked={hasPermissions(role.combined_permissions, permission[key])}
-                              disabled={true}
-                            />
-                          ) : (
-                            <Form.Check
-                              key={key}
-                              type="checkbox"
-                              label={key}
-                              value={value}
-                              defaultChecked={hasPermissions(role.combined_permissions, permission[key])}
-                              onChange={(e) => {
-                                handlePermissionChange(e, role);
-                              }}
-                            />
-                          )}
-                      </Dropdown.ItemText>
-                    ))}
-                  </DropdownButton>
-                </td>
+                <th>Role</th>
+                <th>Permissions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredRoles.map((role) => (
+                <tr>
+                  <td>{role.name}</td>
+                  <td>
+                    <DropdownButton id="dropdown-item-button" title="Permissions">
+                      {Object.entries(permission).map(([key, value]) => (
+                        <Dropdown.ItemText>
+                          {role.name === "admin" ? (
+                              <Form.Check
+                                key={key}
+                                type="checkbox"
+                                label={key}
+                                value={value}
+                                defaultChecked={hasPermissions(role.combined_permissions, permission[key])}
+                                disabled={true}
+                              />
+                            ) : (
+                              <Form.Check
+                                key={key}
+                                type="checkbox"
+                                label={key}
+                                value={value}
+                                defaultChecked={hasPermissions(role.combined_permissions, permission[key])}
+                                onChange={(e) => {
+                                  handlePermissionChange(e, role, key);
+                                }}
+                              />
+                            )}
+                        </Dropdown.ItemText>
+                      ))}
+                    </DropdownButton>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {updateStatus.status === true ? (
+            <Alert variant="success" className="m-2">
+              {updateStatus.text}
+            </Alert>
+          ) : updateStatus.status === false ? (
+            <Alert variant="danger" className="m-2">
+              {updateStatus.text}
+            </Alert>
+          ) : null}
+        </div>
       </div>
-    </div>
+      <div className="create-role-container">
+        <h2>Create New Roles</h2>
+        <div className="create-role-form">
+          <Form>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Role Name</Form.Label>
+              <Form.Control type="text" placeholder="Enter role name" />
+            </Form.Group>
+            <Form.Group controlId="formBasicPassword">
+            <DropdownButton id="dropdown-item-button" title="Permissions">
+              {Object.entries(permission).map(([key, value]) => (
+                <Dropdown.ItemText>
+                      <Form.Check
+                        key={key}
+                        type="checkbox"
+                        label={key}
+                        value={value}
+                      />
+                </Dropdown.ItemText>
+                ))}
+            </DropdownButton>
+            </Form.Group>
+            <button>
+              Submit
+            </button>
+          </Form>
+        </div>
+      </div>
+    </>
   ); 
 }
 
