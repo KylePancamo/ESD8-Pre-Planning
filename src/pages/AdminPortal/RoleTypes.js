@@ -11,6 +11,13 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 
 function RoleTypes() {
   const [rolePermissions, setRolePermissions] = useState([]);
+  const updatePermissions = (role, newPermissions) => {
+    setRolePermissions((prevRolePermissions) => {
+      return prevRolePermissions.map((currRole) =>
+        currRole.id === role.id ? { ...currRole, combined_permissions: newPermissions } : currRole
+      );
+    })
+  }
 
   useEffect(() => {
     const fetchRolePermissions = async () => {
@@ -22,22 +29,31 @@ function RoleTypes() {
     fetchRolePermissions();
   }, [])
 
-  const handlePermissionChange = (e, role) => {
+  const handlePermissionChange = async (e, role) => {
     const isChecked = e.target.checked;
     const permissionValue = e.target.value;
-    let newPermissioons = role.combined_permissions;
+    let newPermissions = role.combined_permissions;
 
     if (isChecked) {
-      newPermissioons |= permissionValue;
+      newPermissions |= permissionValue;
     } else {
-      newPermissioons &= ~permissionValue;
+      newPermissions &= ~permissionValue;
     }
 
-    setRolePermissions((prevRolePermissions) => {
-      return prevRolePermissions.map((currRole) =>
-        currRole.id === role.id ? { ...currRole, combined_permissions: newPermissioons } : currRole
-      );
-    })
+    const addedPermissions = newPermissions & ~role.combined_permissions;
+    const removedPermissions = ~newPermissions & role.combined_permissions;
+
+    if (addedPermissions) {
+      const response = await Axios.post('http://localhost:5000/api/insert-role-permissions', {role, addedPermissions});
+      if (response.data.status === 'success') {
+        updatePermissions(role, newPermissions);
+      }
+    } else if (removedPermissions) {
+      const response = await Axios.post('http://localhost:5000/api/delete-role-permissions', {role, removedPermissions});
+      if (response.data.status === 'success') {
+        updatePermissions(role, newPermissions);
+      }
+    }
   }
 
   useEffect(() => {
