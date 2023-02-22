@@ -97,11 +97,9 @@ function UserRoles() {
                               }
                             }>
                             {roles.map((role) => (
-                              <>
-                                <option value={role.id}>
+                                <option key={role.id} value={role.id}>
                                   {role.name}
                                 </option>
-                              </>
                             ))}
                           </Form.Select>
                           ) : null}

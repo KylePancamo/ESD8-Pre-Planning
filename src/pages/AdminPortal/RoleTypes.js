@@ -113,12 +113,12 @@ function RoleTypes() {
             </thead>
             <tbody>
               {filteredRoles.map((role) => (
-                <tr>
+                <tr key={role.id}>
                   <td>{role.name}</td>
                   <td>
                     <DropdownButton id="dropdown-item-button" title="Permissions">
                       {Object.entries(permission).map(([key, value]) => (
-                        <Dropdown.ItemText>
+                        <Dropdown.ItemText key={value}>
                           {role.name === "admin" ? (
                               <Form.Check
                                 key={key}
@@ -170,7 +170,7 @@ function RoleTypes() {
             <Form.Group controlId="formBasicPassword">
             <DropdownButton id="dropdown-item-button" title="Permissions">
               {Object.entries(permission).map(([key, value]) => (
-                <Dropdown.ItemText>
+                <Dropdown.ItemText key={value}>
                       <Form.Check
                         key={key}
                         type="checkbox"
@@ -181,7 +181,7 @@ function RoleTypes() {
                 ))}
             </DropdownButton>
             </Form.Group>
-            <button>
+            <button type="submit" className="btn btn-primary">
               Submit
             </button>
           </Form>
