@@ -7,37 +7,40 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Button from 'react-bootstrap/Button'
 
-function NewRoleComponent({setNewRolePermissions, newRolePermissions, setRolePermissions}) {
+function NewRoleComponent({setNewRolePermissions, newRolePermissions, setRolePermissions, rolePermissions}) {
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
 
-    // const onSubmit = (data) => {
-    //     console.log('asdad');
+    const [selectedPermission, setSelectedPermission] = useState();
 
-    //     e.preventDefault();
-    //     const role = e.currentTarget.elements[0].value;
-    //     setRolePermissions((prevRolePermissions) => {
-    //       return [...prevRolePermissions, {id: prevRolePermissions.length + 1, name: role, combined_permissions: newRolePermissions}]
-    //     })
-    // }
+    const onSubmitData = async (data) => {
+      const {role} = data;
+      const response = await Axios.post('http://localhost:5000/api/insert-role-and-permissions', {role, addedPermissions: selectedPermission});
+      if (response.data.status === 'success') {
+        setRolePermissions((prevRolePermissions) => {
+          return [...prevRolePermissions, {id: response.data.payload.roleId, name: role, combined_permissions: selectedPermission}]
+        })
+      } else {
+        console.log('error');
+      }
+    }
 
     return (
-        <div className="create-role-container">
+      <div className="create-role-container">
         <h2>Create New Roles</h2>
         <div className="create-role-form">
           <Form 
             style={{display: 'flex', flexDirection: 'row', gap: '10px', width: 'fit-content'}}
-            onSubmit={() => console.log('adsa')}
+            onSubmit={handleSubmit((data) => onSubmitData(data))}
           >
             <Form.Group style={{width: 'fit-content'}}>
                 <Form.Control
                     type="text" placeholder="Enter role name"
-                    //{...register("role", { required: true })}
+                    {...register("role", { required: true })}
                 />
-                {/* {errors.role && <span style={{color: 'red'}}>Role name is required</span>} */}
             </Form.Group>
             <Form.Group>
               <DropdownButton id="dropdown-item-button" title="Permissions">
@@ -49,14 +52,14 @@ function NewRoleComponent({setNewRolePermissions, newRolePermissions, setRolePer
                         label={key}
                         value={value}
                         onChange={(e) => {
-                          setNewRolePermissions(e.target.checked ? newRolePermissions | value : newRolePermissions & ~value)
+                          setSelectedPermission(e.target.checked ? selectedPermission | value : selectedPermission & ~value)
                         }}
                       />
                   </Dropdown.ItemText>
                   ))}
               </DropdownButton>
             </Form.Group>
-            <Button style={{height: 'fit-content'}}>
+            <Button type="submit" style={{height: 'fit-content'}}>
               Submit
             </Button>
           </Form>

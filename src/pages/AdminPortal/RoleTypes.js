@@ -175,6 +175,7 @@ function RoleTypes() {
         setNewRolePermissions={setNewRolePermissions}
         newRolePermissions={newRolePermissions}
         setRolePermissions={setRolePermissions}
+        rolePermissions={rolePermissions}
       />
     </>
   ); 
