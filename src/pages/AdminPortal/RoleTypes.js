@@ -93,14 +93,6 @@ function RoleTypes() {
     [rolePermissions, searchTerm]
   );
 
-  const handleFormSubmission = async (e) => {
-    const roleName = e.currentTarget[0].value;
-    // const response = await Axios.post('http://localhost:5000/api/insert-role', {roleName});
-    // if (response.data.status === 'success') {
-
-    // }
-  }
-
   return (
     <>
       <div className='role-types-container'>
