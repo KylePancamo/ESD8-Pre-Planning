@@ -8,6 +8,7 @@ import { hasPermissions } from "../../helpers"
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import NewRoleComponent from "./NewRoleComponent";
+import Button from 'react-bootstrap/Button'
 
 function RoleTypes() {
   const [rolePermissions, setRolePermissions] = useState([]);
@@ -113,6 +114,7 @@ function RoleTypes() {
               <tr>
                 <th>Role</th>
                 <th>Permissions</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -147,6 +149,9 @@ function RoleTypes() {
                         </Dropdown.ItemText>
                       ))}
                     </DropdownButton>
+                  </td>
+                  <td>
+                    <Button variant="danger">Delete</Button>
                   </td>
                 </tr>
               ))}

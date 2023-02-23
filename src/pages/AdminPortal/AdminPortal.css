@@ -141,6 +141,10 @@
   cursor: pointer;
 }
 
+.table-container .btn-danger {
+  background-image: none;
+}
+
 .table-container select {
   padding: 5px;
   border: none;
