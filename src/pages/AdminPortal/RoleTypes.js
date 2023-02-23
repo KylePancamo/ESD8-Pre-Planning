@@ -7,10 +7,14 @@ import { permission } from "../../permissions"
 import { hasPermissions } from "../../helpers"
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import NewRoleComponent from "./NewRoleComponent";
 
 function RoleTypes() {
   const [rolePermissions, setRolePermissions] = useState([]);
   const [updateStatus, setUpdateStatus] = useState({text: '', statusType: '', status: undefined});
+  const [newRolePermissions, setNewRolePermissions] = useState({role: {id: '', name: '', permissions: 0x000000} });
+  
+  
   const updatePermissions = (role, newPermissions) => {
     setRolePermissions((prevRolePermissions) => {
       return prevRolePermissions.map((currRole) =>
@@ -89,6 +93,14 @@ function RoleTypes() {
     [rolePermissions, searchTerm]
   );
 
+  const handleFormSubmission = async (e) => {
+    const roleName = e.currentTarget[0].value;
+    // const response = await Axios.post('http://localhost:5000/api/insert-role', {roleName});
+    // if (response.data.status === 'success') {
+
+    // }
+  }
+
   return (
     <>
       <div className='role-types-container'>
@@ -159,34 +171,11 @@ function RoleTypes() {
           ) : null}
         </div>
       </div>
-      <div className="create-role-container">
-        <h2>Create New Roles</h2>
-        <div className="create-role-form">
-          <Form>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Role Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter role name" />
-            </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-            <DropdownButton id="dropdown-item-button" title="Permissions">
-              {Object.entries(permission).map(([key, value]) => (
-                <Dropdown.ItemText key={value}>
-                      <Form.Check
-                        key={key}
-                        type="checkbox"
-                        label={key}
-                        value={value}
-                      />
-                </Dropdown.ItemText>
-                ))}
-            </DropdownButton>
-            </Form.Group>
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </Form>
-        </div>
-      </div>
+      <NewRoleComponent
+        setNewRolePermissions={setNewRolePermissions}
+        newRolePermissions={newRolePermissions}
+        setRolePermissions={setRolePermissions}
+      />
     </>
   ); 
 }
