@@ -169,10 +169,7 @@ function RoleTypes() {
         </div>
       </div>
       <NewRoleComponent
-        setNewRolePermissions={setNewRolePermissions}
-        newRolePermissions={newRolePermissions}
         setRolePermissions={setRolePermissions}
-        rolePermissions={rolePermissions}
       />
     </>
   ); 
