@@ -7,16 +7,28 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Button from 'react-bootstrap/Button'
 
-function NewRoleComponent({setNewRolePermissions, newRolePermissions, setRolePermissions, rolePermissions}) {
+type RolePermissions = {
+  id: number,
+  name: string,
+  combined_permissions: number
+}
+
+type FormData = Record<string, string>;
+
+type NewRoleComponentProps = {
+  setRolePermissions: React.Dispatch<React.SetStateAction<RolePermissions[]>>
+}
+
+function NewRoleComponent({setRolePermissions} : NewRoleComponentProps) {
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
 
-    const [selectedPermission, setSelectedPermission] = useState();
+    const [selectedPermission, setSelectedPermission] = useState<number>(0);
 
-    const onSubmitData = async (data) => {
+    const onSubmitData = async (data: FormData) => {
       const {role} = data;
       const response = await Axios.post('http://localhost:5000/api/insert-role-and-permissions', {role, addedPermissions: selectedPermission});
       if (response.data.status === 'success') {
@@ -34,7 +46,7 @@ function NewRoleComponent({setNewRolePermissions, newRolePermissions, setRolePer
         <div className="create-role-form">
           <Form 
             style={{display: 'flex', flexDirection: 'row', gap: '10px', width: 'fit-content'}}
-            onSubmit={handleSubmit((data) => onSubmitData(data))}
+            onSubmit={handleSubmit((data: FormData) => onSubmitData(data))}
           >
             <Form.Group style={{width: 'fit-content'}}>
                 <Form.Control

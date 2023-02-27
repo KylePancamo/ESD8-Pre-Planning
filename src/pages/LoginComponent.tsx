@@ -8,16 +8,16 @@ import '../Login.css';
 import Logo from '../esd8_logo.png';
 
 export default function Login() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
     const { login } = useAuth();
 
     function validateForm() {
         return username.length > 0 && password.length > 0;
     }
 
-    function handleSubmit(event) {
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         Axios.post("http://localhost:5000/api/login", {username, password}, {
             withCredentials: true
@@ -41,7 +41,7 @@ export default function Login() {
                 <img src={Logo} alt="ESD8 Logo" />
             
             <Form className="login-form" onSubmit={handleSubmit}>
-                <Form.Group size="lg" controlId="username">
+                <Form.Group controlId="username">
                     <Form.Label style={{
                         fontFamily: 'Arial',
                     }}>Username</Form.Label>
@@ -52,7 +52,7 @@ export default function Login() {
                         onChange={(e) => setUsername(e.target.value)}
                     />
                 </Form.Group>
-                <Form.Group size="lg" controlId="password">
+                <Form.Group controlId="password">
                     <Form.Label style={{
                         fontFamily: 'Arial',
                     }}>Password</Form.Label>

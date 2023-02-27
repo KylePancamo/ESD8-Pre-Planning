@@ -10,13 +10,23 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import NewRoleComponent from "./NewRoleComponent";
 import Button from 'react-bootstrap/Button'
 
+type RolePermission = {
+  id: number,
+  name: string,
+  combined_permissions: number
+}
+
+type UpdateStatus = {
+  text: string,
+  statusType: string,
+  status: boolean | undefined
+}
+
 function RoleTypes() {
-  const [rolePermissions, setRolePermissions] = useState([]);
-  const [updateStatus, setUpdateStatus] = useState({text: '', statusType: '', status: undefined});
-  const [newRolePermissions, setNewRolePermissions] = useState({role: {id: '', name: '', permissions: 0x000000} });
+  const [rolePermissions, setRolePermissions] = useState<RolePermission[]>([]);
+  const [updateStatus, setUpdateStatus] = useState<UpdateStatus>({text: '', statusType: '', status: undefined});  
   
-  
-  const updatePermissions = (role, newPermissions) => {
+  const updatePermissions = (role: RolePermission, newPermissions: number) => {
     setRolePermissions((prevRolePermissions) => {
       return prevRolePermissions.map((currRole) =>
         currRole.id === role.id ? { ...currRole, combined_permissions: newPermissions } : currRole
@@ -34,10 +44,9 @@ function RoleTypes() {
     fetchRolePermissions();
   }, [])
 
-  const handlePermissionChange = async (e, role, key) => {
+  const handlePermissionChange = async (e: React.ChangeEvent<HTMLInputElement>, role: RolePermission, key: string) => {
     const isChecked = e.target.checked;
-    const permissionValue = e.target.value;
-    console.log(key);
+    const permissionValue: number = parseInt(e.target.value);
     let newPermissions = role.combined_permissions;
 
     if (isChecked) {
@@ -131,7 +140,7 @@ function RoleTypes() {
                                 type="checkbox"
                                 label={key}
                                 value={value}
-                                defaultChecked={hasPermissions(role.combined_permissions, permission[key])}
+                                defaultChecked={hasPermissions(role.combined_permissions, value)}
                                 disabled={true}
                               />
                             ) : (
@@ -140,7 +149,7 @@ function RoleTypes() {
                                 type="checkbox"
                                 label={key}
                                 value={value}
-                                defaultChecked={hasPermissions(role.combined_permissions, permission[key])}
+                                defaultChecked={hasPermissions(role.combined_permissions, value)}
                                 onChange={(e) => {
                                   handlePermissionChange(e, role, key);
                                 }}

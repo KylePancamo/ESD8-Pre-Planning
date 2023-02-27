@@ -4,11 +4,23 @@ import Axios from "axios";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 
+type User = {
+  user_id: number,
+  name: string,
+  username: string,
+  role_id: number,
+}
+
+type Role = {
+  id: number,
+  name: string;
+}
+
 function UserRoles() {
 
-    const [users, setUsers] = useState([]);
-    const [roles, setRoles] = useState([]);
-    const [updateStatus , setUpdateStatus] = useState(undefined);
+    const [users, setUsers] = useState<User[]>([]);
+    const [roles, setRoles] = useState<Role[]>([]);
+    const [updateStatus , setUpdateStatus] = useState<boolean | undefined>(undefined);
 
     const currentRoles = {
       1: "admin",
@@ -17,13 +29,14 @@ function UserRoles() {
 
     useEffect(() => {
       const fetchUserRoles = async () => {
-        const response = await Axios.get("http://localhost:5000/api/get-user-roles", {withCredentials: true});
+        const response = await Axios.get<{payload: User[]}>("http://localhost:5000/api/get-user-roles", {withCredentials: true});
         console.log(response);
         setUsers(response.data.payload);
       }
 
       const fetchRoles = async () => {
-        const response = await Axios.get("http://localhost:5000/api/get-roles");
+        const response = await Axios.get<{payload: Role[]}>("http://localhost:5000/api/get-roles");
+        console.log(response);
         setRoles(response.data.payload);
       }
 
@@ -31,11 +44,11 @@ function UserRoles() {
       fetchRoles();
     }, []);
 
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState<string>('');
   
-    const handleRoleChange = (user, roleId) => {
-        setUsers((prevUsers) =>
-          prevUsers.map((currUser) =>
+    const handleRoleChange = (user: User, roleId: number) => {
+        setUsers((prevUsers: User[]) =>
+          prevUsers.map((currUser: User) =>
             currUser.user_id === user.user_id ? { ...currUser, role_id: roleId } : currUser
           )
         );
@@ -43,19 +56,18 @@ function UserRoles() {
   
     const filteredUsers = useMemo(
       () =>
-        users.filter((user) =>
+        users.filter((user: User) =>
           user.username.toLowerCase().includes(searchTerm.toLowerCase())
         ),
       [users, searchTerm]
     );
 
-    const updateUser = async (user) => {
-      console.log(user);
-      const response = await Axios.post("http://localhost:5000/api/update-user-role", user, {withCredentials: true});
+    const updateUser = async (user: User) => {
+      const response = await Axios.post<{status: string}>("http://localhost:5000/api/update-user-role", user, {withCredentials: true});
 
       if (response.data.status == 'success') {
         setUpdateStatus(true);
-      } else if (response.datastatus == 'error') {
+      } else if (response.data.status == 'error') {
         setUpdateStatus(false);
       }
     }
@@ -84,7 +96,7 @@ function UserRoles() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers.map((user) => (
+                  {filteredUsers.map((user: User) => (
                     <tr key={user.user_id}>
                       <td>{user.username}</td>
                       <td>
@@ -96,7 +108,7 @@ function UserRoles() {
                                 handleRoleChange(user, roleId)
                               }
                             }>
-                            {roles.map((role) => (
+                            {roles.map((role: Role) => (
                                 <option key={role.id} value={role.id}>
                                   {role.name}
                                 </option>

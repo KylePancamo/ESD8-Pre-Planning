@@ -7,14 +7,19 @@ import Form from "react-bootstrap/Form";
 import { useRecoilState } from "recoil";
 import { imagesState } from "../../atoms";
 
+type FileUploadProps = {
+  show: boolean;
+  onHide: () => void;
+}
 
-function FileUpload(props) {
-  let inputRef = useRef(null);
-  const [fileName, setFileName] = useState("");
-  const [FileUploadStatus, setFileUploadStatus] = useState();
-  const [FileUploadString, setFileUploadString] = useState("");
-  const [iconName, setIconName] = useState("");
-  const [images, setImages] = useRecoilState(imagesState);
+
+function FileUpload(props: FileUploadProps) {
+  let inputRef = useRef<HTMLInputElement>(null);
+  const [fileName, setFileName] = useState<string | null>("");
+  const [FileUploadStatus, setFileUploadStatus] = useState<boolean | undefined>(undefined);
+  const [FileUploadString, setFileUploadString] = useState<string>("");
+  const [iconName, setIconName] = useState<string>("");
+  const [images, setImages] = useRecoilState<any>(imagesState);
 
   const handleFileUpload = () => {
     inputRef.current?.click();
@@ -22,27 +27,30 @@ function FileUpload(props) {
 
   const handleDisplayFileDetails = () => {
     if (iconName.length > 0) {
-      if (inputRef.current?.files.length > 0) {
-        // create formData object and append file data to it. Then make axios request to backend
-        const formData = new FormData();
-        formData.append("file", inputRef.current?.files[0]);
-        formData.append('iconName', iconName);
+      const file: FileList | null | undefined = inputRef.current?.files;
+      if (file?.length !== undefined) {
+        if (file?.length > 0) {
+          // create formData object and append file data to it. Then make axios request to backend
+          const formData = new FormData();
+          formData.append("file", file[0]);
+          formData.append('iconName', iconName);
 
-        Axios.post("http://localhost:5000/api/upload-icon", formData)
-          .then((response) => {
-            setFileUploadStatus(true);
-            setFileUploadString(response.data.message);
-            setFileName(inputRef.current?.files[0].name);
-            setImages((currImages) => [
-              ...currImages,
-              response.data.payload,
-            ]);
-          })
-          .catch((error) => {
-            console.log(error);
-            setFileUploadStatus(false);
-            setFileUploadString(error.response.data.message);
-          });
+          Axios.post("http://localhost:5000/api/upload-icon", formData)
+            .then((response) => {
+              setFileUploadStatus(true);
+              setFileUploadString(response.data.message);
+              setFileName(file[0].name);
+              setImages((currImages: any) => [
+                ...currImages,
+                response.data.payload,
+              ]);
+            })
+            .catch((error) => {
+              console.log(error);
+              setFileUploadStatus(false);
+              setFileUploadString(error.response.data.message);
+            });
+        }
       }
     } else {
       setFileUploadStatus(false);
