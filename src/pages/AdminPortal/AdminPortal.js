@@ -5,14 +5,15 @@ import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 import UserRoles from "./UserRoles";
 import RoleTypes from "./RoleTypes";
-
+import RegisterUser from "./RegisterUsers";
 
 function AdminPortal() {
 
     const [portalType, setPortalType] = useState('update');
     const portalTypes = {
         "userRoles": <UserRoles />,
-        "roleTypes": <RoleTypes />
+        "roleTypes": <RoleTypes />,
+        "registerUsers": <RegisterUser />
     }
 
     return (
@@ -33,6 +34,12 @@ function AdminPortal() {
                                 setPortalType("roleTypes")
                             }}>
                                 <span className="sidebar-item-link">Modify Role Types</span>
+                            </li>
+                            <li className="sidebar-item" onClick={(e) => {
+                                e.preventDefault();
+                                setPortalType("registerUsers")
+                            }}>
+                                <span className="sidebar-item-link">Register Users</span>
                             </li>
                         </ul>
                     </div>
