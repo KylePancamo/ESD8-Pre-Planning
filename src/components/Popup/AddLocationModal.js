@@ -642,7 +642,7 @@ function AddLocation({ show, onHide, address }) {
             </Row>
           </Container>
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button id="location-modal-submit" variant="primary" type="submit">
           Submit
         </Button>
         {locationAddedResponse?.status === "success" ? (
