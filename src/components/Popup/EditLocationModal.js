@@ -634,7 +634,7 @@ function EditLocation(props) {
             </Row>
           </Container>
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button id="location-modal-submit" variant="primary" type="submit">
           Submit
         </Button>
         {locationEditResponse?.status === "success" ? (

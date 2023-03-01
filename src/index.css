@@ -579,3 +579,7 @@ button:hover {
   cursor: pointer;
   transform: scaleX(1.1) scaleY(1.1);
 }
+
+#location-modal-submit:hover {
+  transform: scaleX(1.03) scaleY(1.03);
+}
