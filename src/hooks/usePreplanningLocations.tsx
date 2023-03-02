@@ -1,12 +1,13 @@
 import { useState, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { preplanningLocationsState } from '../atoms';
+import { LocationTypes } from "../types/location-types";
 
 function usePrePlanningLocations() {
-  const [prePlanningLocations, setPrePlanningLocations] = useRecoilState(preplanningLocationsState);
+  const [prePlanningLocations, setPrePlanningLocations] = useRecoilState<any>(preplanningLocationsState);
 
-  const updateLocations = useCallback((newVal, id) => {
-    setPrePlanningLocations((locations) => {
+  const updateLocations = useCallback((newVal: LocationTypes, id: number) => {
+    setPrePlanningLocations((locations: LocationTypes[]) => {
       return locations.map((location) => {
         if (location.id === id) {
           location = newVal;
@@ -18,8 +19,8 @@ function usePrePlanningLocations() {
     });
   }, [prePlanningLocations]);
 
-  const addNewLocation = useCallback((newVal) => {
-    setPrePlanningLocations((locations) => {
+  const addNewLocation = useCallback((newVal: LocationTypes) => {
+    setPrePlanningLocations((locations: LocationTypes[]) => {
       return [...locations, newVal];
     });
   }, [prePlanningLocations])

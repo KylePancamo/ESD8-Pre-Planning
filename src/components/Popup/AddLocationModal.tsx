@@ -13,29 +13,54 @@ import Alert from "react-bootstrap/Alert";
 import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
 import { preplanningLocationsState } from "../../atoms";
 
+type Address = {
+  latitude: number;
+  location: string;
+  longitude: number;
+}
 
-function AddLocation({ show, onHide, address }) {
+type AddLocationProps = {
+  show: boolean;
+  onHide: () => void;
+  address: Address;
+}
+
+type FormValues = {
+  [key: string]: string;
+};
+
+type LocationAddedResponse = {
+  status: string;
+  message: string;
+  err?: string;
+}
+
+function AddLocation({ show, onHide, address } : AddLocationProps) {
   const {
     register,
     handleSubmit,
     reset,
     setValue,
     formState: { errors },
-  } = useForm();
-  const [locationAddedResponse, setLocationAddedResponse] = useState(false);
+  } = useForm<FormValues>();
+  const [locationAddedResponse, setLocationAddedResponse] = useState<LocationAddedResponse>({
+    status: "",
+    message: "",
+    err: "",
+  });
 
-  const [searchBox, setSearchBox] = useState(null);
+  const [searchBox, setSearchBox] = useState<google.maps.places.Autocomplete>();
   const [formattedAddress, setFormattedAddress] = useState(address.location);
   const { addNewLocation } = usePrePlanningLocations();
 
-  function onLoad(autocomplete) {
+  function onLoad(autocomplete: google.maps.places.Autocomplete) {
     setSearchBox(autocomplete);
   }
 
   function onPlaceChanged() { 
     if (searchBox != null) {
       const place = searchBox.getPlace();
-      const formattedAddress = place.formatted_address;
+      const formattedAddress = place.formatted_address === undefined ? "" : place.formatted_address;
       setFormattedAddress(formattedAddress);
 
       let addressArray = formattedAddress.split(',');
@@ -47,12 +72,12 @@ function AddLocation({ show, onHide, address }) {
       setValue("streetAddress", occupancyaddress);
       setValue("city", city);
       setValue("state", state);
-      zip ? setValue("zipCode", zip) : setValue("zipCode", null);
+      zip ? setValue("zipCode", zip) : setValue("zipCode", "");
     } else {
       alert("Please enter text");
     }
   }
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     Axios.post("http://localhost:5000/api/add-preplanning-location", {
       payload: {
         data: data,
@@ -69,23 +94,24 @@ function AddLocation({ show, onHide, address }) {
           other_notes: data.notes,
           access: data.accessInformation,
           breaker_box: data.breakerBoxLoc,
-          constructiontype: data.constructionType,
+          constructiontype: parseInt(data.constructionType),
           contactname: data.contactName,
           electric_meter: data.electricMeterLoc,
           emergency_contact_number: data.emergencyContact,
           gas_shutoff: data.gasShutoffLoc,
           hydrant_address: data.hydrantAddress,
-          hydrant_distance: data.hydrantDistance,
-          mut_aid_bc2fd: data.mutual_aid1,
-          mut_aid_d7fr: data.mutual_aid2,
-          mut_aid_helotesfd: data.mutual_aid3,
-          google_formatted_address: searchBox.getPlace() ? searchBox.getPlace().formatted_address : address.location, 
-          latitude: searchBox.getPlace() ? searchBox.getPlace().geometry.location.lat() : address.latitude,
-          longitude: searchBox.getPlace() ? searchBox.getPlace().geometry.location.lng() : address.longitude,
-          mut_aid_leonspringsvfd: data.mutual_aid4,
+          hydrant_distance: Number(data.hydrantDistance),
+          mut_aid_bc2fd: parseInt(data.mutual_aid1),
+          mut_aid_d7fr: parseInt(data.mutual_aid2),
+          mut_aid_helotesfd: parseInt(data.mutual_aid3),
+          google_formatted_address: searchBox?.getPlace() ? searchBox.getPlace().formatted_address as string : address.location as string, 
+          latitude: searchBox?.getPlace() ? searchBox.getPlace().geometry?.location?.lat() as number : address.latitude,
+          longitude: searchBox?.getPlace() ? searchBox.getPlace().geometry?.location?.lng() as number: address.longitude,
+          mut_aid_leonspringsvfd: parseInt(data.mutual_aid4),
           occupancyaddress: data.streetAddress,
           occupancycity: data.city,
           occupancystate: data.state,
+          occupancycountry: data.country,
           occupancyzip: data.zipCode,
           water: data.waterLoc,
         });

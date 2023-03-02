@@ -328,7 +328,7 @@ function PopupWindow(props: PopupWindowProps) {
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        {hasPermissions(userData.permissions, permission.MODIFY)  ? (
+        {hasPermissions(userData?.permissions, permission.MODIFY)  ? (
         <Button
           onClick={deleteMarkerPopup}
           variant={"danger"}
@@ -338,7 +338,7 @@ function PopupWindow(props: PopupWindowProps) {
         </Button>
         ) : null}
         <Button onClick={props.onHide}>Close</Button>
-        {hasPermissions(userData.permissions, permission.MODIFY)  ? (
+        {hasPermissions(userData?.permissions, permission.MODIFY)  ? (
           <Button onClick={handleSubmit((data) => handleMarkerSaving(data))}>Save</Button>
         ) : null}
       </Modal.Footer>

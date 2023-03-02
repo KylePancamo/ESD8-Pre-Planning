@@ -40,8 +40,6 @@ function App() {
       <Sidebar
         sideBarValue={sideBarValue}
         setSideBarValue={setSideBarValue}
-        searchedSite={searchedSite}
-        setSearchedSite={setSearchedSite}
       />
       <MapContainer
         sideBarValue={sideBarValue}

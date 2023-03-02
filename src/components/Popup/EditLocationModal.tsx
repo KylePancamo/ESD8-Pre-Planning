@@ -113,7 +113,7 @@ function EditLocation(props : EditLocationProps) {
           occupancycity: data.city,
           occupancystate: data.state,
           occupancyzip: data.zipCode,
-          occupanycountry: data.country,
+          occupancycountry: data.country,
           water: data.waterLoc,
         })
 
@@ -143,7 +143,7 @@ function EditLocation(props : EditLocationProps) {
           occupancycity: data.city,
           occupancystate: data.state,
           occupancyzip: data.zipCode,
-          occupanycountry: data.country,
+          occupancycountry: data.country,
           water: data.waterLoc,
         }, props.selectedEditLocation.id as number);
       })

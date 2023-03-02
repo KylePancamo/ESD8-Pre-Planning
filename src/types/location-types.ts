@@ -12,7 +12,7 @@ export type LocationTypes = {
     occupancycity: string;
     occupancystate: string;
     occupancyzip: string;
-    occupanycountry: string;
+    occupancycountry: string;
     constructiontype: number;
     hazards: string;
     hydrant_address: string;

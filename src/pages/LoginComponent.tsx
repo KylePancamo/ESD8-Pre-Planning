@@ -7,6 +7,8 @@ import { decodeToken } from "react-jwt";
 import '../Login.css';
 import Logo from '../esd8_logo.png';
 
+import { UserData } from '../types/auth-types';
+
 export default function Login() {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -24,7 +26,13 @@ export default function Login() {
         }
         ).then((response) => {
             const token = response.data.token;
-            const decodedToken = decodeToken(token);
+            if (!token) {
+                setError("There was an error retrieving your token. Please try again.");
+                return;
+            }
+
+            const decodedToken: UserData | null = decodeToken(token);
+            console.log(decodedToken);
             if (!decodedToken) {
                 setError("Invalid username or password");
                 return;

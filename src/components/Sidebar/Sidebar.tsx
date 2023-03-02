@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
+import React from "react";
 import Header from "./Header";
 import Content from "./Content";
-import Footer from "./Footer";
-import { Pencil } from "react-bootstrap-icons";
 import { Button } from "react-bootstrap";
-import Popup from "../Popup/GenericPopup"
 import Axios from "axios";
 import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
@@ -17,26 +15,31 @@ import AddLocationModal from "../Popup/AddLocationModal";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
+import { LocationTypes } from "../../types/location-types"; 
 
+type SideBarProps = {
+  sideBarValue: boolean;
+  setSideBarValue: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-function Sidebar(props) {
+function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
   const [siteIsSet, setSiteIsSet] = useRecoilState(siteIsSetState);
-  const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
-  const [sidebarData, setSidebarData] = useRecoilState(sideBarDataState);
-  const [editLocation, setEditLocation] = useState(false);
-  const { preplanningLocations, updateLocations }= usePrePlanningLocations();
-  const [addLocationButton, setAddLocationButton] = useState(false);
+  const [searchedSite, setSearchedSite] = useRecoilState<any>(searchSiteState);
+  const [sidebarData, setSidebarData] = useRecoilState<any>(sideBarDataState);
+  const [editLocation, setEditLocation] = useState<boolean>(false);
+  const { updateLocations }= usePrePlanningLocations();
+  const [addLocationButton, setAddLocationButton] = useState<boolean>(false);
   const { userData } = useAuth();
 
   const updateEdit = useCallback(() => {
     setEditLocation(false);
-  })
+  }, [])
   
   const toggleSideBar = () => {
-    props.setSideBarValue(!props.sideBarValue);
+    setSideBarValue(!sideBarValue);
   };
-
-  const canEditLocation = hasPermissions(userData.permissions, permission.MODIFY);
+  
+  const canEditLocation = hasPermissions(userData?.permissions as number, permission.MODIFY);
 
   function renderEditLocationButton() {
     return (
@@ -102,7 +105,7 @@ function Sidebar(props) {
 
   return (
     <div className="sidebar-wrapper">
-      {props.sideBarValue === false ? (
+      {sideBarValue === false ? (
         <button className="sidebar-button" onClick={toggleSideBar}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +117,7 @@ function Sidebar(props) {
           </svg>
         </button>
       ) : null}
-      {props.sideBarValue === true ? (
+      {sideBarValue === true ? (
         <div className="sidebar-menu" id="sidebar-menu">
           <div className="sidebar-close">
             <button
@@ -131,12 +134,10 @@ function Sidebar(props) {
                 {editLocation && renderEditLocationModal()}
                 <Header 
                   sidebarData={sidebarData}
-                >
-                </Header>
+                />
                 <Content
                   sidebarData={sidebarData}
-                >
-                </Content>
+                />
               </div>
               ) : searchedSite.location ? (
                 <div style={{
