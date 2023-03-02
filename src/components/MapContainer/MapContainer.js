@@ -209,7 +209,6 @@ function MapContainer(props) {
         markers={markers}
         setSelectedMarker={setSelectedMarker}
         setMarkers={setMarkers}
-        drawManagerMarker={drawManagerMarker}
       />
       ) : null}
       <Marker 

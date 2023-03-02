@@ -12,6 +12,12 @@ type FileUploadProps = {
   onHide: () => void;
 }
 
+type IconUpload = {
+  file_name: string;
+  icon_id: number;
+  icon_name: string;
+}
+
 
 function FileUpload(props: FileUploadProps) {
   let inputRef = useRef<HTMLInputElement>(null);
@@ -40,7 +46,7 @@ function FileUpload(props: FileUploadProps) {
               setFileUploadStatus(true);
               setFileUploadString(response.data.message);
               setFileName(file[0].name);
-              setImages((currImages: any) => [
+              setImages((currImages: IconUpload[]) => [
                 ...currImages,
                 response.data.payload,
               ]);

@@ -11,8 +11,31 @@ import states from "./states";
 import fetchPreplanData from "./fetchPreplanData";
 import { Autocomplete } from "@react-google-maps/api";  
 import Alert from "react-bootstrap/Alert";
+import { LocationTypes } from "../../types/location-types";
 
-function EditLocation(props) {
+type EditLocationProps = {
+  show: boolean;
+  onHide: (show: boolean) => void;
+  selectedEditLocation: LocationTypes;
+  setSelectedEditLocaton: React.Dispatch<React.SetStateAction<LocationTypes>>;
+  updateLocations: (newVal: LocationTypes, id: number) => void;
+}
+
+
+
+type FormValues = {
+  [key: string]: string;
+};
+
+type LocationEditResponse = {
+  status: string;
+  message: string;
+  err?: string;
+}
+
+
+
+function EditLocation(props : EditLocationProps) {
   const {
     register,
     handleSubmit,
@@ -20,12 +43,16 @@ function EditLocation(props) {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm();
-  const [locationEditResponse, setLocationEditResponse] = useState({});
+  } = useForm<FormValues>();
+  const [locationEditResponse, setLocationEditResponse] = useState<LocationEditResponse>({
+    status: "",
+    message: "",
+    err: "",
+  });
 
-  const [searchBox, setSearchBox] = useState(null);
+  const [searchBox, setSearchBox] = useState<google.maps.places.Autocomplete>();
 
-  function onLoad(autocomplete) {
+  function onLoad(autocomplete: google.maps.places.Autocomplete) {
     setSearchBox(autocomplete);
   }
 
@@ -34,7 +61,7 @@ function EditLocation(props) {
   function onPlaceChanged() {
     if (searchBox != null) {
       const place = searchBox.getPlace();
-      const formattedAddress = place.formatted_address;
+      const formattedAddress: string = place.formatted_address === undefined ? "" : place.formatted_address;
       let addressArray = formattedAddress.split(',');
 
       let occupancyaddress = addressArray[0].trim();
@@ -50,11 +77,11 @@ function EditLocation(props) {
     }
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: FormValues) => {
     console.log(data);
     Axios.post("http://localhost:5000/api/update-preplanning-location", {
       payload: data,
-      googleAddress: searchBox.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address,
+      googleAddress: searchBox?.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address,
       id: props.selectedEditLocation.id,
     }, {
       withCredentials: true,
@@ -68,24 +95,25 @@ function EditLocation(props) {
           other_notes: data.notes,
           access: data.accessInformation,
           breaker_box: data.breakerBoxLoc,
-          constructiontype: data.constructionType,
+          constructiontype: parseInt(data.constructionType),
           contactname: data.contactName,
           electric_meter: data.electricMeterLoc,
           emergency_contact_number: data.emergencyContact,
           gas_shutoff: data.gasShutoffLoc,
           hydrant_address: data.hydrantAddress,
-          hydrant_distance: data.hydrantDistance,
-          mut_aid_bc2fd: data.mutual_aid1,
-          mut_aid_d7fr: data.mutual_aid2,
-          mut_aid_helotesfd: data.mutual_aid3,
-          google_formatted_address: searchBox.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address, 
+          hydrant_distance: Number(data.hydrantDistance),
+          mut_aid_bc2fd: parseInt(data.mutual_aid1),
+          mut_aid_d7fr: parseInt(data.mutual_aid2),
+          mut_aid_helotesfd: parseInt(data.mutual_aid3),
+          google_formatted_address: searchBox?.getPlace() ? searchBox.getPlace().formatted_address as string : props.selectedEditLocation.google_formatted_address as string, 
           latitude: props.selectedEditLocation.latitude,
           longitude: props.selectedEditLocation.longitude,
-          mut_aid_leonspringsvfd: data.mutual_aid4,
+          mut_aid_leonspringsvfd: parseInt(data.mutual_aid4),
           occupancyaddress: data.streetAddress,
           occupancycity: data.city,
           occupancystate: data.state,
           occupancyzip: data.zipCode,
+          occupanycountry: data.country,
           water: data.waterLoc,
         })
 
@@ -97,26 +125,27 @@ function EditLocation(props) {
           other_notes: data.notes,
           access: data.accessInformation,
           breaker_box: data.breakerBoxLoc,
-          constructiontype: data.constructionType,
+          constructiontype: parseInt(data.constructionType),
           contactname: data.contactName,
           electric_meter: data.electricMeterLoc,
           emergency_contact_number: data.emergencyContact,
           gas_shutoff: data.gasShutoffLoc,
           hydrant_address: data.hydrantAddress,
-          hydrant_distance: data.hydrantDistance,
-          mut_aid_bc2fd: data.mutual_aid1,
-          mut_aid_d7fr: data.mutual_aid2,
-          mut_aid_helotesfd: data.mutual_aid3,
-          google_formatted_address: searchBox.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address, 
+          hydrant_distance: Number(data.hydrantDistance),
+          mut_aid_bc2fd: parseInt(data.mutual_aid1),
+          mut_aid_d7fr: parseInt(data.mutual_aid2),
+          mut_aid_helotesfd: parseInt(data.mutual_aid3),
+          google_formatted_address: searchBox?.getPlace() ? searchBox.getPlace().formatted_address as string : props.selectedEditLocation.google_formatted_address as string, 
           latitude: props.selectedEditLocation.latitude,
           longitude: props.selectedEditLocation.longitude,
-          mut_aid_leonspringsvfd: data.mutual_aid4,
+          mut_aid_leonspringsvfd: parseInt(data.mutual_aid4),
           occupancyaddress: data.streetAddress,
           occupancycity: data.city,
           occupancystate: data.state,
           occupancyzip: data.zipCode,
+          occupanycountry: data.country,
           water: data.waterLoc,
-        }, props.selectedEditLocation.id);
+        }, props.selectedEditLocation.id as number);
       })
       .catch((error) => {
         setLocationEditResponse(error.response?.data);
@@ -130,15 +159,19 @@ function EditLocation(props) {
       contentClassName="edit-location-modal"
       title="Edit Location"
       onEntering={() => {
-        fetchPreplanData(reset, props);
+        fetchPreplanData(reset, props.selectedEditLocation.id as number);
       }}
       onExit={() => {
-        setLocationEditResponse({});
+        setLocationEditResponse({
+          status: "",
+          message: "",
+          err: "",
+        });
       }}
     >
       <Form
         className="location-form"
-        onSubmit={handleSubmit((data) => onSubmit(data))}
+        onSubmit={handleSubmit((data: FormValues) => onSubmit(data))}
       >
         <Form.Group className="occupancy-group">
           <Container>
@@ -164,9 +197,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Occupancy Name"
                 />
-                {errors.occupancyName && (
+                {errors?.occupancyName && (
                   <span style={{ color: "red" }}>
-                    {errors.occupancyName.message}
+                    {errors?.occupancyName.message}
                   </span>
                 )}
               </Col>
@@ -184,9 +217,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Occupancy Type"
                 />
-                {errors.occupancyType && (
+                {errors?.occupancyType && (
                   <span style={{ color: "red" }}>
-                    {errors.occupancyType.message}
+                    {errors?.occupancyType.message}
                   </span>
                 )}
               </Col>
@@ -204,9 +237,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Contact Name"
                 />
-                {errors.contactName && (
+                {errors?.contactName && (
                   <span style={{ color: "red" }}>
-                    {errors.contactName.message}
+                    {errors?.contactName.message}
                   </span>
                 )}
               </Col>
@@ -224,9 +257,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Emergency Contact"
                 />
-                {errors.emergencyContact && (
+                {errors?.emergencyContact && (
                   <span style={{ color: "red" }}>
-                    {errors.emergencyContact.message}
+                    {errors?.emergencyContact.message}
                   </span>
                 )}
               </Col>
@@ -243,9 +276,9 @@ function EditLocation(props) {
                   type="number"
                   placeholder="Construction Type"
                 />
-                {errors.constructionType && (
+                {errors?.constructionType && (
                   <span style={{ color: "red" }}>
-                    {errors.constructionType.message}
+                    {errors?.constructionType.message}
                   </span>
                 )}
               </Col>
@@ -278,9 +311,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Street Address"
                 />
-                {errors.streetAddress && (
+                {errors?.streetAddress && (
                   <span style={{ color: "red" }}>
-                    {errors.streetAddress.message}
+                    {errors?.streetAddress.message}
                   </span>
                 )}
               </Col>
@@ -298,8 +331,8 @@ function EditLocation(props) {
                   type="text"
                   placeholder="City"
                 />
-                {errors.city && (
-                  <span style={{ color: "red" }}>{errors.city.message}</span>
+                {errors?.city && (
+                  <span style={{ color: "red" }}>{errors?.city.message}</span>
                 )}
               </Col>
               <Col>
@@ -321,8 +354,8 @@ function EditLocation(props) {
                     );
                   })}
                 </Form.Select>
-                {errors.state && (
-                  <span style={{ color: "red" }}>{errors.state.message}</span>
+                {errors?.state && (
+                  <span style={{ color: "red" }}>{errors?.state.message}</span>
                 )}
               </Col>
             </Row>
@@ -342,8 +375,8 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Postal / Zip Code"
                 />
-                {errors.zipCode && (
-                  <span style={{ color: "red" }}>{errors.zipCode.message}</span>
+                {errors?.zipCode && (
+                  <span style={{ color: "red" }}>{errors?.zipCode.message}</span>
                 )}
               </Col>
               <Col>
@@ -362,8 +395,8 @@ function EditLocation(props) {
                   placeholder="Country"
                   defaultValue="USA"
                 />
-                {errors.country && (
-                  <span style={{ color: "red" }}>{errors.country.message}</span>
+                {errors?.country && (
+                  <span style={{ color: "red" }}>{errors?.country.message}</span>
                 )}
               </Col>
             </Row>
@@ -447,8 +480,8 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Hazards"
                 />
-                {errors.hazards && (
-                  <span style={{ color: "red" }}>{errors.hazards.message}</span>
+                {errors?.hazards && (
+                  <span style={{ color: "red" }}>{errors?.hazards.message}</span>
                 )}
               </Col>
             </Row>
@@ -467,9 +500,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Hydrant Address"
                 />
-                {errors.hydrantAddress && (
+                {errors?.hydrantAddress && (
                   <span style={{ color: "red" }}>
-                    {errors.hydrantAddress.message}
+                    {errors?.hydrantAddress.message}
                   </span>
                 )}
               </Col>
@@ -484,9 +517,9 @@ function EditLocation(props) {
                   type="number"
                   placeholder="Hydrant Distance (feet)"
                 />
-                {errors.hydrantDistance && (
+                {errors?.hydrantDistance && (
                   <span style={{ color: "red" }}>
-                    {errors.hydrantDistance.message}
+                    {errors?.hydrantDistance.message}
                   </span>
                 )}
               </Col>
@@ -508,9 +541,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Access Information"
                 />
-                {errors.accessInformation && (
+                {errors?.accessInformation && (
                   <span style={{ color: "red" }}>
-                    {errors.accessInformation.message}
+                    {errors?.accessInformation.message}
                   </span>
                 )}
               </Col>
@@ -531,9 +564,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Electic Meter Location"
                 />
-                {errors.electricMeterLoc && (
+                {errors?.electricMeterLoc && (
                   <span style={{ color: "red" }}>
-                    {errors.electricMeterLoc.message}
+                    {errors?.electricMeterLoc.message}
                   </span>
                 )}
               </Col>
@@ -552,9 +585,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Breaker Box Location"
                 />
-                {errors.breakerBoxLoc && (
+                {errors?.breakerBoxLoc && (
                   <span style={{ color: "red" }}>
-                    {errors.breakerBoxLoc.message}
+                    {errors?.breakerBoxLoc.message}
                   </span>
                 )}
               </Col>
@@ -574,9 +607,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Water Location"
                 />
-                {errors.waterLoc && (
+                {errors?.waterLoc && (
                   <span style={{ color: "red" }}>
-                    {errors.waterLoc.message}
+                    {errors?.waterLoc.message}
                   </span>
                 )}
               </Col>
@@ -596,9 +629,9 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Gas Shutoff Location"
                 />
-                {errors.gasShutoffLoc && (
+                {errors?.gasShutoffLoc && (
                   <span style={{ color: "red" }}>
-                    {errors.gasShutoffLoc.message}
+                    {errors?.gasShutoffLoc.message}
                   </span>
                 )}
               </Col>
@@ -627,8 +660,8 @@ function EditLocation(props) {
                   type="text"
                   placeholder="Notes"
                 />
-                {errors.notes && (
-                  <span style={{ color: "red" }}>{errors.notes.message}</span>
+                {errors?.notes && (
+                  <span style={{ color: "red" }}>{errors?.notes.message}</span>
                 )}
               </Col>
             </Row>

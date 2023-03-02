@@ -51,6 +51,7 @@ function Sidebar(props) {
   }
 
   function renderEditLocationModal() {
+    console.log(sidebarData);
     return (
       <EditLocation
         show={editLocation}

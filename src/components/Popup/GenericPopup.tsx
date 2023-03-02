@@ -2,7 +2,26 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-function GenericPopupWindow(props) {
+interface GenericPopupWindowProps {
+    size?: 'sm' | 'lg' | 'xl';
+    areaLabelledBy?: string | undefined;
+    show: boolean;
+    onHide: () => void;
+    contentClassName?: string | undefined;
+    onEntering?: (node: HTMLElement, isAppearing: boolean) => void;
+    onEntered?: (node: HTMLElement, isAppearing: boolean) => void;
+    onExit?: (node: HTMLElement) => void;
+    headerClassName?: string | undefined;
+    title?: string;
+    className?: string | undefined;
+    bodyClassName?: string | undefined;
+    footerClassName?: string | undefined;
+    children: React.ReactNode;
+    extraButton?: string | undefined;
+    extraAction?: () => void;
+
+}
+function GenericPopupWindow(props: GenericPopupWindowProps) {
   return (
     <Modal
       size={props.size}

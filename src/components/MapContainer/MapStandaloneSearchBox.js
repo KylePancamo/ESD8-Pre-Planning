@@ -10,7 +10,6 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
       bounds={bounds}
       onPlacesChanged={onPlacesChanged}
       onLoad={onSBLoad}
-      
     >
         <div className="search">
           <div className="searchInputs">

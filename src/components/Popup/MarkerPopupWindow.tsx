@@ -14,16 +14,32 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import {useAuth} from "../../hooks/AuthProvider";
 import {permission} from "../../permissions";
 import { hasPermissions } from '../../helpers';
+import { marker } from "../../types/marker-types";
+import { Icon } from "../../types/icon-types";
 
-function PopupWindow(props) {
-  let inputRef = useRef(null);
-  const [imageIcons, setImageIcons] = useState([]);
-  const [selectedIcon, setSelectedIcon] = useState({
+interface PopupWindowProps {
+  show: boolean;
+  onHide: () => void;
+  selectedMarker: marker;
+  markers: marker[];
+  setSelectedMarker: React.Dispatch<React.SetStateAction<marker>>;
+  setMarkers: React.Dispatch<React.SetStateAction<marker[]>>;
+}
+
+type FormData = Record<string, string>;
+
+function PopupWindow(props: PopupWindowProps) {
+  let inputRef = useRef<HTMLInputElement>(null);
+  const [imageIcons, setImageIcons] = useState<Icon[]>([]);
+  const [selectedIcon, setSelectedIcon] = useState<{
+    icon_id: number;
+    icon_name: string
+  }>({
     icon_id: 0,
     icon_name: "",
   });
   const {userData} = useAuth();
-  console.log(userData)
+  // console.log(props.markers);
 
   const [markerSaved, setMarkerSaved] = useState(false);
   const [markerDeleted, setMarkerDeleted] = useState(false);
@@ -52,8 +68,10 @@ function PopupWindow(props) {
       icon_name: props.selectedMarker.file_name,
     });
   }, [props]);
+  
+  const [selectedFile, setSelectedFile] = useState<any>()
 
-  const handleMarkerSaving = (inputData) => {
+  const handleMarkerSaving = (inputData: FormData) => {
     inputData.imageName = selectedFile?.name;
     let markerFoundOnMap = props.markers.find(
       (marker) => marker.marker_id === props.selectedMarker.marker_id
@@ -61,13 +79,18 @@ function PopupWindow(props) {
 
     if (markerFoundOnMap)  {
       const formData = new FormData();
-      formData.append("file", inputRef.current?.files[0] ? inputRef.current?.files[0] : null);
-      formData.append("marker_id", inputData.selectedMarkerId);
-      formData.append("icon_id", selectedIcon.icon_id);
-      formData.append("marker_name", inputData.markerName);
-      formData.append("latitude", inputData.latitude);
-      formData.append("longitude", inputData.longitude);
-      formData.append("image_name", inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image);
+      const inputFiles = inputRef.current?.files;
+      const inputFile = inputFiles ? inputFiles[0] : null;
+      const inputFileName = inputFile ? inputFile.name : props.selectedMarker.image;
+
+      formData.append("file", inputRef.current?.files ? inputRef.current?.files[0] as string | Blob : "");
+      formData.append("marker_id", inputData.selectedMarkerId as string);
+      formData.append("icon_id", selectedIcon.icon_id.toString());
+      formData.append("marker_name", inputData.markerName as string);
+      formData.append("latitude", inputData.latitude as string);
+      formData.append("longitude", inputData.longitude as string);
+      
+      formData.append("image_name", inputFileName as string);
       
       Axios.post("http://localhost:5000/api/update-map-marker", formData, {
         withCredentials: true,
@@ -78,19 +101,19 @@ function PopupWindow(props) {
             ...props.selectedMarker,
             file_name: selectedIcon.icon_name,
             marker_name: inputData.markerName,
-            latitude: inputData.latitude,
-            longitude: inputData.longitude,
-            image: inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image,
+            latitude: Number(inputData.latitude),
+            longitude: Number(inputData.longitude),
+            image: inputFileName,
           })
           props.setMarkers((markers) => {
             let newMarkers = markers.map((marker) => {
               if (marker.marker_id === props.selectedMarker.marker_id) {
                 marker.file_name = selectedIcon.icon_name;
                 marker.marker_name = inputData.markerName;
-                marker.latitude = inputData.latitude;
-                marker.longitude = inputData.longitude;
+                marker.latitude = Number(inputData.latitude);
+                marker.longitude = Number(inputData.longitude);
                 marker.icon_id = selectedIcon.icon_id;
-                marker.image = inputRef.current?.files[0] ? inputRef.current?.files[0].name : props.selectedMarker.image;
+                marker.image = inputFileName;
               }
               return marker;
             });
@@ -112,16 +135,17 @@ function PopupWindow(props) {
   };
   
   //used for file preview
-  const [selectedFile, setSelectedFile] = useState()
-  const [preview, setPreview] = useState();
+  
+  const [preview, setPreview] = useState<string>();
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = (e: any) => {
     e.preventDefault();
     inputRef.current?.click();
   };
 
   useEffect(() => {
     resetFormData();
+    console.log(props.selectedMarker.image);
   }, [props.selectedMarker]);
 
   // create a preview as a side effect, whenever selected file is changed
@@ -151,7 +175,7 @@ function PopupWindow(props) {
     })
   }
 
-  const onSelectFile = e => {
+  const onSelectFile = (e: any) => {
     if (!inputRef.current?.files || inputRef.current?.files.length === 0) {
         setSelectedFile(undefined)
         return
@@ -205,8 +229,8 @@ function PopupWindow(props) {
                   className="d-none"
                   type="file"
                   ref={inputRef}
-                  onChange={() => {
-                    onSelectFile();
+                  onChange={(e) => {
+                    onSelectFile(e);
                   }}
                 />
                 <div className="marker-image">
@@ -233,7 +257,7 @@ function PopupWindow(props) {
                       />
                     }
                   >
-                    {imageIcons.map((icon) => (
+                    {imageIcons.map((icon: Icon) => (
                       <Dropdown.Item
                         onClick={() => {
                           setValue("activeIcon", icon.file_name);
@@ -248,7 +272,7 @@ function PopupWindow(props) {
                         {
                           <img
                             src={"/icon_images/" + icon.file_name}
-                            alt={icon.name}
+                            alt={icon.icon_name}
                             className="images"
                           />
                         }

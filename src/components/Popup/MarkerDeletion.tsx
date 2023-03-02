@@ -3,13 +3,23 @@ import GenericPopupWindow from "./GenericPopup";
 import Alert from "react-bootstrap/Alert";
 import Axios from "axios";
 
+import { marker } from "../../types/marker-types";
+
+interface MarkerDeletionProps {
+  markerSaved: boolean;
+  setMarkerSaved: React.Dispatch<React.SetStateAction<boolean>>;
+  markerDeleted: boolean;
+  setMarkerDeleted: React.Dispatch<React.SetStateAction<boolean>>;
+  props: any;
+}
+
 function MarkerDeletion({
   markerSaved,
   setMarkerSaved,
   markerDeleted,
   setMarkerDeleted,
   props,
-}) {
+} : MarkerDeletionProps) {
   const handleMarkerDelete = () => {
     const data = {
       marker_id: props.selectedMarker.marker_id,
@@ -21,9 +31,9 @@ function MarkerDeletion({
     }  )
       .then((response) => {
         // remove marker from props.markers array
-        props.setMarkers((markers) => {
+        props.setMarkers((markers: marker[]) => {
           let newMarkers = markers.filter(
-            (marker) => marker.marker_id !== props.selectedMarker.marker_id
+            (marker: marker) => marker.marker_id !== props.selectedMarker.marker_id
           );
           localStorage.setItem("markers", JSON.stringify(newMarkers));
           return newMarkers;
