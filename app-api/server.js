@@ -9,7 +9,7 @@ const bcrypt = require('bcrypt');
 
 app.use(fileupload());
 app.use(cors({
-  origin: [$REACT_BASE_URL],
+  origin: [process.env.REACT_BASE_URL],
   credentials: true,
 }));
 
