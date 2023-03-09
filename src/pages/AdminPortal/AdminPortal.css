@@ -152,3 +152,8 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.sidebar-item.active {
+  background-color: #252f50;
+  color: white;
+}

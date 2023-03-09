@@ -17,6 +17,10 @@ function AdminPortal() {
         "registerUsers": <RegisterUser />
     }
 
+    const isActive = (type: string) => {
+        return portalType === type ? 'active' : '';
+    };
+
     return (
         <div className="admin-background">
             <div className="admin-wrapper">
@@ -24,19 +28,19 @@ function AdminPortal() {
                     <span className="text-center">Admin Portal</span>
                     <div className="sidebar-divider">
                         <ul className="sidebar-nav">
-                            <li className="sidebar-item" onClick={(e) => {
+                            <li className={`sidebar-item ${isActive('userRoles')}`} onClick={(e) => {
                                 e.preventDefault();
                                 setPortalType("userRoles")
                             }}>
                                 <span className="sidebar-item-link">Modify User Roles</span>
                             </li>
-                            <li className="sidebar-item" onClick={(e) => {
+                            <li className={`sidebar-item ${isActive('roleTypes')}`} onClick={(e) => {
                                 e.preventDefault();
                                 setPortalType("roleTypes")
                             }}>
                                 <span className="sidebar-item-link">Modify Role Types</span>
                             </li>
-                            <li className="sidebar-item" onClick={(e) => {
+                            <li className={`sidebar-item ${isActive('registerUsers')}`} onClick={(e) => {
                                 e.preventDefault();
                                 setPortalType("registerUsers")
                             }}>
