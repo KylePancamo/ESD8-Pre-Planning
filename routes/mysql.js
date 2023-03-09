@@ -1,12 +1,13 @@
 // mysql.js
 const mysql = require('mysql2');
 
-const createDBConnection = (database) => {
+const createDBConnection = (database, multiStatement = false) => {
   const db = mysql.createConnection({
     user: process.env.MYSQL_USERNAME,
     host: process.env.MYSQL_HOST_NAME,
     password: process.env.MYSQL_ROOT_PASSWORD,
     database: database,
+    multipleStatements: multiStatement
   });
 
   db.connect((err) => {
