@@ -17,7 +17,7 @@ router.post('/', getUser, isAuthorized, (req, res) => {
       req.body.icon_id,
       Number(req.body.latitude),
       Number(req.body.longitude),
-      req.body.image_name ? req.body.image_name : null,
+      req.body.image_name === "null" ? null : req.body.image_name,
       req.body.marker_id,
     ]
   
