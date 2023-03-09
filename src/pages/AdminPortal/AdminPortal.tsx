@@ -2,6 +2,7 @@ import "./AdminPortal.css"
 import React, { useState } from "react";
 import UserRoles from "./UserRoles";
 import RoleTypes from "./RoleTypes";
+import RegisterUser from "./RegisterUsers";
 
 type portalTypes = {
     [key: string]: JSX.Element
