@@ -1,6 +1,6 @@
 import "./AdminPortal.css"
 import React, { useState } from "react";
-import UserRoles from "./UserRoles";
+import Users from "./Users";
 import RoleTypes from "./RoleTypes";
 import RegisterUser from "./RegisterUsers";
 
@@ -10,9 +10,9 @@ type portalTypes = {
 
 function AdminPortal() {
 
-    const [portalType, setPortalType] = useState<string>('update');
+    const [portalType, setPortalType] = useState<string>('users');
     const portalTypes: portalTypes = {
-        "userRoles": <UserRoles />,
+        "users": <Users />,
         "roleTypes": <RoleTypes />,
         "registerUsers": <RegisterUser />
     }
@@ -28,11 +28,11 @@ function AdminPortal() {
                     <span className="text-center">Admin Portal</span>
                     <div className="sidebar-divider">
                         <ul className="sidebar-nav">
-                            <li className={`sidebar-item ${isActive('userRoles')}`} onClick={(e) => {
+                            <li className={`sidebar-item ${isActive('users')}`} onClick={(e) => {
                                 e.preventDefault();
-                                setPortalType("userRoles")
+                                setPortalType("users")
                             }}>
-                                <span className="sidebar-item-link">Modify User Roles</span>
+                                <span className="sidebar-item-link">Modify Users</span>
                             </li>
                             <li className={`sidebar-item ${isActive('roleTypes')}`} onClick={(e) => {
                                 e.preventDefault();

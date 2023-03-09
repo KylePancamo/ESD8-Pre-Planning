@@ -16,16 +16,11 @@ type Role = {
   name: string;
 }
 
-function UserRoles() {
+function Users() {
 
     const [users, setUsers] = useState<User[]>([]);
     const [roles, setRoles] = useState<Role[]>([]);
     const [updateStatus , setUpdateStatus] = useState<boolean | undefined>(undefined);
-
-    const currentRoles = {
-      1: "admin",
-      2: "user",
-    }
 
     useEffect(() => {
       const fetchUserRoles = async () => {
@@ -72,7 +67,7 @@ function UserRoles() {
       }
     }
     return (
-      <div className='user-roles-container'>
+      <div className='user-container'>
         <h2>Modify User Roles</h2>
         {users.length !== 0 ? (
           <>
@@ -126,11 +121,11 @@ function UserRoles() {
               <div style={{marginTop: "10px"}}>
                 {updateStatus == true ? (
                   <Alert variant='success'>
-                    User role updated successfully!
+                    User updated successfully!
                   </Alert>
                 ) : updateStatus == false ? (
                   <Alert variant='danger'>
-                    User role update failed!
+                    User update failed!
                   </Alert>
                 ) : null}
               </div>
@@ -141,4 +136,4 @@ function UserRoles() {
     ); 
 }
 
-export default UserRoles;
+export default Users;
