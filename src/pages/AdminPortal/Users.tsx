@@ -2,6 +2,7 @@ import "./AdminPortal.css"
 import React, { useEffect, useState, useMemo } from "react";
 import Axios from "axios";
 import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 
 type User = {
@@ -20,7 +21,13 @@ function Users() {
 
     const [users, setUsers] = useState<User[]>([]);
     const [roles, setRoles] = useState<Role[]>([]);
-    const [updateStatus , setUpdateStatus] = useState<boolean | undefined>(undefined);
+    const [updateStatus , setUpdateStatus] = useState<{
+      status: boolean | undefined,
+      message: string
+    }>({
+      status: undefined,
+      message: ''
+    });
 
     useEffect(() => {
       const fetchUserRoles = async () => {
@@ -61,11 +68,36 @@ function Users() {
       const response = await Axios.post<{status: string}>("http://localhost:5000/api/update-user-role", user, {withCredentials: true});
 
       if (response.data.status == 'success') {
-        setUpdateStatus(true);
+        setUpdateStatus({
+          status: true,
+          message: 'User role updated successfully'
+        });
       } else if (response.data.status == 'error') {
-        setUpdateStatus(false);
+        setUpdateStatus({
+          status: false,
+          message: 'Error updating user role'
+        });
       }
     }
+
+    const deleteUser = async (user: User) => {
+      const response = await Axios.post<{status: string}>("http://localhost:5000/api/delete-user", user, {withCredentials: true});
+    
+      if (response.data.status == 'success') {
+        setUsers((prevUsers: User[]) => prevUsers.filter((currUser: User) => currUser.user_id !== user.user_id));
+        setUpdateStatus({
+          status: true,
+          message: 'User deleted successfully'
+        });
+      } else if (response.data.status == 'error') {
+        setUpdateStatus({
+          status: false,
+          message: 'Error deleting user'
+        });
+      }
+
+    }
+
     return (
       <div className='user-container'>
         <h2>Modify User Roles</h2>
@@ -87,7 +119,8 @@ function Users() {
                   <tr>
                     <th>Username</th>
                     <th>Update Role</th>
-                    <th>Actions</th>
+                    <th>Action</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -112,20 +145,23 @@ function Users() {
                           ) : null}
                       </td>
                       <td>
-                        <button onClick={() => {updateUser(user)}}>Update</button>
+                        <Button onClick={() => {updateUser(user)}}>Update</Button>
+                      </td>
+                      <td>
+                        <Button onClick={() => deleteUser(user)} variant="danger">Delete User</Button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               <div style={{marginTop: "10px"}}>
-                {updateStatus == true ? (
+                {updateStatus.status == true ? (
                   <Alert variant='success'>
-                    User updated successfully!
+                    {updateStatus.message}
                   </Alert>
-                ) : updateStatus == false ? (
+                ) : updateStatus.status == false ? (
                   <Alert variant='danger'>
-                    User update failed!
+                    {updateStatus.message}
                   </Alert>
                 ) : null}
               </div>
