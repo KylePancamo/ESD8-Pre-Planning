@@ -10,6 +10,7 @@ router.get("/", (req, res) => {
                 FROM roles r
                 LEFT JOIN role_permissions rp ON r.id = rp.role_id
                 LEFT JOIN permissions p ON p.id = rp.permission_id
+                WHERE r.name != 'admin'
                 GROUP BY r.id, r.name;`
 
     db.query(query, (err, result) => {
