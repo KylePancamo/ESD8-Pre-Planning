@@ -1,4 +1,5 @@
 import "./404NotFound.css"
+import React from "react"
 
 const RouteNotFound = () => {
     return (

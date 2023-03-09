@@ -1,21 +1,22 @@
 import './404Unauthorized.css';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from "../hooks/AuthProvider";
+import React from "react";
 
 const RouteUnauthorized = () => {
 
         // We need ref in this, because we are dealing
     // with JS setInterval to keep track of it and
     // stop it when needed
-    const Ref = useRef(null);
+    const Ref = useRef<NodeJS.Timer>();
     const { logout } = useAuth();
   
     // The state for our timer
     const [timer, setTimer] = useState('00');
   
   
-    const getTimeRemaining = (e) => {
-        const total = Date.parse(e) - Date.parse(new Date());
+    const getTimeRemaining = (e: string) => {
+        const total = Date.parse(e) - Date.parse(new Date().toString());
         const seconds = Math.floor((total / 1000) % 60);
         return {
             total, seconds
@@ -23,14 +24,14 @@ const RouteUnauthorized = () => {
     }
   
   
-    const startTimer = (e) => {
+    const startTimer = (e: string) => {
         let { total, seconds } = getTimeRemaining(e);
         if (total >= 0) {
-  
+
             // update the timer
             // check if less than 10 then we need to 
             // add '0' at the beginning of the variable
-            setTimer((seconds > 9 ? seconds : '0' + seconds))
+            setTimer((seconds > 9 ? seconds : '0' + seconds).toString())
         }
         else {
             console.log('Time is up')
@@ -39,18 +40,18 @@ const RouteUnauthorized = () => {
     }
   
   
-    const clearTimer = (e) => {
-  
+    const clearTimer = (e: string) => {
+
         // If you adjust it you should also need to
         // adjust the Endtime formula we are about
         // to code next    
         setTimer('10');
-  
+
         // If you try to remove this line the 
         // updating of timer Variable will be
         // after 1000ms or 1sec
         if (Ref.current) clearInterval(Ref.current);
-        const id = setInterval(() => {
+        const id: NodeJS.Timer = setInterval(() => {
             startTimer(e);
         }, 1000)
         Ref.current = id;
@@ -58,11 +59,11 @@ const RouteUnauthorized = () => {
   
     const getDeadTime = () => {
         let deadline = new Date();
-  
+
         // This is where you need to adjust if 
-        // you entend to add more time
+        // you intend to add more time
         deadline.setSeconds(deadline.getSeconds() + 10);
-        return deadline;
+        return deadline.toString();
     }
   
     // We can use useEffect so that when the component

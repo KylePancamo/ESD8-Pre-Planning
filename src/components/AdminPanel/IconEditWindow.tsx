@@ -1,4 +1,5 @@
 import GenericEditWindow from "../Popup/GenericPopup";
+import React from "react";
 import Form from "react-bootstrap/Form";
 import Axios from "axios";
 import { useForm } from "react-hook-form";
@@ -7,7 +8,16 @@ import Alert from "react-bootstrap/Alert";
 import { useRecoilState } from "recoil";
 import { imagesState } from "../../atoms";
 
-function IconEditWindow(props) {
+type IconEditWindowProps = {
+  show: boolean;
+  onHide: () => void;
+  selectedIcon: any;
+  setSelectedIcon: React.Dispatch<React.SetStateAction<any>>;
+  contentClassName: string;
+  setImages: React.Dispatch<React.SetStateAction<any>>
+}
+
+function IconEditWindow(props: IconEditWindowProps) {
   const [images, setImages] = useRecoilState(imagesState);
   const [iconUpdateStatus, setIconUpdateStatus] = useState({
     variant: "",
@@ -17,11 +27,10 @@ function IconEditWindow(props) {
     register,
     handleSubmit,
     reset,
-    getValues,
     formState: { errors },
   } = useForm();
 
-  const onSave = (data) => {
+  const onSave = (data: any) => {
     Axios.post("http://localhost:5000/api/update-icon-name", {
       id: props.selectedIcon?.icon_id,
       formData: data,

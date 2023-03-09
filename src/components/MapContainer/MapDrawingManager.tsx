@@ -5,10 +5,15 @@ import {
 import Axios from "axios";
 import { useEffect } from "react";
 import config from "../../config/config";
-function MapDrawingManager({
-    markers,
-    setMarkers,
-}) {
+import { marker } from "../../types/marker-types";
+
+
+type MapDrawingManagerProps = {
+  markers: marker[];
+  setMarkers: React.Dispatch<React.SetStateAction<marker[]>>;
+};
+
+function MapDrawingManager({ markers, setMarkers } : MapDrawingManagerProps) {
 
   const [fileExists, setFileExists] = React.useState(false);
   useEffect(() => {
@@ -31,14 +36,14 @@ function MapDrawingManager({
 
   return (
     <DrawingManager
-      onMarkerComplete={(marker) => {
+      onMarkerComplete={(marker: google.maps.Marker) => {
         if (fileExists) {
           marker.setIcon(
             "/icon_images/" + config.DEFAULT_MARKER_NAME
           ); 
           
         }
-        const position = marker.position;
+        const position = marker.getPosition();
         // Make marker transition little nicer with timeout
         setTimeout(() => {
           marker.setMap(null);
@@ -64,7 +69,11 @@ function MapDrawingManager({
                     longitude: parseFloat(response.data.payload.longitude),
                     icon_id: response.data.payload.icon_id,
                     image: null,
-                    file_name: fileExists ? config.DEFAULT_MARKER_NAME : null,
+                    file_name: fileExists ? config.DEFAULT_MARKER_NAME : "",
+                    position: {
+                      lat: Number(response.data.payload.latitude),
+                      lng: Number(response.data.payload.longitude),
+                    },
                   }
                 ]
                 localStorage.setItem("markers", JSON.stringify(newMarkers));
@@ -79,7 +88,11 @@ function MapDrawingManager({
                   longitude: parseFloat(response.data.payload.longitude),
                   icon_id: response.data.payload.icon_id,
                   image: null,
-                  file_name: fileExists ? config.DEFAULT_MARKER_NAME : null,
+                  file_name: fileExists ? config.DEFAULT_MARKER_NAME : "",
+                  position: {
+                    lat: Number(response.data.payload.latitude),
+                    lng: Number(response.data.payload.longitude),
+                  },
                 }]
                 localStorage.setItem("markers", JSON.stringify(newMarker));
                 return newMarker;
@@ -91,7 +104,7 @@ function MapDrawingManager({
       }}
       options={{
         drawingControlOptions: {
-          drawingModes: ["marker"],
+          drawingModes: [google.maps.drawing.OverlayType.MARKER]
         },
       }}
     />

@@ -1,19 +1,20 @@
 import { Navigate, useOutlet } from "react-router-dom";
 import { useAuth } from "../../hooks/AuthProvider";
+import React from "react";
 
 const HomeLayout = () => {
     const { userData } = useAuth();
     const outlet = useOutlet();
 
-    if (userData?.username) {
-        return <Navigate to="/map" replace />;
+    if (!userData || !userData.username) {
+        return (
+            <>
+                {outlet}
+            </>
+        );
     }
 
-    return (
-    <div>
-        {outlet}
-    </div>
-    );
+    return <Navigate to="/map" replace />;
 };
  
 export default HomeLayout;

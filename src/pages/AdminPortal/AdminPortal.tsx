@@ -1,16 +1,16 @@
 import "./AdminPortal.css"
-import React, { useEffect, useState, useMemo } from "react";
-import Axios from "axios";
-import Form from "react-bootstrap/Form";
-import Alert from "react-bootstrap/Alert";
+import React, { useState } from "react";
 import UserRoles from "./UserRoles";
 import RoleTypes from "./RoleTypes";
 
+type portalTypes = {
+    [key: string]: JSX.Element
+}
 
 function AdminPortal() {
 
-    const [portalType, setPortalType] = useState('update');
-    const portalTypes = {
+    const [portalType, setPortalType] = useState<string>('update');
+    const portalTypes: portalTypes = {
         "userRoles": <UserRoles />,
         "roleTypes": <RoleTypes />
     }

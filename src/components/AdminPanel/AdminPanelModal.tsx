@@ -6,26 +6,28 @@ import IconEditWindow from "./IconEditWindow";
 import {useRecoilState} from 'recoil';
 import {imagesState} from "../../atoms";
 import React from "react";
-
+import { Image } from "../../types/atoms-types";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
 
+type AdminPanelProps = {
+  flushMarkers: () => void;
+}
 
-function AdminPanel(props) {
-  const [fileUploadPopup, setFileUploadPopup] = useState(false);
-  const [adminPanel, setAdminPanel] = useState(false);
-  const [mainContentString, setMainContentString] = useState("");
-  const [images, setImages] = useRecoilState(imagesState);
-  const [locationsButton, setLocationsButton] = useState(false);
-  const [iconEditState, setIconEditState] = useState(false);
-  const [selectedIcon, setSelectedIcon] = useState();
+
+function AdminPanel(props: AdminPanelProps) {
+  const [fileUploadPopup, setFileUploadPopup] = useState<boolean>(false);
+  const [adminPanel, setAdminPanel] = useState<boolean>(false);
+  const [images, setImages] = useRecoilState<Image[]>(imagesState);
+  const [iconEditState, setIconEditState] = useState<boolean>(false);
+  const [selectedIcon, setSelectedIcon] = useState<Image>();
 
   const { userData } = useAuth();
 
   return (
     <>
-    {hasPermissions(userData.permissions, permission.MODIFY) ? (
+    {hasPermissions(userData?.permissions, permission.MODIFY) ? (
       <div className="admin-ui">
         <button
           className="btn btn-primary"
@@ -94,7 +96,7 @@ function AdminPanel(props) {
                           <td>
                             <img
                               src={"/icon_images/" + image.file_name}
-                              alt={image.name}
+                              alt={image.file_name}
                               className="images"
                             />
                           </td>

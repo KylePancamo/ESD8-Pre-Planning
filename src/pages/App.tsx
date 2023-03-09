@@ -2,15 +2,16 @@ import MapContainer from "../components/MapContainer/MapContainer";
 import Legend from "../components/Legend";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../components/Sidebar/Sidebar";
-import IconUpload from "../components/Popup/IconUpload";
 import Axios from "axios";
 import {useState, useEffect} from "react";
 import {useRecoilState} from 'recoil';
 import {imagesState, preplanningLocationsState} from "../atoms";
+import { SearchSite } from "../types/atoms-types";
+import React from "react";
 
 function App() {
   const [sideBarValue, setSideBarValue] = useState(false);
-  const [searchedSite, setSearchedSite] = useState("");
+  const [searchedSite, setSearchedSite] = useState<SearchSite>();
   const [images, setImages] = useRecoilState(imagesState);
   const [prePlanningLocations, setPrePlanningLocations] = useRecoilState(preplanningLocationsState);
   
@@ -44,10 +45,7 @@ function App() {
       <MapContainer
         sideBarValue={sideBarValue}
         setSideBarValue={setSideBarValue}
-        searchedSite={searchedSite}
-        setSearchedSite={setSearchedSite}
       />
-      <IconUpload />
       <Legend />
     </div>
   );

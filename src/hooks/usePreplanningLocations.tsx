@@ -4,7 +4,7 @@ import { preplanningLocationsState } from '../atoms';
 import { LocationTypes } from "../types/location-types";
 
 function usePrePlanningLocations() {
-  const [prePlanningLocations, setPrePlanningLocations] = useRecoilState<any>(preplanningLocationsState);
+  const [prePlanningLocations, setPrePlanningLocations] = useRecoilState<LocationTypes[]>(preplanningLocationsState);
 
   const updateLocations = useCallback((newVal: LocationTypes, id: number) => {
     setPrePlanningLocations((locations: LocationTypes[]) => {

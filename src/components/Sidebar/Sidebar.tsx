@@ -15,7 +15,7 @@ import AddLocationModal from "../Popup/AddLocationModal";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
-import { LocationTypes } from "../../types/location-types"; 
+
 
 type SideBarProps = {
   sideBarValue: boolean;
@@ -30,6 +30,8 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
   const { updateLocations }= usePrePlanningLocations();
   const [addLocationButton, setAddLocationButton] = useState<boolean>(false);
   const { userData } = useAuth();
+
+  console.log(searchedSite);
 
   const updateEdit = useCallback(() => {
     setEditLocation(false);

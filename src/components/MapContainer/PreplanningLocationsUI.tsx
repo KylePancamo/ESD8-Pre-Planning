@@ -1,8 +1,18 @@
 import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
 import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
+import React from "react";
 
-function PreplanningLocationsUI({ setSideBarValue, setCenter }) {
+
+type center = google.maps.LatLng | google.maps.LatLngLiteral;
+
+type PreplanningLocationsUIProps = {
+    setSideBarValue: React.Dispatch<React.SetStateAction<boolean>>;
+    setCenter: React.Dispatch<React.SetStateAction<center>>;
+
+}
+
+function PreplanningLocationsUI({ setSideBarValue, setCenter } : PreplanningLocationsUIProps) {
     const { prePlanningLocations } = usePrePlanningLocations();
     const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
 
@@ -16,7 +26,7 @@ function PreplanningLocationsUI({ setSideBarValue, setCenter }) {
                             return (
                                 <tr key={location.id}>
                                     <td onClick={() => {
-                                        setCenter({lat: parseFloat(location.latitude), lng: parseFloat(location.longitude)});
+                                        setCenter({lat: location.latitude, lng: location.longitude});
                                         setSearchedSite({
                                             location: location.google_formatted_address,
                                             latitude: location.latitude,

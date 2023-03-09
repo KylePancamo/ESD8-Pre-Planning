@@ -1,12 +1,11 @@
 import MapStandaloneSearchBox from "./MapStandaloneSearchBox";
 import MapDrawingManager from "./MapDrawingManager";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Popup from "../Popup/MarkerPopupWindow";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
 import Axios from "axios";
-import "../../useStateWithCallback";
 import AdminPanel from "../AdminPanel/AdminPanelModal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -14,97 +13,119 @@ import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
 import {sideBarDataState} from "../../atoms";
 import {siteIsSetState} from "../../atoms";
-import {preplanningLocationsState} from "../../atoms";
 import PreplanningLocationsUI from "./PreplanningLocationsUI";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
+import { SearchSite } from "../../types/atoms-types";
+import { marker } from "../../types/marker-types";
 
 const containerStyle = {
   width: "100vw",
   height: "100vh",
 };
 
-function MapContainer(props) {
-  const [libraries] = useState(["drawing", "places"]);
+type center = google.maps.LatLng | google.maps.LatLngLiteral;
+type bounds = google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral | undefined
+type Libraries = ("drawing" | "geometry" | "localContext" | "places" | "visualization")[];
+type MapContainerProps = {
+  sideBarValue: boolean;
+  setSideBarValue: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function MapContainer(props : MapContainerProps) {
+  const [libraries] = useState<Libraries>(["drawing", "places"]);
   const [drawManagerMarker, setDrawManagerMarker] = useState();
-  const [markers, setMarkers] = useState(undefined);
-  const [selectedMarker, setSelectedMarker] = useState({
+  const [markers, setMarkers] = useState<marker[]>([]);
+  const [selectedMarker, setSelectedMarker] = useState<marker>({
     marker_id: 0,
     marker_name: "default",
     latitude: 0,
     longitude: 0,
     icon_id: 0,
     file_name: "",
+    image: null,
+    position: {
+      lat: 0,
+      lng: 0,
+    }
   });
 
-  const [center, setCenter] = useState({
+  const [center, setCenter] = useState<center>({
     lat: 29.615106009353045,
     lng: -98.68537740890328,
   });
 
-  const [markerClicked, setMarkerClicked] = useState(false);
-  const [markerVisibility, setMarkerVisibility] = useState(true);
-  const [searchBox, setSearchBox] = useState(null);
-  const [bounds, setBounds] = useState(null);
+  const [markerClicked, setMarkerClicked] = useState<boolean>(false);
+  const [markerVisibility, setMarkerVisibility] = useState<boolean>(true);
+  const [searchBox, setSearchBox] = useState<google.maps.places.SearchBox>();
+  const [bounds, setBounds] = useState<bounds>();
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
-  const [mapId, setMapId] = useState("satellite");
+  const [mapId, setMapId] = useState<string | undefined>("satellite");
   const { userData, logout } = useAuth();
   const searchBoxRef = React.useRef(null);
 
   const onPlacesChanged = () => {
-    const places = searchBox.getPlaces();
-    const bounds = new window.google.maps.LatLngBounds();
-    
-    setSearchedSite({
-      location: places[0].formatted_address,
-      latitude: places[0].geometry.location.lat(),
-      longitude: places[0].geometry.location.lng(),
-    });
-
-    places.forEach((place) => {
-      if (place.geometry.viewport) {
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
+    if (searchBox) {
+      const places = searchBox.getPlaces();
+      const bounds = new window.google.maps.LatLngBounds();
+      
+      if (!places || !places[0]) {
+        return;
       }
-    });
 
-    const nextMarkers = places.map((place) => ({
-      position: place.geometry.location,
-    }));
+      setSearchedSite({
+        location: places[0].formatted_address as string,
+        latitude: places[0].geometry?.location?.lat() as number,
+        longitude: places[0].geometry?.location?.lng() as number,
+      });
 
-    const nextCenter =
-      nextMarkers.length > 0 ? nextMarkers[0].position : center;
-      console.log(nextCenter.lat());
-      console.log(nextCenter.lng());
-    setCenter(nextCenter);
-    props.setSideBarValue(true);
+      places.forEach((place) => {
+
+        if (place?.geometry?.viewport) {
+          bounds.union(place.geometry.viewport);
+        } else if (place?.geometry?.location){
+          bounds.extend(place.geometry.location);
+        }
+      });
+
+      const nextMarkers = places.map((place) => ({
+        position: place?.geometry?.location,
+      }));
+
+      const nextCenter: center = nextMarkers.length > 0 ? nextMarkers[0].position as center : center;
+      setCenter(nextCenter);
+      props.setSideBarValue(true);
+    }
   };
 
   const [sidebarData, setSidebarData] = useRecoilState(sideBarDataState);
   const [siteIsSet, setSiteIsSet] = useRecoilState(siteIsSetState);
   const clearPlaces = () => {
-    setSearchedSite("");
+    setSearchedSite({
+      location: "",
+      latitude: 0,
+      longitude: 0,
+    });
     setSidebarData([])
     setSiteIsSet(false);
     props.setSideBarValue(false);
   }
 
-  const onSBLoad = (ref) => {
+  const onSBLoad = (ref: google.maps.places.SearchBox) => {
     setSearchBox(ref);
   };
 
   const { isLoaded } = useJsApiLoader({
     version: "weekly",
     id: "google-map-script",
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY as string | "",
     libraries,
   });
 
-  const [map, setMap] = React.useState(null);
+  const [map, setMap] = useState<google.maps.Map | null>();
 
-  const onLoad = React.useCallback(function callback(map) {
+  const onLoad = useCallback(function callback(map: google.maps.Map) {
     placeMarkers();
     const bounds = new window.google.maps.LatLngBounds(center);
     map.fitBounds(bounds);
@@ -112,7 +133,7 @@ function MapContainer(props) {
   }, []);
 
   const placeMarkers = () => {
-    let localMarkers = JSON.parse(localStorage.getItem("markers"));
+    let localMarkers = JSON.parse(localStorage.getItem("markers") as string);
     // fetch data if local storage is empty
     if (localMarkers == null) {
       console.log('fetching markers');
@@ -128,13 +149,11 @@ function MapContainer(props) {
         .catch((err) => {});
     } else {
       console.log('using local markers');
-      setMarkers(JSON.parse(localStorage.getItem("markers")));
+      if (localStorage.getItem("markers") === null) {
+        setMarkers(JSON.parse(localStorage.getItem("markers") || ""));
+      }
     }
   };
-
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
 
   const handleOnClick = () => {
     props.setSideBarValue(!props.sideBarValue);
@@ -175,14 +194,14 @@ function MapContainer(props) {
         styles: MapStyle,
       }}
       onMapTypeIdChanged={() => {
-        setMapId(map ? map.getMapTypeId() : "roadmap");
+        setMapId(map ? map.getMapTypeId(): "roadmap");
       }}
     >
       {markers ? (
           markers.map((marker) => {
           marker.position = {
-            lat: parseFloat(marker.latitude),
-            lng: parseFloat(marker.longitude),
+            lat: marker.latitude,
+            lng: marker.longitude,
           };
           return (
             <Marker
@@ -216,7 +235,7 @@ function MapContainer(props) {
         onClick={() => handleOnClick()}
         icon={"map-pin.png"}
         />
-      {hasPermissions(userData.permissions, permission.MODIFY) ? (
+      {hasPermissions(userData?.permissions, permission.MODIFY) ? (
         <MapDrawingManager markers={markers} setMarkers={setMarkers} />
       ) : null}
 
@@ -245,8 +264,8 @@ function MapContainer(props) {
         <div className="goto-center">
           <Button
             onClick={() => {
-              map.panTo(center);
-              map.setZoom(15);
+              map?.panTo(center as google.maps.LatLng | google.maps.LatLngLiteral);
+              map?.setZoom(15);
             }}
           >
             Goto Center
@@ -262,7 +281,7 @@ function MapContainer(props) {
           if (response.data.status === "success") {
             logout();
           }
-        }} class="logout-btn">
+        }} className="logout-btn">
           Logout
         </button>
     </GoogleMap>

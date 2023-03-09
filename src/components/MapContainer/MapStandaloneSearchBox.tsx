@@ -3,7 +3,24 @@ import { StandaloneSearchBox } from "@react-google-maps/api";
 import Form from "react-bootstrap/Form";
 import {AiOutlineClose, AiOutlineSearch} from "react-icons/ai";
 
-function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces, searchBoxRef }) {
+type MapStandaloneSearchBoxProps = {
+  bounds: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral | undefined;
+  onPlacesChanged: () => void;
+  onSBLoad: (ref: google.maps.places.SearchBox) => void;
+  clearPlaces: () => void;
+  searchBoxRef: React.RefObject<HTMLInputElement>;
+};
+
+function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces, searchBoxRef } : MapStandaloneSearchBoxProps) {
+
+  const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (searchBoxRef.current) {
+      searchBoxRef.current.value = "";
+    }
+    clearPlaces();
+  };
+
 
   return (
     <StandaloneSearchBox
@@ -14,11 +31,7 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
         <div className="search">
           <div className="searchInputs">
             <div className="searchIcon">
-              <button onClick={(e) => {
-                e.preventDefault();
-                searchBoxRef.current.value = "";
-                clearPlaces();
-              }}>
+              <button onClick={handleClear}>
                 <AiOutlineClose/>
               </button>
             </div>
