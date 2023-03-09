@@ -12,7 +12,8 @@ function AdminPortal() {
     const [portalType, setPortalType] = useState<string>('update');
     const portalTypes: portalTypes = {
         "userRoles": <UserRoles />,
-        "roleTypes": <RoleTypes />
+        "roleTypes": <RoleTypes />,
+        "registerUsers": <RegisterUser />
     }
 
     return (
@@ -33,6 +34,12 @@ function AdminPortal() {
                                 setPortalType("roleTypes")
                             }}>
                                 <span className="sidebar-item-link">Modify Role Types</span>
+                            </li>
+                            <li className="sidebar-item" onClick={(e) => {
+                                e.preventDefault();
+                                setPortalType("registerUsers")
+                            }}>
+                                <span className="sidebar-item-link">Register Users</span>
                             </li>
                         </ul>
                     </div>

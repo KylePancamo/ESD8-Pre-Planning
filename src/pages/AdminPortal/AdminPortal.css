@@ -90,7 +90,8 @@
 }
 .create-role-container,
 .role-types-container,
-.user-roles-container {
+.user-roles-container,
+.register-user-container {
   margin: 50px;
 }
   
