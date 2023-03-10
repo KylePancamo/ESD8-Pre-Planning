@@ -157,3 +157,7 @@
   background-color: #252f50;
   color: white;
 }
+
+.password-toggle svg:hover {
+  cursor: pointer;
+}
