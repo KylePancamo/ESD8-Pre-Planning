@@ -18,8 +18,9 @@ interface GenericPopupWindowProps {
     footerClassName?: string | undefined;
     children: React.ReactNode;
     extraButton?: string | undefined;
+    extraButtonVariant?: string | undefined;
     extraAction?: () => void;
-
+    props?: any;
 }
 function GenericPopupWindow(props: GenericPopupWindowProps) {
   return (
@@ -51,7 +52,7 @@ function GenericPopupWindow(props: GenericPopupWindowProps) {
       >
         <Button onClick={props.onHide}>Close</Button>
         {props.extraButton ? (
-          <Button onClick={props.extraAction}>{props.extraButton}</Button>
+          <Button variant={props.extraButtonVariant} onClick={props.extraAction}>{props.extraButton}</Button>
         ) : null }
       </Modal.Footer>
     </Modal>
