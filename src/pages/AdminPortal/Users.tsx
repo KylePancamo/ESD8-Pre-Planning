@@ -4,6 +4,7 @@ import Axios from "axios";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+import DeleteUserModal from "../../components/Popup/GenericPopup";
 
 type User = {
   user_id: number,
@@ -28,6 +29,9 @@ function Users() {
       status: undefined,
       message: ''
     });
+
+    const [userDeleteWindow, setUserDeleteWindow] = useState<boolean>(false);
+    const [userToDelete, setUserToDelete] = useState<User | undefined>(undefined);
 
     useEffect(() => {
       const fetchUserRoles = async () => {
@@ -80,15 +84,20 @@ function Users() {
       }
     }
 
-    const deleteUser = async (user: User) => {
-      const response = await Axios.post<{status: string}>("http://localhost:5000/api/delete-user", user, {withCredentials: true});
+    const deleteUser = async () => {
+      if (!userToDelete) {
+        return;
+      }
+
+      const response = await Axios.post<{status: string}>("http://localhost:5000/api/delete-user", userToDelete, {withCredentials: true});
     
       if (response.data.status == 'success') {
-        setUsers((prevUsers: User[]) => prevUsers.filter((currUser: User) => currUser.user_id !== user.user_id));
+        setUsers((prevUsers: User[]) => prevUsers.filter((currUser: User) => currUser.user_id !== userToDelete.user_id));
         setUpdateStatus({
           status: true,
           message: 'User deleted successfully'
         });
+        setUserDeleteWindow(false);
       } else if (response.data.status == 'error') {
         setUpdateStatus({
           status: false,
@@ -148,7 +157,10 @@ function Users() {
                         <Button onClick={() => {updateUser(user)}}>Update</Button>
                       </td>
                       <td>
-                        <Button onClick={() => deleteUser(user)} variant="danger">Delete User</Button>
+                        <Button onClick={() => {
+                          setUserDeleteWindow(true);
+                          setUserToDelete(user)
+                          }} variant="danger">Delete User</Button>
                       </td>
                     </tr>
                   ))}
@@ -168,6 +180,21 @@ function Users() {
             </div>
           </>
         ) : null }
+        {userDeleteWindow ? (
+          <DeleteUserModal
+            show={userDeleteWindow}
+            onHide={() => setUserDeleteWindow(false)}
+            headerClassName='delete-user-header bg-danger text-white'
+            title='User Delete Confirmation'
+            extraButton="Delete"
+            extraButtonVariant="danger"
+            extraAction={deleteUser}
+          >
+            <Alert variant='danger'>
+              You are about to delete this user. Are you sure you want to continue?
+            </Alert>
+          </DeleteUserModal>
+        ) : null}
       </div>
     ); 
 }

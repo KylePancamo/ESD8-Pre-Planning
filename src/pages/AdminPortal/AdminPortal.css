@@ -161,3 +161,7 @@
 .password-toggle svg:hover {
   cursor: pointer;
 }
+
+.delete-user-header .modal-title {
+  left: 0;
+}
