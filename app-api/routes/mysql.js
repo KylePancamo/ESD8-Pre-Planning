@@ -2,6 +2,7 @@
 const mysql = require('mysql2');
 
 const createDBConnection = (database, multiStatement = false) => {
+  
   const db = mysql.createConnection({
     user: process.env.MYSQL_USERNAME,
     host: process.env.MYSQL_HOST_NAME,
@@ -12,7 +13,7 @@ const createDBConnection = (database, multiStatement = false) => {
 
   db.connect((err) => {
     if (err) {
-        console.log("\x1b[41m", "MySQL Connection Error:")
+        console.log("\x1b[41m", "MySQL Connection Error in creating connection:")
         console.log(process.env.MYSQL_DATABASE)
         throw err;
     }
