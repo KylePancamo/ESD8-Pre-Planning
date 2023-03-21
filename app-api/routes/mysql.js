@@ -2,7 +2,6 @@
 const mysql = require('mysql2');
 
 const createDBConnection = (database, multiStatement = false) => {
-  
   const db = mysql.createConnection({
     user: process.env.MYSQL_USERNAME,
     host: process.env.MYSQL_HOST_NAME,
