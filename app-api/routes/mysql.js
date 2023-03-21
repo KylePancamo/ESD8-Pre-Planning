@@ -12,7 +12,7 @@ const createDBConnection = (database, multiStatement = false) => {
 
   db.connect((err) => {
     if (err) {
-        console.log("\x1b[41m", "MySQL Connection Error:")
+        console.log("\x1b[41m", "MySQL Connection Error in creating connection:")
         console.log(process.env.MYSQL_DATABASE)
         throw err;
     }

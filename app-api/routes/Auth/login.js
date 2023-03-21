@@ -30,6 +30,8 @@ router.post("/", (req, res) => {
         (err, result) => {
             if (err) {
                 res.send({ err: err });
+                console.log("\x1b[41m", "MySQL Connection Error:")
+                console.log(err);
                 return;
             }
             if (result?.length > 0) {

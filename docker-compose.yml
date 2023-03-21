@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:8.0.11
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+    ports:
+      - 3307:3306
+    volumes:
+      - db:/var/lib/mysql
+      - ./database/create_databases/auth.sql:/docker-entrypoint-initdb.d/auth.sql
+      - ./database/create_databases/esd8_preplanning_db.sql:/docker-entrypoint-initdb.d/esd8_preplanning_db.sql
+      - ./database/updates/auth_accounts.sql:/docker-entrypoint-initdb.d/auth_accounts.sql
+      - ./database/updates/auth_roles_02_28_2023.sql:/docker-entrypoint-initdb.d/auth_roles_02_28_2023.sql
+      - ./database/updates/role_permissions_02_02_2023.sql:/docker-entrypoint-initdb.d/role_permissions_02_02_2023.sql
+    networks:
+      - backend
+
+  app-api:
+    depends_on:
+      - mysqldb
+    build: 
+      context: ./app-api
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - 5000:5000
+    environment:
+      - DB_HOST=mysqldb
+      - DB_USERNAME=$MYSQL_USERNAME
+      - DB_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - DB_PORT=$MYSQL_DOCKER_PORT
+      - CLIENT_ORIGIN=$CLIENT_ORIGIN 
+    networks:
+      - backend
+
+  app-ui:
+    depends_on:
+      - app-api 
+    build: 
+      context: ./app-ui 
+      args:
+        - REACT_APP_API_BASE_URL=$REACT_BASE_URL
+    ports:
+      - 3000:3000
+    networks:
+      - frontend
+      
+volumes:
+  db: 
+
+networks:
+  backend:
+  frontend:
