@@ -24,6 +24,7 @@ module.exports = (app) => {
     const deleteRolePermissions = require('./Auth/delete-role-permissions');
     const insertRoleAndPermissions = require('./Auth/insert-role-and-permissions');
     const deleteUser = require('./Auth/delete-user');
+    //const registerUser = require('./Auth/register-user');
     const resetPassword = require('./Auth/reset-password');
 
     // mount routes here
@@ -51,5 +52,6 @@ module.exports = (app) => {
     app.use('/api/delete-role-permissions', deleteRolePermissions);
     app.use('/api/insert-role-and-permissions', insertRoleAndPermissions);
     app.use('/api/delete-user', deleteUser);
+    //app.use('/api/register-user', registerUser);
     app.use('/api/reset-password', resetPassword);
 }
