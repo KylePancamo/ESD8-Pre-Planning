@@ -1,6 +1,6 @@
 import "./AdminPortal.css"
 import React, { useState } from "react";
-import Users from "./Users";
+import Users from "./Users/Users";
 import RoleTypes from "./RoleTypes";
 import RegisterUser from "./RegisterUsers";
 

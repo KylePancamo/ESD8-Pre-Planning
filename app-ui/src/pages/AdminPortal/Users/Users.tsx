@@ -1,10 +1,12 @@
-import "./AdminPortal.css"
+import "../AdminPortal.css"
 import React, { useEffect, useState, useMemo } from "react";
 import Axios from "axios";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
-import DeleteUserModal from "../../components/Popup/GenericPopup";
+import GenericModal from "../../../components/Popup/GenericPopup";
+import PasswordReset from "./PasswordReset";
+import {permission} from "../../../permissions";
 
 type User = {
   user_id: number,
@@ -19,8 +21,8 @@ type Role = {
 }
 
 function Users() {
-
     const [users, setUsers] = useState<User[]>([]);
+    const inputRef = React.useRef<HTMLSelectElement>(null);
     const [roles, setRoles] = useState<Role[]>([]);
     const [updateStatus , setUpdateStatus] = useState<{
       status: boolean | undefined,
@@ -31,7 +33,9 @@ function Users() {
     });
 
     const [userDeleteWindow, setUserDeleteWindow] = useState<boolean>(false);
-    const [userToDelete, setUserToDelete] = useState<User | undefined>(undefined);
+    const [user, setUser] = useState<User | undefined>(undefined);
+    const [forgotPasswordWindow, setForgotPasswordWindow] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
 
     useEffect(() => {
       const fetchUserRoles = async () => {
@@ -74,7 +78,7 @@ function Users() {
       if (response.data.status == 'success') {
         setUpdateStatus({
           status: true,
-          message: 'User role updated successfully'
+          message: `${user.username}'s role was updated to ${roles.find((role: Role) => role.id == user.role_id)?.name} `
         });
       } else if (response.data.status == 'error') {
         setUpdateStatus({
@@ -85,14 +89,14 @@ function Users() {
     }
 
     const deleteUser = async () => {
-      if (!userToDelete) {
+      if (!user) {
         return;
       }
 
-      const response = await Axios.post<{status: string}>("http://localhost:5000/api/delete-user", userToDelete, {withCredentials: true});
+      const response = await Axios.post<{status: string}>("http://localhost:5000/api/delete-user", user, {withCredentials: true});
     
       if (response.data.status == 'success') {
-        setUsers((prevUsers: User[]) => prevUsers.filter((currUser: User) => currUser.user_id !== userToDelete.user_id));
+        setUsers((prevUsers: User[]) => prevUsers.filter((currUser: User) => currUser.user_id !== user.user_id));
         setUpdateStatus({
           status: true,
           message: 'User deleted successfully'
@@ -130,6 +134,7 @@ function Users() {
                     <th>Update Role</th>
                     <th>Action</th>
                     <th>Delete</th>
+                    <th>Change Password</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -144,7 +149,9 @@ function Users() {
                                 const roleId = parseInt(e.target.value);
                                 handleRoleChange(user, roleId)
                               }
-                            }>
+                            }
+                            ref={inputRef}
+                            >
                             {roles.map((role: Role) => (
                                 <option key={role.id} value={role.id}>
                                   {role.name}
@@ -159,8 +166,14 @@ function Users() {
                       <td>
                         <Button onClick={() => {
                           setUserDeleteWindow(true);
-                          setUserToDelete(user)
+                          setUser(user)
                           }} variant="danger">Delete User</Button>
+                      </td>
+                      <td>
+                        <Button variant="danger" onClick={() => {
+                          setForgotPasswordWindow(true);
+                          setUser(user)
+                        }}>Change Password</Button>
                       </td>
                     </tr>
                   ))}
@@ -181,9 +194,12 @@ function Users() {
           </>
         ) : null }
         {userDeleteWindow ? (
-          <DeleteUserModal
+          <GenericModal
             show={userDeleteWindow}
-            onHide={() => setUserDeleteWindow(false)}
+            onHide={() => {
+              setUserDeleteWindow(false)
+              setUser(undefined)
+            }}
             headerClassName='delete-user-header bg-danger text-white'
             title='User Delete Confirmation'
             extraButton="Delete"
@@ -193,7 +209,14 @@ function Users() {
             <Alert variant='danger'>
               You are about to delete this user. Are you sure you want to continue?
             </Alert>
-          </DeleteUserModal>
+          </GenericModal>
+        ) : null}
+        {(forgotPasswordWindow && user) ? (
+          <PasswordReset
+            forgotPasswordWindow={forgotPasswordWindow}
+            setForgotPasswordWindow={() => setForgotPasswordWindow(false)}
+            user={user}
+          />
         ) : null}
       </div>
     ); 
