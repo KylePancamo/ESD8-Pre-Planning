@@ -6,7 +6,6 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import GenericModal from "../../../components/Popup/GenericPopup";
 import PasswordReset from "./PasswordReset";
-import {permission} from "../../../permissions";
 
 type User = {
   user_id: number,
