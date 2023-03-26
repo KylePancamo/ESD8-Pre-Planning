@@ -134,6 +134,7 @@ function MapContainer(props : MapContainerProps) {
 
   const placeMarkers = () => {
     let localMarkers = JSON.parse(localStorage.getItem("markers") as string);
+    console.log(localMarkers);
     // fetch data if local storage is empty
     if (localMarkers == null) {
       console.log('fetching markers');
@@ -149,11 +150,11 @@ function MapContainer(props : MapContainerProps) {
         .catch((err) => {});
     } else {
       console.log('using local markers');
-      if (localStorage.getItem("markers") === null) {
-        setMarkers(JSON.parse(localStorage.getItem("markers") || ""));
-      }
+      setMarkers(JSON.parse(localStorage.getItem("markers") || ""));
     }
   };
+
+  console.log(markers)
 
   const handleOnClick = () => {
     props.setSideBarValue(!props.sideBarValue);
