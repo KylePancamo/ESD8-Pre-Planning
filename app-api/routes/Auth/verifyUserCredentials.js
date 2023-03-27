@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const getUser = async (req, res, next) => { 
+const verifyUserCredentials = async (req, res, next) => { 
     const cookieValue = req.headers.cookie ? req.headers.cookie.split("=")[1] : null;
     const session = await req.sessionStore.get(req.sessionID, (err, session) => {
         if (err || !session) {
@@ -34,4 +34,4 @@ const getUser = async (req, res, next) => {
 };
 
 
-module.exports = getUser;
+module.exports = verifyUserCredentials;

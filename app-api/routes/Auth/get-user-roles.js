@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const createDBConnection = require("../mysql");
-const getUser = require('./verifyUserCredentials');
+const verifyUserCredentials = require('./verifyUserCredentials');
 
-router.get("/", getUser, (req, res) => {
+router.get("/", verifyUserCredentials, (req, res) => {
     const db = createDBConnection("auth");
 
     const user = req.user;
