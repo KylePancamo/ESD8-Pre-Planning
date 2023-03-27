@@ -162,6 +162,7 @@
   cursor: pointer;
 }
 
+.role-user-header .modal-title,
 .change-password-header .modal-title, 
 .delete-user-header .modal-title {
   left: 0;

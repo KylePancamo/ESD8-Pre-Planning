@@ -9,6 +9,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import NewRoleComponent from "./NewRoleComponent";
 import Button from 'react-bootstrap/Button'
+import GenericModal from "../../components/Popup/GenericPopup";
 
 type RolePermission = {
   id: number,
@@ -25,7 +26,31 @@ type UpdateStatus = {
 function RoleTypes() {
   const [rolePermissions, setRolePermissions] = useState<RolePermission[]>([]);
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>({text: '', statusType: '', status: undefined});  
+  const [roleDeleteWindow, setRoleDeleteWindow] = useState<boolean>(false);
+  const [role , setRole] = useState<RolePermission | undefined>(undefined);
   
+  
+  useEffect(() => {
+    const fetchRolePermissions = async () => {
+      const response = await Axios.get("http://localhost:5000/api/get-role-permissions", {withCredentials: true});
+      console.log(response.data.payload);
+      setRolePermissions(response.data.payload);
+    }
+    
+    fetchRolePermissions();
+  }, [])
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredRoles = useMemo(
+    () =>
+      rolePermissions.filter((role) =>
+        role.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [rolePermissions, searchTerm]
+  );
+  
+
   const updatePermissions = (role: RolePermission, newPermissions: number) => {
     setRolePermissions((prevRolePermissions) => {
       return prevRolePermissions.map((currRole) =>
@@ -33,17 +58,7 @@ function RoleTypes() {
       );
     })
   }
-
-  useEffect(() => {
-    const fetchRolePermissions = async () => {
-      const response = await Axios.get("http://localhost:5000/api/get-role-permissions", {withCredentials: true});
-      console.log(response.data.payload);
-      setRolePermissions(response.data.payload);
-    }
-
-    fetchRolePermissions();
-  }, [])
-
+  
   const handlePermissionChange = async (e: React.ChangeEvent<HTMLInputElement>, role: RolePermission, key: string) => {
     const isChecked = e.target.checked;
     const permissionValue: number = parseInt(e.target.value);
@@ -97,16 +112,28 @@ function RoleTypes() {
     }
   }
 
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const filteredRoles = useMemo(
-    () =>
-      rolePermissions.filter((role) =>
-        role.name.toLowerCase().includes(searchTerm.toLowerCase())
-      ),
-    [rolePermissions, searchTerm]
-  );
-
+  const handleDeleteRole = async (role: RolePermission) => {
+    const response = await Axios.post('http://localhost:5000/api/delete-role', {role}, {
+      withCredentials: true
+    });
+    if (response.data.status === 'success') {
+      setRolePermissions((prevRolePermissions) => {
+        return prevRolePermissions.filter((currRole) => currRole.id !== role.id);
+      })
+      setUpdateStatus({text: 
+        'Successfully removed ' + role.name + ' role',
+        statusType: 'removed',
+        status: true
+      })
+    } else {
+      setUpdateStatus({text: 
+        'Error removing ' + role.name + ' role',
+        statusType: 'error',
+        status: false
+      })
+    }
+  }
+  
   return (
     <>
       <div className='role-types-container'>
@@ -164,7 +191,13 @@ function RoleTypes() {
                     </DropdownButton>
                   </td>
                   <td>
-                    <Button variant="danger">Delete</Button>
+                    <Button 
+                      variant="danger"
+                      onClick={() => {
+                        setRoleDeleteWindow(true)
+                        setRole(role)
+                      }}
+                    >Delete</Button>
                   </td>
                 </tr>
               ))}
@@ -181,6 +214,24 @@ function RoleTypes() {
           ) : null}
         </div>
       </div>
+      {roleDeleteWindow ? (
+          <GenericModal
+            show={roleDeleteWindow}
+            onHide={() => {
+              setRoleDeleteWindow(false)
+              setRole(undefined)
+            }}
+            headerClassName='role-user-header bg-danger text-white'
+            title='Role Delete Confirmation'
+            extraButton="Delete"
+            extraButtonVariant="danger"
+            extraAction={() => handleDeleteRole(role as RolePermission)}
+          >
+            <Alert variant='danger'>
+              You are about to delete this role. Are you sure you want to continue?
+            </Alert>
+          </GenericModal>
+        ) : null}
       <NewRoleComponent
         setRolePermissions={setRolePermissions}
       />

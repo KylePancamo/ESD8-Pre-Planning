@@ -26,6 +26,7 @@ module.exports = (app) => {
     const deleteUser = require('./Auth/delete-user');
     //const registerUser = require('./Auth/register-user');
     const resetPassword = require('./Auth/reset-password');
+    const deleteRole = require('./Auth/delete-role');
 
     // mount routes here
     app.use('/api/insert-placed-marker', insertMarkers);
@@ -54,4 +55,5 @@ module.exports = (app) => {
     app.use('/api/delete-user', deleteUser);
     //app.use('/api/register-user', registerUser);
     app.use('/api/reset-password', resetPassword);
+    app.use('/api/delete-role', deleteRole);
 }

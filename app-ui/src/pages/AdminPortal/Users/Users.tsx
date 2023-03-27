@@ -55,10 +55,10 @@ function Users() {
 
     const [searchTerm, setSearchTerm] = useState<string>('');
   
-    const handleRoleChange = (user: User, roleId: number) => {
+    const handleRoleChange = (user: User, role: Role) => {
         setUsers((prevUsers: User[]) =>
           prevUsers.map((currUser: User) =>
-            currUser.user_id === user.user_id ? { ...currUser, role_id: roleId } : currUser
+            currUser.user_id === user.user_id ? { ...currUser, role_id: role.id, name: role.name} : currUser
           )
         );
     };
@@ -72,7 +72,8 @@ function Users() {
     );
 
     const updateUser = async (user: User) => {
-      const response = await Axios.post<{status: string}>("http://localhost:5000/api/update-user-role", user, {withCredentials: true});
+      console.log(user);
+      const response = await Axios.post<{status: string, err: string}>("http://localhost:5000/api/update-user-role", user, {withCredentials: true});
 
       if (response.data.status == 'success') {
         setUpdateStatus({
@@ -82,7 +83,7 @@ function Users() {
       } else if (response.data.status == 'error') {
         setUpdateStatus({
           status: false,
-          message: 'Error updating user role'
+          message: response.data.err
         });
       }
     }
@@ -146,11 +147,16 @@ function Users() {
                             value={user.role_id}
                             onChange={(e) => {
                                 const roleId = parseInt(e.target.value);
-                                handleRoleChange(user, roleId)
+                                const role = {
+                                  id: roleId,
+                                  name: e.currentTarget.selectedOptions[0].text,
+                                }
+                                handleRoleChange(user, role)
                               }
                             }
                             ref={inputRef}
                             >
+                            <option value={0}>No Role Assigned</option>
                             {roles.map((role: Role) => (
                                 <option key={role.id} value={role.id}>
                                   {role.name}

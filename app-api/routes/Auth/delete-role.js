@@ -6,31 +6,27 @@ const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const {isAdmin} = require('../middleware/authorization');
 
 router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
-    const db = createDBConnection("auth");
+    const db = createDBConnection("auth", true);
 
-    const user = req.body;
-
-    if (user.role_id === 0) {
-        res.send({ status: 'error', err: 'Please select an appropriate role' });
-        return;
-    }
+    const roleId = req.body.role.id;
 
     const query = `
-        INSERT INTO user_roles (user_id, role_id)
-        VALUES (?, ?)
-        ON DUPLICATE KEY UPDATE role_id = ?;
-    `
-    const data = [user.user_id, user.role_id, user.role_id];
+            DELETE FROM user_roles WHERE role_id = ?;
+            DELETE FROM role_permissions WHERE role_id = ?;
+            DELETE FROM roles WHERE id = ?;
+        `;
+
+    const data = [roleId, roleId, roleId];
 
     db.query(query, data, (err, result) => {
         if (err) {
-            res.send({ status: 'error', err: 'Error updating role.' });
+            console.log(err);
+            res.send({ status: 'error', err: err });
             return;
         }
 
         res.send({status: 'success'});
     })
-
 });
 
 module.exports = router;
