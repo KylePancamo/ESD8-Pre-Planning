@@ -4,7 +4,7 @@ const router = express.Router();
 const createDBConnection = require("../mysql");
 
 const {canDelete} = require('../Auth/authorization');
-const getUser = require('../Auth/getUser');
+const getUser = require('../Auth/verifyUserCredentials');
 
 
 router.delete('/', getUser, canDelete, (req, res) => {
