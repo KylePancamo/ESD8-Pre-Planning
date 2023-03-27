@@ -44,7 +44,7 @@ function Users() {
       }
 
       const fetchRoles = async () => {
-        const response = await Axios.get<{payload: Role[]}>("http://localhost:5000/api/get-roles");
+        const response = await Axios.get<{payload: Role[]}>("http://localhost:5000/api/get-roles", {withCredentials: true});
         console.log(response);
         setRoles(response.data.payload);
       }

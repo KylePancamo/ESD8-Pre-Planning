@@ -88,7 +88,7 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
 
   useEffect(() => {
     if (searchedSite.location !== "") {
-      Axios.post("http://localhost:5000/api/get-sidebar-data", {address: searchedSite.location})
+      Axios.post("http://localhost:5000/api/get-sidebar-data", {address: searchedSite.location}, {withCredentials: true})
       .then((response) => {
         if(response.data.payload.length > 0) {
           setSiteIsSet(true);

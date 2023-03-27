@@ -26,7 +26,9 @@ function App() {
   }
 
   async function setLocations() {
-    const preplanLocations = await Axios.get("http://localhost:5000/api/get-preplanning-locations");
+    const preplanLocations = await Axios.get("http://localhost:5000/api/get-preplanning-locations", {
+      withCredentials: true,
+    });
     if (!preplanLocations.data.result) {
       console.log("No preplanning locations found");
     }

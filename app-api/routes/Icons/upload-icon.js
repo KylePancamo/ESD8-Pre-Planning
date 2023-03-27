@@ -15,7 +15,7 @@ router.post('/', verifyUserCredentials, (req, res) => {
       return;
     }
   
-    if (fs.existsSync('./public/icon_images/' + file.name)) {
+    if (fs.existsSync('../app-ui/public/icon_images/' + file.name)) {
       res.status(400).send({message: 'File already exists'});
   
       return;
@@ -33,7 +33,7 @@ router.post('/', verifyUserCredentials, (req, res) => {
         console.log(err.message);
         res.status(400).send({message: 'Error uploading file'});
       } else {
-        file.mv('./public/icon_images/' + filename, (err) => {
+        file.mv('../app-ui/public/icon_images/' + filename, (err) => {
           if (err) {
             console.log(err);
           } else {

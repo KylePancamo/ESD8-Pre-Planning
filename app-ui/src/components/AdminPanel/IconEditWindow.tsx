@@ -34,6 +34,8 @@ function IconEditWindow(props: IconEditWindowProps) {
     Axios.post("http://localhost:5000/api/update-icon-name", {
       id: props.selectedIcon?.icon_id,
       formData: data,
+    }, {
+      withCredentials: true
     })
       .then((response) => {
         console.log(response.data.message);

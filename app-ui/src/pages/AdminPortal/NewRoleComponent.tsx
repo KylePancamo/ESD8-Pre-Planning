@@ -30,7 +30,9 @@ function NewRoleComponent({setRolePermissions} : NewRoleComponentProps) {
 
     const onSubmitData = async (data: FormData) => {
       const {role} = data;
-      const response = await Axios.post('http://localhost:5000/api/insert-role-and-permissions', {role, addedPermissions: selectedPermission});
+      const response = await Axios.post('http://localhost:5000/api/insert-role-and-permissions', {role, addedPermissions: selectedPermission}, {
+        withCredentials: true
+      });
       if (response.data.status === 'success') {
         setRolePermissions((prevRolePermissions) => {
           return [...prevRolePermissions, {id: response.data.payload.roleId, name: role, combined_permissions: selectedPermission}]
