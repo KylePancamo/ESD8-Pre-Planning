@@ -3,12 +3,11 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 const createDBConnection = require("../mysql");
-const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-router.get("/", verifyUserCredentials, (req, res) => {
+router.get("/", (req, res) => {
     const sessionValue = req.headers.cookie ? req.headers.cookie.split("=")[1] : null;
 
     if (sessionValue) {

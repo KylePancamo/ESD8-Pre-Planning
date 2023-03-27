@@ -16,7 +16,8 @@ import {permission} from "../../permissions";
 import { hasPermissions } from '../../helpers';
 import { marker } from "../../types/marker-types";
 import { Icon } from "../../types/icon-types";
-
+import {useRecoilState} from 'recoil';
+import {imagesState} from "../../atoms";
 interface PopupWindowProps {
   show: boolean;
   onHide: () => void;
@@ -30,7 +31,7 @@ type FormData = Record<string, string>;
 
 function PopupWindow(props: PopupWindowProps) {
   let inputRef = useRef<HTMLInputElement>(null);
-  const [imageIcons, setImageIcons] = useState<Icon[]>([]);
+  const [imageIcons, setImageIcons] = useRecoilState<Icon[]>(imagesState);
   const [selectedIcon, setSelectedIcon] = useState<{
     icon_id: number;
     icon_name: string
@@ -51,16 +52,6 @@ function PopupWindow(props: PopupWindowProps) {
     setValue,
     formState: { errors },
   } = useForm();
-
-  const fetchImages = () => {
-    Axios.get("http://localhost:5000/api/get-uploaded-icons")
-      .then((response) => {
-        setImageIcons(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   useEffect(() => {
     setSelectedIcon({
@@ -193,9 +184,6 @@ function PopupWindow(props: PopupWindowProps) {
       onHide={props.onHide}
       backdrop="static"
       keyboard={false}
-      onEnter={() => {
-        fetchImages();
-      }}
       onExit={() => {
         setSelectedIcon({ icon_id: 0, icon_name: "" });
         setSelectedFile(undefined);

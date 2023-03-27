@@ -25,6 +25,7 @@ function MapDrawingManager({ markers, setMarkers } : MapDrawingManagerProps) {
         params: {
           fileName: config.DEFAULT_MARKER_NAME,
         },
+        withCredentials: true,
       }).then((response) => {
         if (response?.data.status === "success") {
           setFileExists(true);

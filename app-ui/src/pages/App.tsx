@@ -16,7 +16,9 @@ function App() {
   const [prePlanningLocations, setPrePlanningLocations] = useRecoilState(preplanningLocationsState);
   
   async function setIcons() {
-    const uploadedIcons = await Axios.get("http://localhost:5000/api/get-uploaded-icons");
+    const uploadedIcons = await Axios.get("http://localhost:5000/api/get-uploaded-icons", {
+      withCredentials: true,
+    });
     if (!uploadedIcons.data) {
       console.log("No icons found");
     } 
