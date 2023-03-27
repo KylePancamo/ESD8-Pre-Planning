@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 router.get("/", (req, res) => {
     const token = req.headers.cookie ? req.headers.cookie.split("=")[1] : null;
+    req.session.destroy();
 
     if (token) {
         res.clearCookie("token", {path: "/"});

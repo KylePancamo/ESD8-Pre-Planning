@@ -39,9 +39,11 @@ router.post("/", (req, res) => {
                 //    if (response) {
                         const permissions = parseInt(result[0].permissions.toString('hex'), 16);
                         const userData = {...result[0]};
+
                         userData.permissions = permissions;
                         const token = jwt.sign(userData, process.env.SECRET_KEY_JWT, { expiresIn: "24hr" });
-                        res.cookie("token", token, { httpOnly: true });
+                        req.session.userId = result[0].id;
+                        req.session.token = token;
                         res.send({ message: 'Logged in successfully', token } )
                 //    } else {
                 //        res.send({ message: "Wrong username/password combination!" });

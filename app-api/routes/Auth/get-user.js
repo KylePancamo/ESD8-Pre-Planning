@@ -8,21 +8,25 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 router.get("/", (req, res) => {
-    const token = req.headers.cookie ? req.headers.cookie.split("=")[1] : null;
+    const sessionValue = req.headers.cookie ? req.headers.cookie.split("=")[1] : null;
 
-    if (token) {
+    if (sessionValue) {
         try {
+            if (!req.session) {
+                return;
+            }
+            const token = req.session.token;
             const decoded = jwt.verify(token, process.env.SECRET_KEY_JWT);
-            
             req.user = decoded;
             res.send(req.user);
         } catch (err) {
-            console.log("Invalid token/Token expired")
-            res.send({error: "Invalid token/Token expired"});
+            console.log("Error decoding token")
+            res.send({error: "Error decoding token"});
         }
     } else {
-        console.log("Invalid token/Token expired");
+        console.log("Token not found");
         res.send({error: "Token not found"});
+
     }
 });
 
