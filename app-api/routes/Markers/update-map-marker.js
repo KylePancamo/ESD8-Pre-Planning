@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const {isAuthorized} = require('../Auth/authorization');
-const verifyUserCredentials = require('../Auth/verifyUserCredentials');
+const {isAuthorized} = require('../middleware/authorization');
+const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
 
 const createDBConnection = require("../mysql");
