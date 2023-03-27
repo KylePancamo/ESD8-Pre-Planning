@@ -3,8 +3,9 @@ const router = express.Router();
 
 const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
+const {isAdmin} = require('../middleware/authorization');
 
-router.post("/", (req, res) => {
+router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
     const db = createDBConnection("auth");
 
     const user = req.body;

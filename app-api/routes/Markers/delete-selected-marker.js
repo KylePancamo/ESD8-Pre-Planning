@@ -3,7 +3,7 @@ const router = express.Router();
 
 const createDBConnection = require("../mysql");
 
-const {isAuthorized, canDelete} = require('../middleware/authorization');
+const {canDelete} = require('../middleware/authorization');
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
 

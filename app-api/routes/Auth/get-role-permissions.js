@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const createDBConnection = require("../mysql");
+const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
-router.get("/", (req, res) => {
+router.get("/", verifyUserCredentials, (req, res) => {
     const db = createDBConnection("auth");
 
     const query = `SELECT r.id, r.name, COALESCE(BIT_OR(p.security_hex), 0) as combined_permissions

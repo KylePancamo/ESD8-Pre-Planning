@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const {isAuthorized} = require('../middleware/authorization');
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
+const {canDelete} = require('../middleware/authorization');
 
 
 const createDBConnection = require("../mysql");
 
 
-router.delete('/', verifyUserCredentials, isAuthorized, (req, res) => {
+router.delete('/', verifyUserCredentials, canDelete, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
     const query = "TRUNCATE TABLE markers"
   

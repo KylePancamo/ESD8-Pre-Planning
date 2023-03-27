@@ -3,8 +3,9 @@ const router = express.Router();
 
 const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
+const {canModify} = require('../middleware/authorization');
 
-router.post('/', verifyUserCredentials, (req, res) => {
+router.post('/', verifyUserCredentials, canModify, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
     const fileExists = req.body.payload.fileExists;
     const fileName = req.body.payload.fileName;

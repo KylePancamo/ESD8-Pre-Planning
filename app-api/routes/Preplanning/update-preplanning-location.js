@@ -3,10 +3,10 @@ const router = express.Router();
 
 const createDBConnection = require("../mysql");
 
-const {isAuthorized} = require('../middleware/authorization');
+const {canModify} = require('../middleware/authorization');
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
-router.post("/", verifyUserCredentials, isAuthorized, (req, res) => {
+router.post("/", verifyUserCredentials, canModify, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
     const payload = req.body.payload;
     const google_formatted_address = req.body.googleAddress;

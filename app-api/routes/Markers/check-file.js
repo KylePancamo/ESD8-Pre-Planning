@@ -3,9 +3,10 @@ const router = express.Router();
 const fs = require('fs');
 
 const createDBConnection = require("../mysql");
+const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
 
-router.get('/', (req, res) => {
+router.get('/', verifyUserCredentials, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
     let fileName = req.query.fileName;
 

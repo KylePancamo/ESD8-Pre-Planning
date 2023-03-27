@@ -3,8 +3,9 @@ const router = express.Router();
 var fs = require('fs');
 
 const createDBConnection = require("../mysql");
+const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
-router.post('/', (req, res) => {
+router.post('/', verifyUserCredentials, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
     let file = req.files.file;
     let iconName = req.body.iconName;
