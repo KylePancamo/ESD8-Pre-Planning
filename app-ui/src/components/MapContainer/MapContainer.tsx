@@ -58,6 +58,7 @@ function MapContainer(props : MapContainerProps) {
 
   const [markerClicked, setMarkerClicked] = useState<boolean>(false);
   const [markerVisibility, setMarkerVisibility] = useState<boolean>(true);
+  const [markerDraggable, setMarkerDraggable] = useState<boolean>(false);
   const [searchBox, setSearchBox] = useState<google.maps.places.SearchBox>();
   const [bounds, setBounds] = useState<bounds>();
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
@@ -216,6 +217,10 @@ function MapContainer(props : MapContainerProps) {
               icon={(marker.file_name === null) ? undefined : "/icon_images/" + marker.file_name}
               key={marker.marker_id}
               visible={markerVisibility}
+              draggable={markerDraggable}
+              onDragEnd={(e) => {
+                console.log(e?.latLng?.lat(), e?.latLng?.lng());
+              }}
             />
           );
           })
@@ -259,6 +264,19 @@ function MapContainer(props : MapContainerProps) {
               }
               checked={markerVisibility}
               onChange={() => setMarkerVisibility(!markerVisibility)}
+            />
+          </Form>
+        </div>
+        <div className="marker-draggable">
+          <Form>
+            <Form.Check
+              type="switch"
+              label="Marker Draggable"
+              style={
+                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
+              }
+              checked={markerDraggable}
+              onChange={() => setMarkerDraggable(!markerDraggable)}
             />
           </Form>
         </div>
