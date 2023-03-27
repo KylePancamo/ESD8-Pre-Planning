@@ -10,6 +10,7 @@ import { Image } from "../../types/atoms-types";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
+import { Link } from "react-router-dom";
 
 type AdminPanelProps = {
   flushMarkers: () => void;
@@ -69,6 +70,9 @@ function AdminPanel(props: AdminPanelProps) {
                 }}
               >
                 Upload File
+              </Button>
+              <Button>
+                <Link style={{color: 'white'}} to='/adminportal' target="_blank">Admin Portal</Link>
               </Button>
               <IconUpload
                 show={fileUploadPopup}
