@@ -3,7 +3,7 @@ const router = express.Router();
 
 const createDBConnection = require("../mysql");
 
-const isAuthorized = require('../Auth/authorization');
+const {isAuthorized} = require('../Auth/authorization');
 const getUser = require('../Auth/getUser');
 
 

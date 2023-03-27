@@ -26,9 +26,9 @@ function MarkerDeletion({
     };
     console.log(props.selectedMarker)
     Axios.delete("http://localhost:5000/api/delete-selected-marker",  {
-      withCredentials: true,
       data: data,
-    }  )
+      withCredentials: true,
+    })
       .then((response) => {
         // remove marker from props.markers array
         props.setMarkers((markers: marker[]) => {

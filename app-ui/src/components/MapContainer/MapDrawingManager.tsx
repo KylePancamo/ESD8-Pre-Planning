@@ -55,6 +55,8 @@ function MapDrawingManager({ markers, setMarkers } : MapDrawingManagerProps) {
         }
         Axios.post("http://localhost:5000/api/insert-placed-marker", {
             payload,
+        }, {
+          withCredentials: true,
         })
           .then((response) => {
             console.log(response.data.payload);

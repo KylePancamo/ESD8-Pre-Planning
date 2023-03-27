@@ -3,12 +3,13 @@ const router = express.Router();
 
 const createDBConnection = require("../mysql");
 
-const isAuthorized = require('../Auth/authorization');
+const {canDelete} = require('../Auth/authorization');
 const getUser = require('../Auth/getUser');
 
 
-router.delete('/', getUser, isAuthorized, (req, res) => {
+router.delete('/', getUser, canDelete, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
+    console.log(req.body);
     const query = "DELETE FROM markers WHERE marker_id = ?"
     const data = [
       req.body.marker_id
