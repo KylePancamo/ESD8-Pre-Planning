@@ -3,7 +3,6 @@ const getRequestIP = (req) => {
 }
 
 const hasPermission = (userPermissions, permission) => {
-    console.log(userPermissions, permission)
     return (userPermissions & permission) == permission;
 }
 

@@ -5,6 +5,7 @@ const fs = require('fs');
 const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
+const logger = require("../../logger");
 
 router.get('/', verifyUserCredentials, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);

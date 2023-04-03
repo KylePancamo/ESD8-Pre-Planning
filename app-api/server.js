@@ -36,7 +36,9 @@ const options = {
       expires: 'expires',
       data: 'data'
     }
-  }
+  },
+  clearExpired: true,
+  checkExpirationInterval: 90000,
 };
 
 const sessionStore = new MySQLStore(options);
@@ -50,7 +52,7 @@ app.use(session({
   store: sessionStore,
   cookie: {
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24, // 24 hours
+    maxAge: 5000 // 24 hours
   },
 }));
 

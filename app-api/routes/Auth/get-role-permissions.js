@@ -3,6 +3,7 @@ const router = express.Router();
 
 const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
+const logger = require("../../logger");
 
 router.get("/", verifyUserCredentials, (req, res) => {
     const db = createDBConnection("auth");
@@ -16,6 +17,9 @@ router.get("/", verifyUserCredentials, (req, res) => {
 
     db.query(query, (err, result) => {
         if (err) {
+            logger.warn("Error getting roles", {
+                error: `${err.message, err.stack}`   
+            })
             res.send({ status: 'error', err: err });
             return;
         }
@@ -23,7 +27,7 @@ router.get("/", verifyUserCredentials, (req, res) => {
         result.map((role) => {
             return role.combined_permissions = parseInt(role.combined_permissions.toString('hex'), 16);
         })
-
+        
         res.send({status: 'success', payload: result});
     })
 

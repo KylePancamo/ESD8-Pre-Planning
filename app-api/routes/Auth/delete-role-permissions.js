@@ -4,15 +4,23 @@ const router = express.Router();
 const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const {isAdmin} = require('../middleware/authorization');
+const { getRequestIP } = require('../../utils');
+const logger = require("../../logger");
 
 router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
     const db = createDBConnection("auth");
+    const IP = getRequestIP(req);
 
     const roleId = req.body.role.id;
+    if (roleId === 1) {
+        logger.warn(`IP address of ${IP} tried to perform a suspicious action in file ${__filename}`);
+        res.send({ status: 'error'});
+        return;
+    }
     const removedPermissions = req.body.removedPermissions;
     const removedPermissionsString = removedPermissions.toString(16);
 
-    const data = [removedPermissionsString, roleId];
+    const data = [removedPermissionsString];
 
     const permissionIdQuery = `SELECT p.id, p.name
             FROM permissions p
@@ -20,6 +28,9 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
 
     db.query(permissionIdQuery, data, (err, result) => {
         if (err) {
+            logger.warn(`Error getting permission ids for role ${roleId} with permissions ${removedPermissionsString}`, {
+                error: err
+            })
             res.send({ status: 'error', err: err });
             return;
         }
@@ -31,6 +42,7 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
                 res.send({ status: 'error', err: err });
                 return;
             }
+
             res.send({status: 'success'});
         });
     })

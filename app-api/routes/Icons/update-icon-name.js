@@ -3,6 +3,7 @@ const router = express.Router();
 
 const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
+const logger = require("../../logger");
 
 
 router.post("/", verifyUserCredentials, (req, res) => {
@@ -18,6 +19,9 @@ router.post("/", verifyUserCredentials, (req, res) => {
   
     db.query(query, data, (err, result) => {
       if (err) {
+        logger.warn(`Error updating icon name for icon ${id}`, {
+          error: `${err.message, err.stack}`
+        });
         res.status(400).send({status: "error", message: "Error updating icon name", error: err.message});
       } else {
         res.status(200).send({status: "success", message: "Icon name updated"});

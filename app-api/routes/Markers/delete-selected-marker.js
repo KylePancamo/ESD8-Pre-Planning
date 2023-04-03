@@ -6,21 +6,29 @@ const createDBConnection = require("../mysql");
 const {canDelete} = require('../middleware/authorization');
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
+const logger = require("../../logger");
+
 
 router.delete('/', verifyUserCredentials, canDelete, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
-    console.log(req.body);
     const query = "DELETE FROM markers WHERE marker_id = ?"
+    const marker = req.body.marker;
     const data = [
-      req.body.marker_id
+      marker.marker_id
     ]
   
     db.query(
       query, data,
       (err, result) => {
         if (err) {
+          logger.warn(`Error deleting marker ${req.body.marker_id}`, {
+            error: `${err.message, err.stack}`
+          });
           res.status(500).send({status: "error", message: "Error deleting marker"});
         } else {
+          logger.info(`Marker ID ${marker.marker_id} successfully deleted`, {
+            marker: marker
+          });
           res.status(200).send({status: "success", message: "Marker deleted"});
         }
       }

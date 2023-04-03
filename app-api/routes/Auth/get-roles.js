@@ -3,6 +3,7 @@ const router = express.Router();
 
 const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
+const logger = require("../../logger");
 
 
 router.get("/", verifyUserCredentials, (req, res) => {
@@ -12,6 +13,9 @@ router.get("/", verifyUserCredentials, (req, res) => {
 
     db.query(query, (err, result) => {
         if (err) {
+            logger.warn("Error getting roles", {
+                error: `${err.message, err.stack}`
+            })
             res.send({ status: 'error', err: err });
             return;
         }

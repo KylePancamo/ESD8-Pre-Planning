@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 const createDBConnection = require("../mysql");
+const logger = require("../../logger");
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -10,22 +11,27 @@ const saltRounds = 10;
 router.get("/", (req, res) => {
     const sessionValue = req.headers.cookie ? req.headers.cookie.split("=")[1] : null;
 
+    if (!req.session) {
+        return;
+    }
+
     if (sessionValue) {
         try {
-            if (!req.session) {
+            const token = req.session.token;
+            if (!token) {
                 return;
             }
-            const token = req.session.token;
+
             const decoded = jwt.verify(token, process.env.SECRET_KEY_JWT);
             req.user = decoded;
             res.send(req.user);
         } catch (err) {
-            console.log("Error decoding token")
+            logger.warn("Error decoding token", {error: `${err.message, err.stack}`})
             res.send({error: "Error decoding token"});
         }
     } else {
-        console.log("Token not found");
-        res.send({error: "Token not found"});
+        logger.warn("Session token not found")
+        res.send({error: "Session token not found"});
 
     }
 });

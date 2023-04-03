@@ -1,24 +1,31 @@
 // mysql.js
 const mysql = require('mysql2');
+const logger = require('../logger');
 
 const createDBConnection = (database, multiStatement = false) => {
-  const db = mysql.createConnection({
-    user: process.env.MYSQL_USERNAME,
-    host: process.env.MYSQL_HOST_NAME,
-    password: process.env.MYSQL_ROOT_PASSWORD,
-    database: database,
-    multipleStatements: multiStatement
-  });
-
-  db.connect((err) => {
-    if (err) {
-        console.log("\x1b[41m", "MySQL Connection Error in creating connection:")
-        console.log(process.env.MYSQL_DATABASE)
+  try {
+    const db = mysql.createConnection({
+      user: process.env.MYSQL_USERNAME,
+      host: process.env.MYSQL_HOST_NAME,
+      password: process.env.MYSQL_ROOT_PASSWORD,
+      database: database,
+      multipleStatements: multiStatement
+    });
+    
+    db.connect((err) => {
+      if (err) {
+        logger.error("Error connecting to MySQL database", {error: `${err.message, err.stack}`});
         throw err;
-    }
-  });
-  
-  return db;
+      }
+    });
+
+    return db;
+
+  } catch (err) {
+    logger.warn("Error creating MySQL connection", {error: `${err.message, err.stack}`})
+    return null;
+  }
+  return null;
 }
 
 module.exports = createDBConnection;

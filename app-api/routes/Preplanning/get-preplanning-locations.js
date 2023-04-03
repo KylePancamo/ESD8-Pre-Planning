@@ -5,6 +5,7 @@ const createDBConnection = require("../mysql");
 
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
+const logger = require("../../logger");
 
 router.get("/", verifyUserCredentials, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
@@ -13,7 +14,9 @@ router.get("/", verifyUserCredentials, (req, res) => {
     db.query(
       query, (err, result) => {
         if (err) {
-          console.log(err.message);
+          logger.warn("Error getting preplanning locations", {
+            error: `${err.message, err.stack}`,
+          });
         } else {
           res.status(200).send({status: "success", message: "Preplanning locations retrieved", result});
         }
@@ -29,7 +32,9 @@ router.get("/:id", (req, res) => {
     db.query(
       `SELECT * FROM pre_planning WHERE id = ?`, [id], (err, result) => {
         if (err) {
-          console.log(err.message);
+          logger.warn("Error getting preplanning locations", {
+            error: `${err.message, err.stack}`,
+          });
         } else {
           res.status(200).send({status: "success", message: "Preplanning locations retrieved", result});
         }

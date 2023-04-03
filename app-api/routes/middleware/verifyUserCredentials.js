@@ -1,9 +1,14 @@
 const jwt = require('jsonwebtoken');
+const logger = require("../../logger");
 
 const verifyUserCredentials = async (req, res, next) => { 
     const cookieValue = req.headers.cookie ? req.headers.cookie.split("=")[1] : null;
     const session = await req.sessionStore.get(req.sessionID, (err, session) => {
-        if (err || !session) {
+        if (err) {
+            logger.warn("Error getting session", {error: `${err.message, err.stack}`})
+            return null;
+        }
+        if (!session) {
             return null;
         }
 
@@ -11,7 +16,7 @@ const verifyUserCredentials = async (req, res, next) => {
     })
 
     if (!session) {
-        console.log("Session " + req.sessionID + " not found");
+        logger.warn(`Session not found at file ${__filename}`);
         res.status(404).send({error: "Session not found"});
         return;
     }
@@ -23,11 +28,14 @@ const verifyUserCredentials = async (req, res, next) => {
             req.user = decoded;
             next();
         } catch (err) {
-            console.log("Error decoding token")
+            logger.warn(`Error decoding token`, {error: `${err.message, err.stack}`})
             res.status(401).send({error: "Error decoding token"});
         }
     } else {
-        console.log("Token not found");
+        logger.warn(`Token not found with sessionID ${req.sessionID}`, {
+            error: `${err.message, err.stack}`,
+            sessionID: req.sessionID
+        })
         res.status(404).send({error: "Token not found"});
 
     }

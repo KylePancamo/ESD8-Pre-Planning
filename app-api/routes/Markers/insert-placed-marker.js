@@ -5,12 +5,29 @@ const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const {canModify} = require('../middleware/authorization');
 
+const logger = require("../../logger");
+
 router.post('/', verifyUserCredentials, canModify, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
-    const fileExists = req.body.payload.fileExists;
-    const fileName = req.body.payload.fileName;
+    try {
+      const fileExists = req.body.payload.fileExists;
+      const fileName = req.body.payload.fileName;
+    } catch (err) {
+      logger.warn('Error inserting marker', {
+        error: `${err.message, err.stack}`,
+      });
+      res.status(500).send({ status: 'error'});
+    }
+
     db.query(
       "SELECT * FROM icons WHERE file_name = ?", [fileName], (err, result) => {
+
+      if (err) {
+        logger.warn('Error inserting marker', {
+          error: `${err.message, err.stack}`,
+        });
+        res.status(500).send({ status: 'error'});
+      }
   
       let iconId;
       if (result.length > 0) {

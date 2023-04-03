@@ -4,6 +4,8 @@ const router = express.Router();
 const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
+const logger = require("../../logger");
+
 
 router.get('/', verifyUserCredentials, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
@@ -11,7 +13,10 @@ router.get('/', verifyUserCredentials, (req, res) => {
   
     db.query(query, (err, result) => {
       if (err) {
-        console.log(err.message);
+        logger.warn('Error getting uploaded icons', {
+          error: `${err.message, err.stack}`,
+        });
+        res.status(500).send({ status: 'error'});
       } else {
         res.status(200).send(result);
       }

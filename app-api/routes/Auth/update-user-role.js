@@ -5,6 +5,8 @@ const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const {isAdmin} = require('../middleware/authorization');
 
+const logger = require("../../logger");
+
 router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
     const db = createDBConnection("auth");
 
@@ -24,6 +26,9 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
 
     db.query(query, data, (err, result) => {
         if (err) {
+            logger.warn(`Error updating role for user ${user.user_id}`, {
+                error: `${err.message, err.stack}`
+            });
             res.send({ status: 'error', err: 'Error updating role.' });
             return;
         }

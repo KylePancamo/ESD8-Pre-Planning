@@ -4,9 +4,9 @@ const router = express.Router();
 const {canModify} = require('../middleware/authorization');
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
-
 const createDBConnection = require("../mysql");
 
+const logger = require("../../logger");
 
 router.post('/', verifyUserCredentials, canModify, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
@@ -24,14 +24,25 @@ router.post('/', verifyUserCredentials, canModify, (req, res) => {
     db.query(
       query, data, (err, result) => {
         if (err) {
-          console.log(err.message)
+          logger.warn(`Error updating marker ${req.body.marker_id}`, {
+            error: `${err.message, err.stack}`
+          });
+          res.status(500).send({status: "error", message: "Error updating marker"});
         } else {
           if (file) {
-            file.mv("./public/marker_images/" + file.name, (err) => {
-              if (err) {
-                console.log(err);
-              }
-            });
+            try {
+              file.mv("./public/marker_images/" + file.name, (err) => {
+                if (err) {
+                  logger.warn(`Error uploading marker image ${file.name}`, {
+                    error: `${err.message, err.stack}`
+                  });
+                }
+              });
+            } catch (err) {
+              logger.warn(`Error uploading marker image ${file.name}`, {
+                error: `${err.message, err.stack}`
+              });
+            }
           }
           res.status(200).send({status: "success", message: "Marker updated successfully"});
         }

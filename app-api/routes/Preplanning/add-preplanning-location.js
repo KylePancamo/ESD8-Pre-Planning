@@ -6,6 +6,7 @@ const createDBConnection = require("../mysql");
 const {canModify} = require('../middleware/authorization');
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
+const logger = require("../../logger");
 
 router.post("/", verifyUserCredentials, canModify, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
@@ -46,7 +47,9 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
     db.query(
       `SELECT * FROM pre_planning WHERE google_formatted_address = ?`, [address.location], (err, result) => {
         if (err) {
-          console.log(err.message);
+          logger.warn('Error adding preplanning location', {
+            error: `${err.message, err.stack}`,
+          });
         } else {
           if (result.length > 0) {
             res.status(409).send({status: "error", message: 'Location already exists'});
@@ -54,6 +57,9 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
             db.query(
               query, data, (err, result) => {
                 if (err) {
+                  logger.warn('Error adding preplanning location', {
+                    error: `${err.message, err.stack}`,
+                  });
                   res.status(400).send({status: "error", message: "Error adding preplanning location", error: err.message});
                 } else {
                   res.status(200).send({status: "success", message: "Preplanning location added"});

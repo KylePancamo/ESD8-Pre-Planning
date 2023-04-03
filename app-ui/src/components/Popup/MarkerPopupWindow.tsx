@@ -62,6 +62,7 @@ function PopupWindow(props: PopupWindowProps) {
   
   const [selectedFile, setSelectedFile] = useState<any>()
 
+  // form submission handler
   const handleMarkerSaving = (inputData: FormData) => {
     inputData.imageName = selectedFile?.name;
     let markerFoundOnMap = props.markers.find(
@@ -126,7 +127,6 @@ function PopupWindow(props: PopupWindowProps) {
   };
   
   //used for file preview
-  
   const [preview, setPreview] = useState<string>();
 
   const handleFileUpload = (e: any) => {

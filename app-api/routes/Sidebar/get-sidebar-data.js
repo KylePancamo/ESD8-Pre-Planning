@@ -4,6 +4,7 @@ const router = express.Router();
 const createDBConnection = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
+const logger = require("../../logger");
 
 router.post('/',verifyUserCredentials, (req, res) => {
     const db = createDBConnection(process.env.MYSQL_DATABASE);
@@ -21,7 +22,9 @@ router.post('/',verifyUserCredentials, (req, res) => {
     db.query(
       query, data, (err, result) => {
         if (err) {
-          console.log(err.message);
+          logger.warn(`Error getting preplanning location for address ${googleFormattedAddress}`, {
+            error: `${err.message, err.stack}`,
+          });
           res.status(400).send({status: 'error', message: 'Data was not able to be retrieved'});
         } else {
           res.status(200).send({status: 'success', message: 'Data was retrieved', payload: result});
