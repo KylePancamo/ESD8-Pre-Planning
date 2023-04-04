@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const createDBConnection = require("../mysql");
+const getPool = require("../mysql");
 const verifyUserCredentials = require("../middleware/verifyUserCredentials");
 const {isAdmin} = require("../middleware/authorization");
 const logger = require("../../logger");
 
 router.post("/",verifyUserCredentials, isAdmin, (req, res) => { 
-    const db = createDBConnection("auth");
+    const db = getPool("auth");
 
     const u_name = req.body;
     const p_word = req.body;

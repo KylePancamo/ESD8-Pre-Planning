@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const createDBConnection = require("../mysql");
+const getPool = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
+const logger = require("../../logger");
 
 router.post("/", verifyUserCredentials, (req, res) => {
-    const db = createDBConnection("auth");
+    const db = getPool("auth");
 
     const role = req.body.role;
     const roleId = role.id;
@@ -19,21 +20,42 @@ router.post("/", verifyUserCredentials, (req, res) => {
             FROM permissions p
             WHERE (UNHEX(?) & p.security_hex) = p.security_hex;`;
 
-    db.query(permissionIdQuery, data, (err, result) => {
+    db.getConnection((err, connection) => {
         if (err) {
+            logger.warn(`Error getting connection for role ${roleId} with permissions ${addedPermissionsString}`, {
+                error: err
+            });
             res.send({ status: 'error', err: err });
             return;
         }
-        const values = result.map(result => [roleId, result.id, role.name + ': ' + result.name])
-        const insertQuery = `INSERT INTO role_permissions (role_id, permission_id, description) VALUES ?;`
-        db.query(insertQuery, [values], (err, result) => {
+
+        connection.query(permissionIdQuery, data, (err, result) => {
             if (err) {
+                logger.warn(`Error getting permission ids for role ${roleId} with permissions ${addedPermissionsString}`, {
+                    error: err
+                });
                 res.send({ status: 'error', err: err });
                 return;
             }
-            res.send({status: 'success'});
-        })
-    })
+
+            const values = result.map(result => [roleId, result.id, role.name + ': ' + result.name])
+            const insertQuery = `INSERT INTO role_permissions (role_id, permission_id, description) VALUES ?;`
+            connection.query(insertQuery, [values], (err, result) => {
+                if (err) {
+                    logger.warn(`Error inserting role permissions for role ${roleId} with permissions ${addedPermissionsString}`, {
+                        error: err
+                    });
+                    res.send({ status: 'error', err: err });
+                    return;
+                }
+
+                logger.info(`Permissions ${addedPermissionsString} added to role ${roleId} successfully`);
+                res.send({status: 'success'});
+            });
+
+            connection.release();
+        });
+    });
 });
 
 module.exports = router;

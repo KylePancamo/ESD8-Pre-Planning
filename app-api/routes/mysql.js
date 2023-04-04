@@ -1,31 +1,21 @@
 // mysql.js
 const mysql = require('mysql2');
 const logger = require('../logger');
+const clusterConfig = require('./poolClusterConfig');
 
-const createDBConnection = (database, multiStatement = false) => {
-  try {
-    const db = mysql.createConnection({
-      user: process.env.MYSQL_USERNAME,
-      host: process.env.MYSQL_HOST_NAME,
-      password: process.env.MYSQL_ROOT_PASSWORD,
-      database: database,
-      multipleStatements: multiStatement
-    });
-    
-    db.connect((err) => {
-      if (err) {
-        logger.error("Error connecting to MySQL database", {error: `${err.message, err.stack}`});
-        throw err;
-      }
-    });
+const poolCluster = mysql.createPoolCluster({
+  canRetry: true,
+  removeNodeErrorCount: 1,
+  restoreNodeTimeout: 10000,
+  defaultSelector: 'RR'
+});
 
-    return db;
+clusterConfig.databases.forEach((database) => {
+  poolCluster.add(database.name, database.dbConfig);
+})
 
-  } catch (err) {
-    logger.warn("Error creating MySQL connection", {error: `${err.message, err.stack}`})
-    return null;
-  }
-  return null;
+const getPool = (poolName) => {
+  return poolCluster.of(poolName, 'RR');
 }
 
-module.exports = createDBConnection;
+module.exports = getPool;

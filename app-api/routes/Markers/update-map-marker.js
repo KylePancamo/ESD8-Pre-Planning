@@ -4,12 +4,12 @@ const router = express.Router();
 const {canModify} = require('../middleware/authorization');
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 
-const createDBConnection = require("../mysql");
+const getPool = require("../mysql");
 
 const logger = require("../../logger");
 
 router.post('/', verifyUserCredentials, canModify, (req, res) => {
-    const db = createDBConnection(process.env.MYSQL_DATABASE);
+    const db = getPool(process.env.MYSQL_DATABASE);
     let query = "UPDATE markers SET marker_name = ?, icon_id = ?, latitude = ?, longitude = ?, image = ? WHERE marker_id = ?"
     let file = req.files?.file;
     let data = [

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const createDBConnection = require("../mysql");
+const getPool = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const {isAdmin} = require('../middleware/authorization');
 const { getRequestIP } = require('../../utils');
@@ -9,7 +9,7 @@ const { getRequestIP } = require('../../utils');
 const logger = require("../../logger");
 
 router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
-    const db = createDBConnection("auth", true);
+    const db = getPool("auth");
     const IP = getRequestIP(req);
 
     const roleId = req.body.role.id;

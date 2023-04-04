@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-const createDBConnection = require("../mysql");
+const getPool = require("../mysql");
 const logger = require("../../logger");
 
 const { getRequestIP } = require('../../utils');
@@ -11,7 +11,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 router.post("/", (req, res) => {
-    const db = createDBConnection("auth");
+    const db = getPool("auth");
     const { username, password } = req.body;
 
     if (!username || !password) {

@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const createDBConnection = require("../mysql");
+const getPool = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const logger = require("../../logger");
 
 router.get("/", verifyUserCredentials, (req, res) => {
-    const db = createDBConnection("auth");
+    const db = getPool("auth");
 
     const query = `SELECT r.id, r.name, COALESCE(BIT_OR(p.security_hex), 0) as combined_permissions
                 FROM roles r
@@ -30,7 +30,6 @@ router.get("/", verifyUserCredentials, (req, res) => {
         
         res.send({status: 'success', payload: result});
     })
-
 });
 
 module.exports = router;

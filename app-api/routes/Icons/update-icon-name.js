@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const createDBConnection = require("../mysql");
+const getPool = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const logger = require("../../logger");
 
 
 router.post("/", verifyUserCredentials, (req, res) => {
-    const db = createDBConnection(process.env.MYSQL_DATABASE);
+    const db = getPool(process.env.MYSQL_DATABASE);
     const id = req.body.id;
     const iconName = req.body.formData.iconName;
     const query = `UPDATE icons SET icon_name = ? WHERE icon_id = ?`;

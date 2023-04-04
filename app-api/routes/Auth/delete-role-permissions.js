@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const createDBConnection = require("../mysql");
+const getPool = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const {isAdmin} = require('../middleware/authorization');
 const { getRequestIP } = require('../../utils');
 const logger = require("../../logger");
 
 router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
-    const db = createDBConnection("auth");
+    const db = getPool("auth");
     const IP = getRequestIP(req);
 
     const roleId = req.body.role.id;
@@ -26,25 +26,42 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
             FROM permissions p
             WHERE (UNHEX(?) & p.security_hex) = p.security_hex;`;
 
-    db.query(permissionIdQuery, data, (err, result) => {
+    db.getConnection((err, connection) => {
         if (err) {
-            logger.warn(`Error getting permission ids for role ${roleId} with permissions ${removedPermissionsString}`, {
+            logger.warn(`Error getting connection for role ${roleId} with permissions ${removedPermissionsString}`, {
                 error: err
             })
             res.send({ status: 'error', err: err });
             return;
         }
-        const values = result.map(result => [result.id]);
-        const data = [roleId, [values]];
-        const deleteQuery = `DELETE FROM role_permissions WHERE role_id = ? AND permission_id IN (?);`
-        db.query(deleteQuery, data, (err, result) => {
+
+        connection.query(permissionIdQuery, data, (err, result) => {
             if (err) {
+                logger.warn(`Error getting permission ids for role ${roleId} with permissions ${removedPermissionsString}`, {
+                    error: err
+                });
                 res.send({ status: 'error', err: err });
                 return;
             }
 
-            res.send({status: 'success'});
-        });
+            const values = result.map(result => [result.id]);
+            const data = [roleId, [values]];
+            const deleteQuery = `DELETE FROM role_permissions WHERE role_id = ? AND permission_id IN (?);`;
+
+            connection.query(deleteQuery, data, (err, result) => {
+                if (err) {
+                    logger.warn(`Error deleting role permissions for role ${roleId} with permissions ${removedPermissionsString}`, {
+                        error: err
+                    });
+                    res.send({ status: 'error', err: err });
+                    return;
+                }
+                logger.info(`Permissions ${removedPermissionsString} removed from role ${roleId} successfully`);
+                res.send({status: 'success'});
+            })
+
+            connection.release();
+        })
     })
 });
 
