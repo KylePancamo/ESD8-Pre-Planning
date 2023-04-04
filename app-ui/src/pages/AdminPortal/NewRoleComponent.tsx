@@ -17,9 +17,10 @@ type FormData = Record<string, string>;
 
 type NewRoleComponentProps = {
   setRolePermissions: React.Dispatch<React.SetStateAction<RolePermissions[]>>
+  setUpdateStatus: React.Dispatch<React.SetStateAction<{text: string, statusType: string, status: boolean | undefined}>>
 }
 
-function NewRoleComponent({setRolePermissions} : NewRoleComponentProps) {
+function NewRoleComponent({setRolePermissions, setUpdateStatus} : NewRoleComponentProps) {
     const {
         register,
         handleSubmit,
@@ -36,9 +37,10 @@ function NewRoleComponent({setRolePermissions} : NewRoleComponentProps) {
       if (response.data.status === 'success') {
         setRolePermissions((prevRolePermissions) => {
           return [...prevRolePermissions, {id: response.data.payload.roleId, name: role, combined_permissions: selectedPermission}]
-        })
+        });
+        setUpdateStatus({text: `Role created successfully`, statusType: 'success', status: true})
       } else {
-        console.log('error');
+        setUpdateStatus({text: `Role creation failed`, statusType: 'danger', status: false})
       }
     }
 

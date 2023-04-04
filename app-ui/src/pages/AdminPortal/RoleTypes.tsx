@@ -125,6 +125,8 @@ function RoleTypes() {
         statusType: 'removed',
         status: true
       })
+      setRoleDeleteWindow(false);
+      setRole(undefined);
     } else {
       setUpdateStatus({text: 
         'Error removing ' + role.name + ' role',
@@ -234,6 +236,7 @@ function RoleTypes() {
         ) : null}
       <NewRoleComponent
         setRolePermissions={setRolePermissions}
+        setUpdateStatus={setUpdateStatus}
       />
     </>
   ); 
