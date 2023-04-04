@@ -10,7 +10,7 @@ const logger = require("../../logger");
 
 
 router.delete('/', verifyUserCredentials, canDelete, (req, res) => {
-    const db = getPool(process.env.MYSQL_DATABASE);
+    const db = getPool(process.env.MYSQL_ESD8_DATABASE);
     const query = "DELETE FROM markers WHERE marker_id = ?"
     const marker = req.body.marker;
     const data = [
@@ -27,7 +27,7 @@ router.delete('/', verifyUserCredentials, canDelete, (req, res) => {
           res.status(500).send({status: "error", message: "Error deleting marker"});
           return;
         }
-        
+
         logger.info(`Marker ID ${marker.marker_id} successfully deleted`, {
           marker: marker
         });

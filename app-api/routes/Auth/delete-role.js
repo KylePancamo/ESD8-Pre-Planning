@@ -9,7 +9,7 @@ const { getRequestIP } = require('../../utils');
 const logger = require("../../logger");
 
 router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
-    const db = getPool("auth");
+    const db = getPool(process.env.MYSQL_AUTH_DATABASE);
     const IP = getRequestIP(req);
 
     const roleId = req.body.role.id;

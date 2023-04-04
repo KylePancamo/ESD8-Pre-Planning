@@ -8,7 +8,7 @@ const logger = require("../../logger");
 
 
 router.get('/', verifyUserCredentials, (req, res) => {
-    const db = getPool(process.env.MYSQL_DATABASE);
+    const db = getPool(process.env.MYSQL_ESD8_DATABASE);
     const query = 'SELECT * FROM icons';
   
     db.query(query, (err, result) => {

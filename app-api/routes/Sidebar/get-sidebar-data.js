@@ -7,7 +7,7 @@ const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const logger = require("../../logger");
 
 router.post('/', verifyUserCredentials, (req, res) => {
-    const db = getPool(process.env.MYSQL_DATABASE);
+    const db = getPool(process.env.MYSQL_ESD8_DATABASE);
     try {
       let googleFormattedAddress = req.body.address;
       

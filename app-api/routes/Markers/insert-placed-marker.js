@@ -8,7 +8,7 @@ const {canModify} = require('../middleware/authorization');
 const logger = require("../../logger");
 
 router.post('/', verifyUserCredentials, canModify, (req, res) => {
-  const db = getPool("esd8_preplanning_db");
+  const db = getPool(process.env.MYSQL_ESD8_DATABASE);
   try {
     const fileExists = req.body.payload.fileExists;
     const fileName = req.body.payload.fileName;

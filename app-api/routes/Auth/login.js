@@ -11,7 +11,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 router.post("/", (req, res) => {
-    const db = getPool("auth");
+    const db = getPool(process.env.MYSQL_AUTH_DATABASE);
     const { username, password } = req.body;
 
     if (!username || !password) {

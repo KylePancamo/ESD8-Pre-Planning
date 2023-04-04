@@ -1,12 +1,12 @@
 module.exports = {
     databases: [
       {
-        name: 'esd8_preplanning_db',
+        name: process.env.MYSQL_ESD8_DATABASE,
         dbConfig: {
           host: process.env.MYSQL_HOST_NAME,
           user: process.env.MYSQL_USERNAME,
           password: process.env.MYSQL_ROOT_PASSWORD,
-          database: process.env.MYSQL_DATABASE,
+          database: process.env.MYSQL_ESD8_DATABASE,
           connectionLimit: 100,
           waitForConnections: true,
           queueLimit: 0,
@@ -14,7 +14,7 @@ module.exports = {
         }
       },
       {
-        name: 'auth',
+        name: process.env.MYSQL_AUTH_DATABASE,
         dbConfig: {
           host: process.env.MYSQL_HOST_NAME,
           user: process.env.MYSQL_USERNAME,

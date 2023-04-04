@@ -6,7 +6,7 @@ const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const logger = require("../../logger");
 
 router.post("/", verifyUserCredentials, (req, res) => {
-    const db = getPool("auth");
+    const db = getPool(process.env.MYSQL_AUTH_DATABASE);
 
     const role = req.body.role;
     const addedPermissions = req.body.addedPermissions;

@@ -7,7 +7,7 @@ const logger = require("../../logger");
 
 
 router.post("/", verifyUserCredentials, (req, res) => {
-    const db = getPool(process.env.MYSQL_DATABASE);
+    const db = getPool(process.env.MYSQL_ESD8_DATABASE);
     const id = req.body.id;
     const iconName = req.body.formData.iconName;
     const query = `UPDATE icons SET icon_name = ? WHERE icon_id = ?`;

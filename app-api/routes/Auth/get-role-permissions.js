@@ -6,7 +6,7 @@ const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const logger = require("../../logger");
 
 router.get("/", verifyUserCredentials, (req, res) => {
-    const db = getPool("auth");
+    const db = getPool(process.env.MYSQL_AUTH_DATABASE);
 
     const query = `SELECT r.id, r.name, COALESCE(BIT_OR(p.security_hex), 0) as combined_permissions
                 FROM roles r

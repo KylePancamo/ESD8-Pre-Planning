@@ -9,7 +9,7 @@ const getPool = require("../mysql");
 
 
 router.delete('/', verifyUserCredentials, canDelete, (req, res) => {
-    const db = getPool("esd8_preplanning_db");
+    const db = getPool(process.env.MYSQL_ESD8_DATABASE);
     const query = "TRUNCATE TABLE markers"
   
     db.query(
@@ -26,7 +26,7 @@ router.delete('/', verifyUserCredentials, canDelete, (req, res) => {
         logger.warn("All markers deleted", {
           error: `${err.message, err.stack}`,
         });
-        
+
         res.status(200).send({status: "success", message: "All markers deleted"});
       }
     )

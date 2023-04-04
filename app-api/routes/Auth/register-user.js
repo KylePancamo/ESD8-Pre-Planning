@@ -7,7 +7,7 @@ const {isAdmin} = require("../middleware/authorization");
 const logger = require("../../logger");
 
 router.post("/",verifyUserCredentials, isAdmin, (req, res) => { 
-    const db = getPool("auth");
+    const db = getPool(process.env.MYSQL_AUTH_DATABASE);
 
     const u_name = req.body;
     const p_word = req.body;

@@ -7,7 +7,7 @@ const logger = require("../../logger");
 
 
 router.get("/", verifyUserCredentials, (req, res) => {
-    const db = getPool("auth");
+    const db = getPool(process.env.MYSQL_AUTH_DATABASE);
 
     const query = `SELECT * from roles;`
 

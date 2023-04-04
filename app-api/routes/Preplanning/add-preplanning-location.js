@@ -9,7 +9,7 @@ const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const logger = require("../../logger");
 
 router.post("/", verifyUserCredentials, canModify, (req, res) => {
-    const db = getPool("esd8_preplanning_db");
+    const db = getPool(process.env.MYSQL_ESD8_DATABASE);
     try {
       const payload = req.body.payload.data;
       const address = req.body.payload.address;
