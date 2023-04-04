@@ -25,3 +25,4 @@ yarn-error.log*
 
 ec2/
 app-api/logs/*.log
+app-api/logs/*.json
