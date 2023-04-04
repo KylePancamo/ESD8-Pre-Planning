@@ -23,9 +23,10 @@ router.post("/", verifyUserCredentials, (req, res) => {
           error: `${err.message, err.stack}`
         });
         res.status(400).send({status: "error", message: "Error updating icon name", error: err.message});
-      } else {
-        res.status(200).send({status: "success", message: "Icon name updated"});
+        return;
       }
+      
+      res.status(200).send({status: "success", message: "Icon name updated"});
     })
 });
 

@@ -74,12 +74,18 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
                     } else {
                       res.status(200).send({status: "success", message: "Preplanning location added"});
                     }
+
+                    connection.release();
                   }
                 )
               }
             }
           }
-        );
+        ).finally(() => {
+          if (connection) {
+            connection.release();
+          }
+        })
     });
   } catch (err) {
     logger.warn('Error adding preplanning location', {

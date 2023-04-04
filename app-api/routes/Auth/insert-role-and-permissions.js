@@ -20,6 +20,8 @@ router.post("/", verifyUserCredentials, (req, res) => {
                 error: err
             })
             res.send({ status: 'error', err: err });
+            connection.release();
+
             return;
         }
 
@@ -29,6 +31,7 @@ router.post("/", verifyUserCredentials, (req, res) => {
                     error: err
                 });
                 res.send({ status: 'error', err: err });
+
                 return;
             }
 
@@ -43,6 +46,7 @@ router.post("/", verifyUserCredentials, (req, res) => {
                         error: err
                     });
                     res.send({ status: 'error', err: err });
+
                     return;
                 }
 
@@ -55,14 +59,20 @@ router.post("/", verifyUserCredentials, (req, res) => {
                             error: err
                         });
                         res.send({ status: 'error', err: err });
+
                         return;
                     }
                     logger.info(`Permissions ${addedPermissionsString} added to role ${roleId} successfully`);
                     res.send({status: 'success',  payload: {roleId: roleId}});
+
+                    connection.release();
                 })
             })
-            connection.release();
-        });
+        }).finally(() => {
+            if (connection) {
+                connection.release();
+            }
+        })
     }) 
 });
 

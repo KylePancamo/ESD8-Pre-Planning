@@ -30,6 +30,7 @@ router.post('/', verifyUserCredentials, canModify, (req, res) => {
             error: `${err.message, err.stack}`,
           });
           res.status(500).send({ status: 'error'});
+
           return;
         }
     
@@ -52,6 +53,7 @@ router.post('/', verifyUserCredentials, canModify, (req, res) => {
                 error: `${err.message, err.stack}`,
               });
               res.status(500).send({ status: 'error'});
+              
               return;
             }
 
@@ -64,10 +66,16 @@ router.post('/', verifyUserCredentials, canModify, (req, res) => {
               file_name: "edit_location_alt_FILL0_wght400_GRAD0_opsz48.png",
             }
             result.payload = payload;
-            res.status(200).send({status: 'success', message: 'Successfully inserted marker', payload})
+            res.status(200).send({status: 'success', message: 'Successfully inserted marker', payload});
+
+            connection.release();
           }
         )
-      });
+      }).finally(() => {
+        if (connection) {
+          connection.release();
+        }
+      })
     })
   } catch (err) {
     logger.warn('Error inserting marker', {

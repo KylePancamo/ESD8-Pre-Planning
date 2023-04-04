@@ -17,9 +17,10 @@ router.get('/', verifyUserCredentials, (req, res) => {
           error: `${err.message, err.stack}`,
         });
         res.status(500).send({ status: 'error'});
-      } else {
-        res.status(200).send(result);
+        return;
       }
+      
+      res.status(200).send(result);
     });
 });
 

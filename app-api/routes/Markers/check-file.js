@@ -21,6 +21,7 @@ router.get('/', verifyUserCredentials, (req, res) => {
             error: `${err.message, err.stack}`,
           });
           res.status(500).send({status: "error", message: "Error getting connection"});
+
           return;
         }
 
@@ -31,6 +32,7 @@ router.get('/', verifyUserCredentials, (req, res) => {
                 error: `${err.message, err.stack}`
               });
               res.status(500).send({status: "error", message: "Error checking if file exists in database"});
+
               return;
             }
             if (result.length === 0) {
@@ -43,6 +45,7 @@ router.get('/', verifyUserCredentials, (req, res) => {
                       error: `${err.message, err.stack}`
                     });
                     res.status(500).send({status: "error", message: "Error adding file to database"});
+
                     return;
                   }
 
@@ -59,15 +62,19 @@ router.get('/', verifyUserCredentials, (req, res) => {
                         return;
 
                       }
-
-                      console.log("Markers updated");
                       res.status(200).send({status: "success", message: "File exists"});
+
+                      connection.release();
                     });
                 })
             } else {
               res.status(200).send({status: "success", message: "File exists"});
             }
-          });
+        }).finally(() => {
+          if (connection) { 
+            connection.release();
+          }
+        })
       })
     } else {
       res.status(404).send({status: "error", message: "File not found"});

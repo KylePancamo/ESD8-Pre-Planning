@@ -32,6 +32,7 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
                 error: err
             })
             res.send({ status: 'error', err: err });
+
             return;
         }
 
@@ -41,6 +42,7 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
                     error: err
                 });
                 res.send({ status: 'error', err: err });
+                
                 return;
             }
 
@@ -54,14 +56,19 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
                         error: err
                     });
                     res.send({ status: 'error', err: err });
+                    connection.release();
                     return;
                 }
                 logger.info(`Permissions ${removedPermissionsString} removed from role ${roleId} successfully`);
                 res.send({status: 'success'});
-            })
-
-            connection.release();
-        })
+                connection.release();
+            });
+        }).finally(() => {
+            // if the connection has already been freed, we don't need to do anything
+            if (connection) {
+                connection.release();
+            }
+        });
     })
 });
 
