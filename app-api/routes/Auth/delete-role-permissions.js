@@ -35,7 +35,7 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
 
             return;
         }
-
+        try { 
         connection.query(permissionIdQuery, data, (err, result) => {
             if (err) {
                 logger.warn(`Error getting permission ids for role ${roleId} with permissions ${removedPermissionsString}`, {
@@ -61,14 +61,17 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
                 }
                 logger.info(`Permissions ${removedPermissionsString} removed from role ${roleId} successfully`);
                 res.send({status: 'success'});
-                connection.release();
             });
-        }).finally(() => {
-            // if the connection has already been freed, we don't need to do anything
-            if (connection) {
-                connection.release();
-            }
-        });
+        })
+        } catch (err) {
+            logger.warn(`Error deleting role permissions for role ${roleId} with permissions ${removedPermissionsString}`, {
+                error: err
+            });
+            res.send({ status: 'error', err: err });
+            return;
+        } finally {
+            connection.release();
+        }
     })
 });
 

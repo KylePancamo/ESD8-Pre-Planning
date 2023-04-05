@@ -24,10 +24,10 @@ router.post("/", verifyUserCredentials, (req, res) => {
 
             return;
         }
-
-        connection.query(insertRoleQuery, [role], (err, result) => {
-            if (err) {
-                logger.warn(`Error getting permission ids for role ${roleId} with permissions ${addedPermissionsString}`, {
+        try {
+            connection.query(insertRoleQuery, [role], (err, result) => {
+                if (err) {
+                    logger.warn(`Error getting permission ids for role ${roleId} with permissions ${addedPermissionsString}`, {
                     error: err
                 });
                 res.send({ status: 'error', err: err });
@@ -64,15 +64,17 @@ router.post("/", verifyUserCredentials, (req, res) => {
                     }
                     logger.info(`Permissions ${addedPermissionsString} added to role ${roleId} successfully`);
                     res.send({status: 'success',  payload: {roleId: roleId}});
-
-                    connection.release();
                 })
             })
-        }).finally(() => {
-            if (connection) {
-                connection.release();
-            }
-        })
+            });
+        } catch (err) {
+            logger.warn(`Error inserting role permissions for role ${roleId} with permissions ${addedPermissionsString}`, {
+                error: err
+            });
+            res.send({ status: 'error', err: err });
+        } finally {
+            connection.release();
+        }
     }) 
 });
 

@@ -45,15 +45,15 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
         payload.contactName
       ];
     
-      db.getConnection((err, connection) => {
-        if (err) {
-          logger.warn("Error adding preplanning location", {
-            error: `${err.message, err.stack}`,
-          });
-          res.status(500).send({ status: "error" });
-          return;
-        }
-
+    db.getConnection((err, connection) => {
+      if (err) {
+        logger.warn("Error adding preplanning location", {
+          error: `${err.message, err.stack}`,
+        });
+        res.status(500).send({ status: "error" });
+        return;
+      }
+      try {
         connection.query(
           `SELECT * FROM pre_planning WHERE google_formatted_address = ?`, [address.location], (err, result) => {
             if (err) {
@@ -74,18 +74,19 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
                     } else {
                       res.status(200).send({status: "success", message: "Preplanning location added"});
                     }
-
-                    connection.release();
                   }
                 )
               }
             }
-          }
-        ).finally(() => {
-          if (connection) {
-            connection.release();
-          }
-        })
+        });
+      } catch (err) {
+        logger.warn('Error adding preplanning location', {
+          error: `${err.message, err.stack}`,
+        });
+        res.status(500).send({ status: 'error'});
+      } finally {
+        connection.release();
+      }
     });
   } catch (err) {
     logger.warn('Error adding preplanning location', {

@@ -29,22 +29,10 @@ router.post("/", verifyUserCredentials, (req, res) => {
 
             return;
         }
-
-        connection.query(permissionIdQuery, data, (err, result) => {
-            if (err) {
-                logger.warn(`Error getting permission ids for role ${roleId} with permissions ${addedPermissionsString}`, {
-                    error: err
-                });
-                res.send({ status: 'error', err: err });
-
-                return;
-            }
-
-            const values = result.map(result => [roleId, result.id, role.name + ': ' + result.name])
-            const insertQuery = `INSERT INTO role_permissions (role_id, permission_id, description) VALUES ?;`
-            connection.query(insertQuery, [values], (err, result) => {
+        try {
+            connection.query(permissionIdQuery, data, (err, result) => {
                 if (err) {
-                    logger.warn(`Error inserting role permissions for role ${roleId} with permissions ${addedPermissionsString}`, {
+                    logger.warn(`Error getting permission ids for role ${roleId} with permissions ${addedPermissionsString}`, {
                         error: err
                     });
                     res.send({ status: 'error', err: err });
@@ -52,16 +40,30 @@ router.post("/", verifyUserCredentials, (req, res) => {
                     return;
                 }
 
-                logger.info(`Permissions ${addedPermissionsString} added to role ${roleId} successfully`);
-                res.send({status: 'success'});
+                const values = result.map(result => [roleId, result.id, role.name + ': ' + result.name])
+                const insertQuery = `INSERT INTO role_permissions (role_id, permission_id, description) VALUES ?;`
+                connection.query(insertQuery, [values], (err, result) => {
+                    if (err) {
+                        logger.warn(`Error inserting role permissions for role ${roleId} with permissions ${addedPermissionsString}`, {
+                            error: err
+                        });
+                        res.send({ status: 'error', err: err });
 
-                connection.release();
+                        return;
+                    }
+
+                    logger.info(`Permissions ${addedPermissionsString} added to role ${roleId} successfully`);
+                    res.send({status: 'success'});
+                });
             });
-        }).finally(() => {
-            if (connection) {
-                connection.release();
-            }
-        });
+        } catch (err) {
+            logger.warn(`Error inserting role permissions for role ${roleId} with permissions ${addedPermissionsString}`, {
+                error: err
+            });
+            res.send({ status: 'error', err: err });
+        } finally {
+            connection.release();
+        }
     });
 });
 
