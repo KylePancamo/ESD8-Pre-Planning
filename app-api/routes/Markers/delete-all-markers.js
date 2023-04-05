@@ -23,9 +23,7 @@ router.delete('/', verifyUserCredentials, canDelete, (req, res) => {
           return;
 
         }
-        logger.warn("All markers deleted", {
-          error: `${err.message, err.stack}`,
-        });
+        logger.warn("All markers deleted");
 
         res.status(200).send({status: "success", message: "All markers deleted"});
       }
