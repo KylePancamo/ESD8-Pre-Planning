@@ -8,11 +8,12 @@ type center = google.maps.LatLng | google.maps.LatLngLiteral;
 
 type PreplanningLocationsUIProps = {
     setSideBarValue: React.Dispatch<React.SetStateAction<boolean>>;
+    setOccupancyLocation: React.Dispatch<React.SetStateAction<center>>;
     setCenter: React.Dispatch<React.SetStateAction<center>>;
 
 }
 
-function PreplanningLocationsUI({ setSideBarValue, setCenter } : PreplanningLocationsUIProps) {
+function PreplanningLocationsUI({ setSideBarValue, setOccupancyLocation, setCenter } : PreplanningLocationsUIProps) {
     const { prePlanningLocations } = usePrePlanningLocations();
     const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
 
@@ -26,7 +27,8 @@ function PreplanningLocationsUI({ setSideBarValue, setCenter } : PreplanningLoca
                             return (
                                 <tr key={location.id}>
                                     <td onClick={() => {
-                                        setCenter({lat: location.latitude, lng: location.longitude});
+                                        setOccupancyLocation({lat: location.latitude, lng: location.longitude});
+                                        setCenter({lat: location.latitude, lng: location.longitude})
                                         setSearchedSite({
                                             location: location.google_formatted_address,
                                             latitude: location.latitude,

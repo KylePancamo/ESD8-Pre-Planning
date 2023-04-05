@@ -346,6 +346,46 @@ code {
   border: 3px solid #000;
 }
 
+.vertical-widget-holder {
+  position: absolute;
+  width: 29px;
+  bottom: 33vh;
+  z-index: 4;
+  right: 20px;
+  transform: translateZ(0);
+}
+
+.vertical-item {
+  margin-top: 3px;
+  transform: translateZ(0);
+}
+
+.vertical-button {
+  border-radius: 8px;
+  display: block;
+  width: 29px;
+  height: 29px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background-color .16s ease-out;
+  background-color: white !important;
+}
+
+.vertical-button-icon {
+  display: block;
+  height: 18px;
+  left: 2px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0px;
+  width: 18px;
+}
+
+.vertical-button-icon:hover {
+  transform: scale(1) !important;
+}
+
 .icon-legend-header {
   position: relative;
   display: flex;

@@ -1,7 +1,7 @@
 import MapStandaloneSearchBox from "./MapStandaloneSearchBox";
 import MapDrawingManager from "./MapDrawingManager";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Popup from "../Popup/MarkerPopupWindow";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
@@ -19,6 +19,7 @@ import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
 import { SearchSite } from "../../types/atoms-types";
 import { marker } from "../../types/marker-types";
+import CurrentUserLocation from "../CurrentUserLocation"
 
 const containerStyle = {
   width: "100vw",
@@ -51,10 +52,8 @@ function MapContainer(props : MapContainerProps) {
     }
   });
 
-  const [center, setCenter] = useState<center>({
-    lat: 29.615106009353045,
-    lng: -98.68537740890328,
-  });
+  
+  
 
   const [markerClicked, setMarkerClicked] = useState<boolean>(false);
   const [markerVisibility, setMarkerVisibility] = useState<boolean>(true);
@@ -63,8 +62,55 @@ function MapContainer(props : MapContainerProps) {
   const [bounds, setBounds] = useState<bounds>();
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
   const [mapId, setMapId] = useState<string | undefined>("satellite");
+  const [currentUserLocation, setCurrentUserLocation] = useState<center>();
+  const [trackingLocation, setTrackingLocation] = useState<boolean>(false);
+  const [trackingLocationId, setTrackingLocationId] = useState<number | null>();
+
+  const [occupancyLocation,  setOccupancyLocation] = useState<center>({
+    lat: 29.615106009353045,
+    lng: -98.68537740890328,
+  })
+  const [center, setCenter] = useState<center>(currentUserLocation ? currentUserLocation : occupancyLocation);
+
   const { userData, logout } = useAuth();
   const searchBoxRef = React.useRef(null);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setCurrentUserLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        }
+        );
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (trackingLocation) {
+      const id: number = navigator.geolocation.watchPosition((position) => {
+        console.log(position.coords.latitude, position.coords.longitude);
+        setCurrentUserLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      }, (error) => {
+        console.log(error);
+      }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 });
+      setTrackingLocationId(id);
+    } else {
+      navigator.geolocation.clearWatch(trackingLocationId as number);
+      setTrackingLocationId(null);
+    }
+
+    return () => {
+      console.log(trackingLocationId)
+      if (trackingLocationId) {
+        navigator.geolocation.clearWatch(trackingLocationId);
+      }
+    }
+  }, [trackingLocation]);
 
   const onPlacesChanged = () => {
     if (searchBox) {
@@ -186,6 +232,19 @@ function MapContainer(props : MapContainerProps) {
       });
   };
 
+  const updateUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setCurrentUserLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      }, (error) => {
+        console.log(error);
+      });
+    }
+  }
+
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -236,11 +295,24 @@ function MapContainer(props : MapContainerProps) {
         setMarkers={setMarkers}
       />
       ) : null}
+
+      {/* Marker for occupancy location */}
       <Marker 
-        position={center} 
+        position={occupancyLocation} 
         onClick={() => handleOnClick()}
         icon={"map-pin.png"}
         />
+
+      {/* Marker for users location */}
+      {currentUserLocation ? (
+        <Marker
+          position={currentUserLocation}
+          icon={"/icon_images/google_dot_new.png"}
+          onMouseOver={() => {
+
+          }}
+        />
+      ) : null}
       {hasPermissions(userData?.permissions, permission.MODIFY) ? (
         <MapDrawingManager markers={markers} setMarkers={setMarkers} />
       ) : null}
@@ -280,29 +352,55 @@ function MapContainer(props : MapContainerProps) {
             />
           </Form>
         </div>
+        <div className="track-user-location">
+          <Form>
+            <Form.Check
+              type="switch"
+              label="Track Location"
+              style={
+                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
+              }
+              checked={trackingLocation}
+              onChange={() => setTrackingLocation(!trackingLocation)}
+            />
+          </Form>
+        </div>
+        <div className="update-user-location">
+          <Button
+            onClick={updateUserLocation}
+          >
+            Update Location
+          </Button>
+        </div>
         <div className="goto-center">
           <Button
             onClick={() => {
-              map?.panTo(center as google.maps.LatLng | google.maps.LatLngLiteral);
+              map?.panTo(occupancyLocation as google.maps.LatLng | google.maps.LatLngLiteral);
               map?.setZoom(15);
             }}
           >
-            Goto Center
+            Goto Location
           </Button>
         </div>
       </div>
       <PreplanningLocationsUI
         setSideBarValue={props.setSideBarValue}
+        setOccupancyLocation={setOccupancyLocation}
         setCenter={setCenter}
       />
-        <button onClick={async () => {
-          const response = await Axios.get("http://localhost:5000/api/logout", { withCredentials: true });
-          if (response.data.status === "success") {
-            logout();
-          }
-        }} className="logout-btn">
-          Logout
-        </button>
+      <button onClick={async () => {
+        const response = await Axios.get("http://localhost:5000/api/logout", { withCredentials: true });
+        if (response.data.status === "success") {
+          logout();
+        }
+      }} className="logout-btn">
+        Logout
+      </button>
+      <CurrentUserLocation
+        lat={currentUserLocation?.lat as number | (() => number)}
+        lng={currentUserLocation?.lng as number | (() => number)}
+        setCenter={setCenter}
+      />
     </GoogleMap>
   ) : (
     <></>
