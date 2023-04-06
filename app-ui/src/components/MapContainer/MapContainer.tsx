@@ -307,7 +307,7 @@ function MapContainer(props : MapContainerProps) {
       {currentUserLocation ? (
         <Marker
           position={currentUserLocation}
-          icon={"/icon_images/google_dot_new.png"}
+          icon={"/icon_images/user_location.png"}
           onMouseOver={() => {
 
           }}
