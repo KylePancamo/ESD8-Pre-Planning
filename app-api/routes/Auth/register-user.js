@@ -27,6 +27,18 @@ router.post("/",verifyUserCredentials, isAdmin, (req, res) => {
         res.send({status: 'success'});
     })
 
+    query = `INSERT INTO user_roles (user_id, role_id) VALUES (?, ?);`;
+    data = [result.insertId, 2];
+    db.query(query, data, (err, result) => {
+        if (err) {
+            logger.warn(`Error creating role ${data[1]} for user ${data[0]}`, { error: `${err.message, err.stack}` });
+            res.send({ status: 'error', err: 'Error creating user.' });
+            return;
+        }
+        res.send({ status: 'success'});
+    })
+
+
 });
 
 module.exports = router;
