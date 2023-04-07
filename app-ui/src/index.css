@@ -623,3 +623,73 @@ button:hover {
 #location-modal-submit:hover {
   transform: scaleX(1.03) scaleY(1.03);
 }
+
+.create-marker {
+  position: absolute;
+  left: 80%;
+  top: 20%;
+  transform: translate(-50%, -50%);
+  background-color: #c1b6b2f0;
+  border: 3px solid #ae5f5f;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.create-marker-form {
+  padding: 20px;
+}
+
+#create-marker {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-column {
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+.create-marker-form .col-md-6 {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px;
+}
+
+.form-item {
+  margin-right: 10px;
+}
+
+.create-marker-trigger {
+  position: fixed;
+  background-color: inherit;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 0px 0px 15px 15px !important;
+  border-color: lightgrey;
+  right: 15%;
+}
+
+.create-marker-trigger svg {
+  fill: lightgrey;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1.5rem;
+  border: none;
+  background-color: transparent;
+  color: #000;
+  height: fit-content;
+}
+
+.close-button:hover {
+  color: #ff0000;
+  cursor: pointer;
+}

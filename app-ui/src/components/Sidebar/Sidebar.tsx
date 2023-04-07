@@ -108,16 +108,18 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
   return (
     <div className="sidebar-wrapper">
       {sideBarValue === false ? (
-        <button className="sidebar-button" onClick={toggleSideBar}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="48"
-            width="48"
-            id="sidebar-button"
+        <Button className="sidebar-button" onClick={toggleSideBar}>
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            height="50" 
+            viewBox="0 96 960 960" 
+            width="50"
           >
-            <path d="m15.2 43.9-2.8-2.85L29.55 23.9 12.4 6.75l2.8-2.85 20 20Z" />
+            <path d="M375.333 816 328 768.667l193.334-193.334L328
+            382l47.333-47.333L616 575.333
+            375.333 816Z"/>
           </svg>
-        </button>
+        </Button>
       ) : null}
       {sideBarValue === true ? (
         <div className="sidebar-menu" id="sidebar-menu">
