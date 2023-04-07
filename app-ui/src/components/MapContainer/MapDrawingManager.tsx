@@ -6,6 +6,8 @@ import Axios from "axios";
 import { useEffect } from "react";
 import config from "../../config/config";
 import { marker } from "../../types/marker-types";
+import { useRecoilState } from "recoil";
+import { defaultMarkerIconExistsState } from "../../atoms";
 
 
 type MapDrawingManagerProps = {
@@ -15,25 +17,7 @@ type MapDrawingManagerProps = {
 
 function MapDrawingManager({ markers, setMarkers } : MapDrawingManagerProps) {
 
-  const [fileExists, setFileExists] = React.useState(false);
-  useEffect(() => {
-    checkFileExists();
-  }, [])
-
-  const checkFileExists = async () => {
-      const response = await Axios.get('http://localhost:5000/api/check-file', {
-        params: {
-          fileName: config.DEFAULT_MARKER_NAME,
-        },
-        withCredentials: true,
-      }).then((response) => {
-        if (response?.data.status === "success") {
-          setFileExists(true);
-        }
-      }).catch((error) => {
-        console.log(error.message);
-      });
-    }
+  const [fileExists, setFileExists] = useRecoilState(defaultMarkerIconExistsState);
 
   return (
     <DrawingManager

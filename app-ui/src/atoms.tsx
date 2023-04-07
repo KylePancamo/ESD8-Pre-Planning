@@ -39,3 +39,8 @@ export const preplanningLocationsState = atom<LocationTypes[]>({
     key: 'preplanningLocations',
     default: [],
 })
+
+export const defaultMarkerIconExistsState = atom<boolean>({
+    key: 'defaultMarkerIconExists',
+    default: false,
+})

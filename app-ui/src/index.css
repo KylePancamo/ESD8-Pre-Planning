@@ -23,24 +23,23 @@ code {
   z-index: 2;
 }
 
+
+
 .sidebar-button {
   position: fixed;
   background-color: inherit;
   border-style: solid;
   border-width: 1px;
-  border-radius: 0px 25px 25px 0px;
+  border-radius: 0px 15px 15px 0px !important;
   border-color: lightgrey;
-  height: 70px;
+  width: 50px;
   top: 50%;
-}
-
-.sidebar-button:hover {
-  border-width: 3px;
-  border-color: lightgreen
 }
 
 .sidebar-button svg {
   fill: lightgrey;
+  position: relative;
+  right: 50%;
 }
 
 .webpage {

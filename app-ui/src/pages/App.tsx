@@ -5,14 +5,16 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import Axios from "axios";
 import {useState, useEffect} from "react";
 import {useRecoilState} from 'recoil';
-import {imagesState, preplanningLocationsState} from "../atoms";
+import {imagesState, preplanningLocationsState, defaultMarkerIconExistsState} from "../atoms";
 import { SearchSite } from "../types/atoms-types";
 import React from "react";
+import config from "../config/config";
 
 function App() {
   const [sideBarValue, setSideBarValue] = useState(false);
   const [searchedSite, setSearchedSite] = useState<SearchSite>();
   const [images, setImages] = useRecoilState(imagesState);
+  const [defaultMarkerIconExist, setDefaultMarkerIconExist] = useRecoilState<boolean>(defaultMarkerIconExistsState);
   const [prePlanningLocations, setPrePlanningLocations] = useRecoilState(preplanningLocationsState);
   
   async function setIcons() {
@@ -35,9 +37,25 @@ function App() {
     setPrePlanningLocations(preplanLocations.data.result);
   }
 
+  const checkDefaultMarkerIconExists = async () => {
+    const response = await Axios.get('http://localhost:5000/api/check-file', {
+      params: {
+        fileName: config.DEFAULT_MARKER_NAME,
+      },
+      withCredentials: true,
+    }).then((response) => {
+      if (response?.data.status === "success") {
+        setDefaultMarkerIconExist(true);
+      }
+    }).catch((error) => {
+      console.log(error.message);
+    });
+  }
+
   useEffect(() => {
     setIcons();
     setLocations();
+    checkDefaultMarkerIconExists();
   }, []);
   
   return (
