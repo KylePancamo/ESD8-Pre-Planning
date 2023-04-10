@@ -12,10 +12,13 @@ function Header({sidebarData}: {sidebarData: LocationTypes}) {
   }
   
   return (
-    <div className="sidebar-header">
-      <p className="sidebar-header__title">{sidebarData.occupancyname}</p>
-      <p className="sidebar-header__subtitle">{addressLineOne}</p>
-    </div>
+    <>
+      <div className="sidebar-header">
+        <p className="sidebar-header__title">{sidebarData.occupancyname}</p>
+        <p className="sidebar-header__subtitle">{addressLineOne}</p>
+      </div>
+      <div className="sidebar-header-bottom"/>
+    </>
   );
 }
 

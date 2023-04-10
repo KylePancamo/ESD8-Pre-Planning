@@ -41,7 +41,7 @@ function Content({ sidebarData }: { sidebarData: LocationTypes }) {
 
 
   return (
-    <div className="sidebar__content">
+    <div className="sidebar-content">
       <div className="sidebar__content-separator"></div>
 
       <div className="sidebar__block">
