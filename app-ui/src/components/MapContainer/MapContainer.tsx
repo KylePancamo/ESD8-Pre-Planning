@@ -1,9 +1,9 @@
 import MapStandaloneSearchBox from "./MapStandaloneSearchBox";
 import MapDrawingManager from "./MapDrawingManager";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import Popup from "../Popup/MarkerPopupWindow";
-import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, Marker, MarkerClustererF } from "@react-google-maps/api";
 
 import Axios from "axios";
 import AdminPanel from "../AdminPanel/AdminPanelModal";
@@ -21,6 +21,7 @@ import { SearchSite } from "../../types/atoms-types";
 import { marker } from "../../types/marker-types";
 import CurrentUserLocation from "../CurrentUserLocation"
 import MapCreateMarker from "../MapCreateMarker";
+import cluster from "cluster";
 
 const containerStyle = {
   width: "100vw",
@@ -110,6 +111,7 @@ function MapContainer(props : MapContainerProps) {
       }
     }
   }, [trackingLocation]);
+
 
   const onPlacesChanged = () => {
     if (searchBox) {
@@ -244,6 +246,7 @@ function MapContainer(props : MapContainerProps) {
     }
   }
 
+
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -257,33 +260,7 @@ function MapContainer(props : MapContainerProps) {
         setMapId(map ? map.getMapTypeId(): "roadmap");
       }}
     >
-      {markers ? (
-          markers.map((marker) => {
-          marker.position = {
-            lat: marker.latitude,
-            lng: marker.longitude,
-          };
-          return (
-            <Marker
-              position={marker.position}
-              onClick={() => {
-                if (markerClicked === false) {
-                  setMarkerClicked(true);
-                }
-                setSelectedMarker(marker);
-              }}
-              icon={(marker.file_name === null) ? undefined : "/icon_images/" + marker.file_name}
-              key={marker.marker_id}
-              visible={markerVisibility}
-              draggable={markerDraggable}
-              onDragEnd={(e) => {
-                console.log(e?.latLng?.lat(), e?.latLng?.lng());
-              }}
-            />
-          );
-          })
-        ) : null 
-    }
+
     {markerClicked ? (
       <Popup
         show={markerClicked}
@@ -294,6 +271,51 @@ function MapContainer(props : MapContainerProps) {
         setMarkers={setMarkers}
       />
       ) : null}
+
+      <MarkerClustererF 
+        options={{ imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m" }}
+        maxZoom={18}
+        styles={[
+          {
+            url: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m3.png",
+            height: 53,
+            width: 53,
+            textColor: "white",
+            textSize: 16,
+          },
+        ]}
+        title={"heyhey"}
+      >
+        {(clusterer) => 
+          <div>
+            {markers.map((marker) => {
+              marker.position = {
+                lat: marker.latitude,
+                lng: marker.longitude,
+              };
+              return (
+                <Marker
+                  position={marker.position}
+                  onClick={() => {
+                    if (markerClicked === false) {
+                      setMarkerClicked(true);
+                    }
+                    setSelectedMarker(marker);
+                  }}
+                  icon={(marker.file_name === null) ? undefined : "/icon_images/" + marker.file_name}
+                  key={marker.marker_id}
+                  visible={markerVisibility}
+                  draggable={markerDraggable}
+                  onDragEnd={(e) => {
+                    console.log(e?.latLng?.lat(), e?.latLng?.lng());
+                  }}
+                />
+              );
+            }
+            )}
+          </div>
+        }
+      </MarkerClustererF>
 
       {/* Marker for occupancy location */}
       <Marker 
@@ -313,7 +335,10 @@ function MapContainer(props : MapContainerProps) {
         />
       ) : null}
       {hasPermissions(userData?.permissions, permission.MODIFY) ? (
-        <MapDrawingManager markers={markers} setMarkers={setMarkers} />
+        <MapDrawingManager 
+          markers={markers} 
+          setMarkers={setMarkers}
+        />
       ) : null}
 
       <MapStandaloneSearchBox
