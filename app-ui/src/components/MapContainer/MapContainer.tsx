@@ -284,7 +284,6 @@ function MapContainer(props : MapContainerProps) {
             textSize: 16,
           },
         ]}
-        title={"heyhey"}
       >
         {(clusterer) => 
           <div>
@@ -309,6 +308,7 @@ function MapContainer(props : MapContainerProps) {
                   onDragEnd={(e) => {
                     console.log(e?.latLng?.lat(), e?.latLng?.lng());
                   }}
+                  clusterer={clusterer}
                 />
               );
             }
