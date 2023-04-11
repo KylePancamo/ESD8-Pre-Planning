@@ -7,7 +7,6 @@ services:
     env_file: ./.env
     environment:
       - MYSQL_PASSWORD=$MYSQL_ROOT_PASSWORD
-      - MYSQL_DATABASE=$MYSQL_ESD8_DATABASE
     ports:
       - 3307:3306
     volumes:
@@ -17,6 +16,7 @@ services:
       - ./database/updates/auth_accounts.sql:/docker-entrypoint-initdb.d/auth_accounts.sql
       - ./database/updates/auth_roles_02_28_2023.sql:/docker-entrypoint-initdb.d/auth_roles_02_28_2023.sql
       - ./database/updates/role_permissions_02_02_2023.sql:/docker-entrypoint-initdb.d/role_permissions_02_02_2023.sql
+      - ./database/updates/sessions_03_26_2023.sql:/docker-entrypoint-initdb.d/sessions_03_26_2023.sql
     networks:
       - backend
 
