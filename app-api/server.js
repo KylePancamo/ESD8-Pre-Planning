@@ -23,12 +23,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+
 const options = {
-  host: 'localhost',
+  host: process.env.MYSQL_HOST_NAME,
   port: 3306,
   user: process.env.MYSQL_USERNAME,
   password: process.env.MYSQL_ROOT_PASSWORD,
-  database: 'auth',
+  database: process.env.MYSQL_AUTH_DATABASE,
   schema: {
     tableName: 'sessions',
     columnNames: {
