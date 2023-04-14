@@ -41,7 +41,7 @@ const PasswordReset = ({forgotPasswordWindow, setForgotPasswordWindow, user} : P
         }
 
         const { password } = data;
-        const response = await Axios.post("http://localhost:5000/api/reset-password", {
+        const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/reset-password", {
             user_id: user?.user_id,
             password: password,
         }, {withCredentials: true});

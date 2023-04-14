@@ -28,7 +28,7 @@ const MapCreateMarker = ({setIsCreateMarkerUIVisible, setMarkers, markers} : Cre
                 fileExists: defaultMarkerIconExists,
             }
 
-            Axios.post("http://localhost:5000/api/insert-placed-marker", {
+            Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/insert-placed-marker", {
                 payload,
             }, {
               withCredentials: true,

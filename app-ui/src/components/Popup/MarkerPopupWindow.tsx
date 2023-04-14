@@ -84,7 +84,7 @@ function PopupWindow(props: PopupWindowProps) {
       
       formData.append("image_name", inputFileName as string);
       
-      Axios.post("http://localhost:5000/api/update-map-marker", formData, {
+      Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-map-marker", formData, {
         withCredentials: true,
       })
         .then((response) => {

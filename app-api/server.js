@@ -13,7 +13,8 @@ const MySQLStore = require('express-mysql-session')(session);
 
 app.use(fileupload());
 app.use(cors({
-  origin: ["http://localhost:3000"],
+  origin: ["http://20.242.84.130"],
+  methods: "GET, POST, DELETE",
   credentials: true,
 }));
 
@@ -25,11 +26,11 @@ app.use(cookieParser());
 
 
 const options = {
-  host: process.env.MYSQL_HOST_NAME,
+  host: "127.0.0.1",
   port: 3306,
-  user: process.env.MYSQL_USERNAME,
-  password: process.env.MYSQL_ROOT_PASSWORD,
-  database: process.env.MYSQL_AUTH_DATABASE,
+  user: "test",
+  password: "test",
+  database: "auth",
   schema: {
     tableName: 'sessions',
     columnNames: {
@@ -64,5 +65,5 @@ routes(app);
 const PORT = 5000;
 // start express server on port 5000
 app.listen(PORT, () => {
-  console.log(`server started on http://localhost:${PORT} `);
+  console.log(`server started on http://20.242.84.130:${PORT} `);
 });

@@ -79,7 +79,7 @@ function EditLocation(props : EditLocationProps) {
 
   const onSubmit = (data: FormValues) => {
     console.log(data);
-    Axios.post("http://localhost:5000/api/update-preplanning-location", {
+    Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-preplanning-location", {
       payload: data,
       googleAddress: searchBox?.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address,
       id: props.selectedEditLocation.id,

@@ -7,7 +7,8 @@ const poolCluster = mysql.createPoolCluster({
   canRetry: true,
   removeNodeErrorCount: 1,
   restoreNodeTimeout: 10000,
-  defaultSelector: 'RR'
+  defaultSelector: 'RR',
+  acquireTimeout: 1000000,
 });
 
 clusterConfig.databases.forEach((database) => {

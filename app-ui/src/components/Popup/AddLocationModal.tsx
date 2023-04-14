@@ -78,7 +78,7 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
     }
   }
   const onSubmit = (data: FormValues) => {
-    Axios.post("http://localhost:5000/api/add-preplanning-location", {
+    Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/add-preplanning-location", {
       payload: {
         data: data,
         address: address,

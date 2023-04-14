@@ -11,6 +11,7 @@ router.get("/", (req, res) => {
     const sessionValue = req.headers.cookie ? req.headers.cookie.split("=")[1] : null;
 
     if (!req.session) {
+        res.send({error: "Could not find session"});
         return;
     }
 

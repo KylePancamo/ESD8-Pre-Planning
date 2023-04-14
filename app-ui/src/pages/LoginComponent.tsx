@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useAuth } from '../hooks/AuthProvider';
@@ -21,7 +21,7 @@ export default function Login() {
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        Axios.post("http://localhost:5000/api/login", {username, password}, {
+        Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/login", {username, password}, {
             withCredentials: true
         }
         ).then((response) => {
@@ -47,7 +47,6 @@ export default function Login() {
         <div className="Login">
             <div className="login-form-container">
                 <img src={Logo} alt="ESD8 Logo" />
-            
             <Form className="login-form" onSubmit={handleSubmit}>
                 <Form.Group controlId="username">
                     <Form.Label style={{
