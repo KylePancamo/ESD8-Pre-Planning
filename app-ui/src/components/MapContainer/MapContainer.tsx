@@ -186,7 +186,7 @@ function MapContainer(props : MapContainerProps) {
     // fetch data if local storage is empty
     if (localMarkers == null) {
       console.log('fetching markers');
-      Axios.get("http://localhost:5000/api/fetch-placed-markers", {
+      Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/fetch-placed-markers", {
         withCredentials: true,
       })
         .then((res) => {
@@ -221,7 +221,7 @@ function MapContainer(props : MapContainerProps) {
   ];
 
   const FlushMarkers = () => {
-    Axios.delete("http://localhost:5000/api/delete-all-markers", {
+    Axios.delete(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-all-markers", {
       withCredentials: true,
     })
       .then((response) => {
@@ -413,7 +413,7 @@ function MapContainer(props : MapContainerProps) {
         setCenter={setCenter}
       />
       <button onClick={async () => {
-        const response = await Axios.get("http://localhost:5000/api/logout", { withCredentials: true });
+        const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/logout", { withCredentials: true });
         if (response.data.status === "success") {
           logout();
         }

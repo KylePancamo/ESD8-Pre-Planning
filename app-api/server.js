@@ -13,7 +13,8 @@ const MySQLStore = require('express-mysql-session')(session);
 
 app.use(fileupload());
 app.use(cors({
-  origin: ["http://localhost:3000"],
+  origin: ["http://20.242.84.130"],
+  methods: "GET, POST, DELETE",
   credentials: true,
 }));
 
@@ -64,5 +65,5 @@ routes(app);
 const PORT = 5000;
 // start express server on port 5000
 app.listen(PORT, () => {
-  console.log(`server started on http://localhost:${PORT} `);
+  console.log(`server started on http://20.242.84.130:${PORT} `);
 });

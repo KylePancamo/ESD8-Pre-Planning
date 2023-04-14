@@ -6,7 +6,7 @@ const fetchPreplanData = (reset: UseFormReset<any>, id: number) => {
     return;
   }
 
-  Axios.get("http://localhost:5000/api/get-preplanning-locations/" + id)
+  Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-preplanning-locations/" + id)
     .then((response) => {
       try {
         reset({

@@ -25,7 +25,7 @@ const router = createBrowserRouter(
     <Route
       element={<AuthProviderLayout/>}
       loader = {() => {
-        const response = Axios.get("http://localhost:5000/api/get-user", {
+        const response = Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-user", {
           withCredentials: true,
         });
         return defer({ response });

@@ -18,7 +18,7 @@ function App() {
   const [prePlanningLocations, setPrePlanningLocations] = useRecoilState(preplanningLocationsState);
   
   async function setIcons() {
-    const uploadedIcons = await Axios.get("http://localhost:5000/api/get-uploaded-icons", {
+    const uploadedIcons = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-uploaded-icons", {
       withCredentials: true,
     });
     if (!uploadedIcons.data) {
@@ -28,7 +28,7 @@ function App() {
   }
 
   async function setLocations() {
-    const preplanLocations = await Axios.get("http://localhost:5000/api/get-preplanning-locations", {
+    const preplanLocations = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-preplanning-locations", {
       withCredentials: true,
     });
     if (!preplanLocations.data.result) {
@@ -38,7 +38,7 @@ function App() {
   }
 
   const checkDefaultMarkerIconExists = async () => {
-    const response = await Axios.get('http://localhost:5000/api/check-file', {
+    const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/check-file", {
       params: {
         fileName: config.DEFAULT_MARKER_NAME,
       },

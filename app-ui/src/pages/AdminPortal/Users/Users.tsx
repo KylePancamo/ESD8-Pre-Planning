@@ -38,13 +38,13 @@ function Users() {
 
     useEffect(() => {
       const fetchUserRoles = async () => {
-        const response = await Axios.get<{payload: User[]}>("http://localhost:5000/api/get-user-roles", {withCredentials: true});
+        const response = await Axios.get<{payload: User[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-user-roles", {withCredentials: true});
         console.log(response);
         setUsers(response.data.payload);
       }
 
       const fetchRoles = async () => {
-        const response = await Axios.get<{payload: Role[]}>("http://localhost:5000/api/get-roles", {withCredentials: true});
+        const response = await Axios.get<{payload: Role[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-roles", {withCredentials: true});
         console.log(response);
         setRoles(response.data.payload);
       }
@@ -73,7 +73,7 @@ function Users() {
 
     const updateUser = async (user: User) => {
       console.log(user);
-      const response = await Axios.post<{status: string, err: string}>("http://localhost:5000/api/update-user-role", user, {withCredentials: true});
+      const response = await Axios.post<{status: string, err: string}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-user-role", user, {withCredentials: true});
 
       if (response.data.status == 'success') {
         setUpdateStatus({
@@ -93,7 +93,7 @@ function Users() {
         return;
       }
 
-      const response = await Axios.post<{status: string}>("http://localhost:5000/api/delete-user", user, {withCredentials: true});
+      const response = await Axios.post<{status: string}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-user", user, {withCredentials: true});
     
       if (response.data.status == 'success') {
         setUsers((prevUsers: User[]) => prevUsers.filter((currUser: User) => currUser.user_id !== user.user_id));
