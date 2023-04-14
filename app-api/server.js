@@ -26,11 +26,11 @@ app.use(cookieParser());
 
 
 const options = {
-  host: "127.0.0.1",
+  host: process.env.MYSQL_HOST_NAME,
   port: 3306,
-  user: "test",
-  password: "test",
-  database: "auth",
+  user: process.env.MYSQL_USERNAME,
+  password: process.env.MYSQL_ROOT_PASSWORD,
+  database: process.env.MYSQL_AUTH_DATABASE,
   schema: {
     tableName: 'sessions',
     columnNames: {

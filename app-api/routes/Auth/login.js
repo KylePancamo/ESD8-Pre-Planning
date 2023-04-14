@@ -31,7 +31,7 @@ router.post("/", (req, res) => {
 
         db.getConnection((err, connection) => {
             if (err) {
-                logger.warn("Error getting connectio nto pool", {
+                logger.warn("Error getting connection to pool", {
                     error: `${err.message, err.stack}`
                 });
                 res.send({err: err});
