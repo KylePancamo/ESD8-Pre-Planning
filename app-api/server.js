@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const https = require('https');
+const fs = require('fs');
 require('dotenv').config();
 const routes = require('./routes/routes');
 var fileupload = require('express-fileupload');
@@ -13,7 +15,7 @@ const MySQLStore = require('express-mysql-session')(session);
 
 app.use(fileupload());
 app.use(cors({
-  origin: ["http://20.242.84.130"],
+  origin: ["https://esd8.eastus2.cloudapp.azure.com"],
   methods: "GET, POST, DELETE",
   credentials: true,
 }));
@@ -61,9 +63,17 @@ app.use(session({
 routes(app);
 
 
+const httpsOptions = {
+  key: fs.readFileSync('/etc/letsencrypt/live/esd8.eastus2.cloudapp.azure.com/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/esd8.eastus2.cloudapp.azure.com/fullchain.pem')
+}
+
 
 const PORT = 5000;
 // start express server on port 5000
-app.listen(PORT, () => {
-  console.log(`server started on http://20.242.84.130:${PORT} `);
-});
+
+try {
+  https.createServer(httpsOptions, app).listen(PORT);
+} catch (err) {
+  console.log(err);
+}

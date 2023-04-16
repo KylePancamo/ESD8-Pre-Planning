@@ -44,7 +44,7 @@ export default function Login() {
     }
 
     return (
-        <div className="Login">
+        <div className="Login" style={{backgroundImage: '/firetruck.jpg'}}>
             <div className="login-form-container">
                 <img src={Logo} alt="ESD8 Logo" />
             <Form className="login-form" onSubmit={handleSubmit}>
