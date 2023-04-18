@@ -6,6 +6,7 @@ import Axios from 'axios';
 import { decodeToken } from "react-jwt";
 import '../Login.css';
 import Logo from '../esd8_logo.png';
+import firetruck from '../firetruck.png';
 
 import { UserData } from '../types/auth-types';
 
@@ -56,7 +57,7 @@ export default function Login() {
     }
 
     return (
-        <div className="Login" style={{backgroundImage: '/firetruck.jpg'}}>
+        <div className="Login" style={{backgroundImage: `url(${firetruck})`}}>
             <div className="login-form-container">
                 <img src={Logo} alt="ESD8 Logo" />
             <Form className="login-form" onSubmit={handleSubmit}>
