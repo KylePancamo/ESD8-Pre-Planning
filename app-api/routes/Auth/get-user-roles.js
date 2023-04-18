@@ -8,18 +8,19 @@ const logger = require("../../logger");
 router.get("/", verifyUserCredentials, (req, res) => {
     const db = getPool(process.env.MYSQL_AUTH_DATABASE);
 
-    const user = req.user;
+    const superAdmin = process.env.ADMIN_USERNAME;
+
 
     const query = `
         SELECT a.id AS user_id, a.username, COALESCE(r.id, 0) AS role_id, COALESCE(r.name, 'No Role Assigned') AS name
         FROM accounts a
         LEFT JOIN user_roles ur ON a.id = ur.user_id
         LEFT JOIN roles r ON r.id = ur.role_id
-        WHERE a.username != 'admin'
+        WHERE a.username != ?
         GROUP BY a.id, a.username, r.id, r.name;
     `
 
-    db.query(query, user.username, (err, result) => {
+    db.query(query, superAdmin, (err, result) => {
         if (err) {
             logger.warn("Error getting user roles", {
                 error: `${err.message, err.stack}`

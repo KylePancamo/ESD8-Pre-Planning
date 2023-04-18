@@ -12,7 +12,8 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
 
     const user = req.body;
     const user_id = user.user_id;
-    if (user_id === 1) {
+
+    if (user.username === process.env.ADMIN_USERNAME) {
         logger.warn(`User ${user.username} tried to delete perform a suspicious action in file ${__filename}`);
         res.send({status: 'error'});
         return;
