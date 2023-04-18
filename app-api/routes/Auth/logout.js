@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
     }
 
     if (token) {
-        res.clearCookie("token", {path: "/"});
+        res.clearCookie("sid", {path: "/"});
         res.send({ status: 'success', message: 'Logged out successfully' } )
     } else {
         logger.warn("No token found")

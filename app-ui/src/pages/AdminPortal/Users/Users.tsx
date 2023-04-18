@@ -37,20 +37,29 @@ function Users() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     useEffect(() => {
+      const controller = new AbortController();
       const fetchUserRoles = async () => {
-        const response = await Axios.get<{payload: User[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-user-roles", {withCredentials: true});
-        console.log(response);
+        const response = await Axios.get<{payload: User[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-user-roles", {
+          withCredentials: true,
+          signal: controller.signal,
+        });
         setUsers(response.data.payload);
       }
 
       const fetchRoles = async () => {
-        const response = await Axios.get<{payload: Role[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-roles", {withCredentials: true});
-        console.log(response);
+        const response = await Axios.get<{payload: Role[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-roles", {
+          withCredentials: true,
+          signal: controller.signal,
+        });
         setRoles(response.data.payload);
       }
 
       fetchUserRoles();
       fetchRoles();
+
+      return () => {
+        controller.abort();
+      }
     }, []);
 
     const [searchTerm, setSearchTerm] = useState<string>('');

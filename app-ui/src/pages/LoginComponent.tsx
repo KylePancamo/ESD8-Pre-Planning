@@ -12,35 +12,47 @@ import { UserData } from '../types/auth-types';
 export default function Login() {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [error, setError] = useState<string>('');
+    const [loginStatus, setLoginStatus] = useState<{
+        status: boolean,
+        message: string,
+    }>();
     const { login } = useAuth();
 
     function validateForm() {
         return username.length > 0 && password.length > 0;
     }
 
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/login", {username, password}, {
+        const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/login", {username, password}, {
             withCredentials: true
-        }
-        ).then((response) => {
+        });
+        if (response.data.status === "success") {
             const token = response.data.token;
             if (!token) {
-                setError("There was an error retrieving your token. Please try again.");
+                console.log(response.data);
+                setLoginStatus({
+                    status: false,
+                    message: "Internal Error. No token returned.",
+                })
                 return;
             }
 
             const decodedToken: UserData | null = decodeToken(token);
-            console.log(decodedToken);
             if (!decodedToken) {
-                setError("Invalid username or password");
+                setLoginStatus({
+                    status: false,
+                    message: "Failed to decode token.",
+                })
                 return;
             }
             login(decodedToken);
-        }).catch((err) => {
-            console.log(err);
-        });
+        } else if (response.data.status === "error") {
+            setLoginStatus({
+                status: false,
+                message: response.data.err as string,
+            })
+        }
     }
 
     return (
@@ -72,9 +84,9 @@ export default function Login() {
                 <Button className="login-button" type="submit" disabled={!validateForm()}>
                     Login
                 </Button>
-                {error ? (
+                {loginStatus?.status === false? (
                     <div className="error-message">
-                        {error}
+                        {loginStatus.message}
                     </div>
                 ) : null }
             </Form>

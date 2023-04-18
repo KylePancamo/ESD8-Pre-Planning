@@ -69,8 +69,7 @@ const httpsOptions = {
 }
 
 
-const PORT = 5000;
-// start express server on port 5000
+const PORT = process.env.SERVER_PORT;
 
 try {
   https.createServer(httpsOptions, app).listen(PORT);

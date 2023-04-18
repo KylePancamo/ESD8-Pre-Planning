@@ -20,7 +20,7 @@ router.post("/", (req, res) => {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        const query = `SELECT a.id, a.username, r.name, COALESCE(BIT_OR(p.security_hex), 0) as permissions
+        const query = `SELECT a.id, a.username, a.password, r.name, COALESCE(BIT_OR(p.security_hex), 0) as permissions
                         FROM accounts a
                         JOIN user_roles ur ON a.id = ur.user_id
                         JOIN roles r ON r.id = ur.role_id
@@ -44,42 +44,44 @@ router.post("/", (req, res) => {
                         logger.warn("Error logging in", {
                             error: `${err.message, err.stack}`
                         });
-                        res.send({ err: err });
+                        res.send({ status: "error", err: "Internal Error" });
                         return;
                     }
                     if (result?.length > 0) {
-                        //bcrypt.compare(password, result[0].password, (error, response) => {
-                        //    if (response) {
-                            try {
-                                const permissions = parseInt(result[0].permissions.toString('hex'), 16);
-                                const userData = {...result[0]};
-    
-                                const IP = getRequestIP(req);
-    
-                                userData.permissions = permissions;
-                                const token = jwt.sign(userData, process.env.SECRET_KEY_JWT, { expiresIn: "24hr" });
-                                req.session.userId = result[0].id;
-                                req.session.token = token;
-                                logger.info(`User ${username} logged in successfully at IP ${IP}`)
-                                res.send({ message: 'Logged in successfully', token } )
-                            } catch (err) {
-                                logger.error("Error logging in", {
-                                    error: `${err.message, err.stack}`
-                                });
+                        bcrypt.compare(password, result[0].password, (error, response) => {
+                            console.log(response);
+                            if (response) {
+                                    try {
+                                        const permissions = parseInt(result[0].permissions.toString('hex'), 16);
+                                        const { password, ...userData } = {...result[0]};
+                                        console.log(userData);
+
+                                        const IP = getRequestIP(req);
+            
+                                        userData.permissions = permissions;
+                                        const token = jwt.sign(userData, process.env.SECRET_KEY_JWT, { expiresIn: "24hr" });
+                                        req.session.userId = result[0].id;
+                                        req.session.token = token;
+                                        logger.info(`User ${username} logged in successfully at IP ${IP}`);
+                                        res.send({ status: "success", message: 'Logged in successfully', token } );
+                                    } catch (err) {
+                                        logger.error("Error logging in", {
+                                            error: `${err.message, err.stack}`
+                                        });
+                                        res.send({ status: "error", err: "Internal Error" });                                
+                                    }
+                            } else {
+                                res.send({ message: "Wrong username or password" });
                             }
-                        //    } else {
-                        //        res.send({ message: "Wrong username/password combination!" });
-                        //    }
-                        //});
+                        });
                     } else {
-                        res.send({ message: "User doesn't exist" });
+                        res.send({ status: "error", err: "Wrong username or password" });
                     }
                 })
             } catch (err) {
                 console.log(err);
             }
         })
-
     } catch (err) {
         console.log(err);
     }

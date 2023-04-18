@@ -17,9 +17,10 @@ function App() {
   const [defaultMarkerIconExist, setDefaultMarkerIconExist] = useRecoilState<boolean>(defaultMarkerIconExistsState);
   const [prePlanningLocations, setPrePlanningLocations] = useRecoilState(preplanningLocationsState);
   
-  async function setIcons() {
+  async function setIcons(signal: AbortSignal) {
     const uploadedIcons = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-uploaded-icons", {
       withCredentials: true,
+      signal: signal,
     });
     if (!uploadedIcons.data) {
       console.log("No icons found");
@@ -27,9 +28,10 @@ function App() {
     setImages(uploadedIcons.data);
   }
 
-  async function setLocations() {
+  async function setLocations(signal: AbortSignal) {
     const preplanLocations = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-preplanning-locations", {
       withCredentials: true,
+      signal: signal,
     });
     if (!preplanLocations.data.result) {
       console.log("No preplanning locations found");
@@ -37,12 +39,13 @@ function App() {
     setPrePlanningLocations(preplanLocations.data.result);
   }
 
-  const checkDefaultMarkerIconExists = async () => {
+  const checkDefaultMarkerIconExists = async (signal: AbortSignal) => {
     const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/check-file", {
       params: {
         fileName: config.DEFAULT_MARKER_NAME,
       },
       withCredentials: true,
+      signal: signal,
     }).then((response) => {
       if (response?.data.status === "success") {
         setDefaultMarkerIconExist(true);
@@ -53,9 +56,14 @@ function App() {
   }
 
   useEffect(() => {
-    setIcons();
-    setLocations();
-    checkDefaultMarkerIconExists();
+    const controller = new AbortController();
+    setIcons(controller.signal);
+    setLocations(controller.signal);
+    checkDefaultMarkerIconExists(controller.signal);
+
+    return () => {
+      controller.abort();
+    }
   }, []);
   
   return (

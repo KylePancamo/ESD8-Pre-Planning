@@ -19,6 +19,7 @@ router.get("/", (req, res) => {
         try {
             const token = req.session.token;
             if (!token) {
+                res.send({error: "Session token not found"});
                 return;
             }
 
@@ -30,9 +31,8 @@ router.get("/", (req, res) => {
             res.send({error: "Error decoding token"});
         }
     } else {
-        logger.warn("Session token not found")
-        res.send({error: "Session token not found"});
-
+        logger.warn("Session value not found")
+        res.send({error: "Session value not found"});
     }
 });
 

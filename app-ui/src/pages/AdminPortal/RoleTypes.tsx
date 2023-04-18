@@ -31,13 +31,21 @@ function RoleTypes() {
   
   
   useEffect(() => {
+    const controller = new AbortController();
     const fetchRolePermissions = async () => {
-      const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-role-permissions", {withCredentials: true});
+      const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-role-permissions", {
+        withCredentials: true,
+        signal: controller.signal
+      });
       console.log(response.data.payload);
       setRolePermissions(response.data.payload);
     }
     
     fetchRolePermissions();
+
+    return () => {
+      controller.abort();
+    }
   }, [])
 
   const [searchTerm, setSearchTerm] = useState("");
