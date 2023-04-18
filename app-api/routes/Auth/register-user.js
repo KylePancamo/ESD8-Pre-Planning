@@ -52,13 +52,13 @@ router.post("/",verifyUserCredentials, isAdmin, (req, res) => {
                             return;
                         }
 
-                        query = `INSERT INTO user_roles (user_id, role_id) VALUES (?, 2);`;
-                        data = [result.insertId];
+                        query = `INSERT INTO user_roles (user_id, role_id) VALUES (?, ?);`;
+                        data = [result.insertId, process.env.DEFAULT_USER_ROLE];
 
                         connection.query(query, data, (err, result) => {
                             if (err) {
                                 logger.warn(`Error creating role 1 for user ${username}`, { error: `${err.message, err.stack}` });
-                                res.send({ status: 'error', err: 'Internal Error' });
+                                res.send({ status: 'error', err: 'User successfully registered, but no role is assigned. Please modify the users role.' });
                                 connection.release();
                                 return;
                             }
