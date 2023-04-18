@@ -71,7 +71,7 @@ router.post("/", (req, res) => {
                                         res.send({ status: "error", err: "Internal Error" });                                
                                     }
                             } else {
-                                res.send({ message: "Wrong username or password" });
+                                res.send({ status: "error", err: "Wrong username or password" });
                             }
                         });
                     } else {
