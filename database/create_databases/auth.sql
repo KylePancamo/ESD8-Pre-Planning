@@ -84,7 +84,7 @@ INSERT INTO `role_permissions` (`id`, `role_id`, `permission_id`, `description`)
 CREATE TABLE IF NOT EXISTS `user_roles` (
   `user_id` int NOT NULL DEFAULT '0',
   `role_id` int NOT NULL DEFAULT '0',
-  KEY `user_roles_ibfk_1` (`user_id`),
+  PRIMARY KEY (`user_id`),
   KEY `user_roles_ibfk_2` (`role_id`),
   CONSTRAINT `user_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`),
   CONSTRAINT `user_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
