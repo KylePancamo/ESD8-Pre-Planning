@@ -15,7 +15,7 @@ const MySQLStore = require('express-mysql-session')(session);
 
 app.use(fileupload());
 app.use(cors({
-  origin: ["https://esd8.eastus2.cloudapp.azure.com"],
+  origin: [process.env.CLIENT_ORIGIN],
   methods: "GET, POST, DELETE",
   credentials: true,
 }));
