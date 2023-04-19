@@ -34,7 +34,7 @@ router.post("/", (req, res) => {
                 logger.warn("Error getting connection to pool", {
                     error: `${err.message, err.stack}`
                 });
-                res.send({err: err});
+                res.send({status: "error", err: "Internal Server Error"});
                 return;
             }
 
