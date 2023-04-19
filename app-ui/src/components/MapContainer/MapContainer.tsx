@@ -83,8 +83,6 @@ function MapContainer(props : MapContainerProps) {
           lng: position.coords.longitude,
         }
         );
-      }, (error) => {
-        console.log(error);
       });
     }
   }, []);

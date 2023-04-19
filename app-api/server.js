@@ -1,8 +1,6 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const https = require('https');
-const fs = require('fs');
 require('dotenv').config();
 const routes = require('./routes/routes');
 var fileupload = require('express-fileupload');
@@ -63,16 +61,9 @@ app.use(session({
 routes(app);
 
 
-const httpsOptions = {
-  key: fs.readFileSync('/etc/letsencrypt/live/esd8.eastus2.cloudapp.azure.com/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/esd8.eastus2.cloudapp.azure.com/fullchain.pem')
-}
-
 
 const PORT = process.env.SERVER_PORT;
-
-try {
-  https.createServer(httpsOptions, app).listen(PORT);
-} catch (err) {
-  console.log(err);
-}
+// start express server on port 5000
+app.listen(PORT, () => {
+  console.log(`server started on ${process.env.SERVER_ORIGIN} `);
+});
