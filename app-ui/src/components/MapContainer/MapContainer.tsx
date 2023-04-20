@@ -121,7 +121,7 @@ function MapContainer(props : MapContainerProps) {
       if (!places || !places[0]) {
         return;
       }
-
+      
       setSearchedSite({
         location: places[0].formatted_address as string,
         latitude: places[0].geometry?.location?.lat() as number,

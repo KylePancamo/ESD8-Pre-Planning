@@ -124,13 +124,12 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
       {sideBarValue === true ? (
         <div className="sidebar-menu" id="sidebar-menu">
           <div className="sidebar-close">
-            <button
+            <Button
               className="close-button"
-              id="close-button"
               onClick={toggleSideBar}
             >
               X
-            </button>
+            </Button>
           </div>
             {siteIsSet ? (
               <div className="sidebar-data-wrapper">
@@ -148,10 +147,10 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
                   width: "fit-content",
                   display: "flex",
                   flexDirection: "column",
-                  position: "absolute",
+                  position: "relative",
                   top: "50%",
                   left: "50%",
-                  transform: "translate(-50%, -50%)"
+                  transform: "translate(-50%, -50%)",
                 }}>
                   <p style={{
                     textAlign: "center",

@@ -19,7 +19,6 @@ code {
 /**********************************************************/
 
 .sidebar-wrapper {
-  background-color: white;
   z-index: 2;
 }
 
@@ -45,32 +44,26 @@ code {
 }
 
 .sidebar-close {
-  position: absolute;
-  right: 0px;
+  display: flex;
+  justify-content: flex-end;
 }
 
+
 .close-button {
-  background-color: inherit;
-  border-style: solid;
-  border-width: 1px;
+  border: none !important;
+  background-color: white !important;
   border-radius: 25px 0px 0px 25px;
-  border-color: lightgray;
-  height: 50px;
+  color: #000 !important;
 }
 
 .close-button:hover {
   border-width: 3px;
-  border-color: red;
+  border-color: red !important;
 }
 
-.sidebar-menu {
-  position: relative;
-  width: 450px;
+.sidebar-menu { 
+  width: 600px;
   height: 100vh;
-  background-color: inherit;
-  border-style: solid;
-  border-width: 1px;
-  border-color: lightgrey;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -92,8 +85,7 @@ code {
 .sidebar-data-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .sidebar-edit-location.btn.btn-primary {
@@ -101,8 +93,7 @@ code {
   top: 0;
   left: 0;
   margin: 10px;
-  background-color: white;
-  color: blue;
+  color: white;
   text-decoration: underline;
   border: 0px solid;
   font-size: 15px;
@@ -130,20 +121,20 @@ code {
 .sidebar-header {
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   height: 80px;
   padding: 0 20px;
-  background-color: #fff;
-  
+  color: rgb(0, 0, 0);
   margin-bottom: 10px;
 }
 
 .sidebar-header-bottom {
   background-color: #000;
-  width: 75%;
-  border-bottom: 1px solid #e0e0e0;
+  width: 100%;
+  border-bottom: 2px solid #000000;
+  border-radius: 5px;
 }
 
 .sidebar-header__title {
@@ -159,24 +150,27 @@ code {
   font-size: 0.75rem;
 }
 
+.sidebar-header-left {
+  position: relative;
+  top: -50px;
+  display: flex;
+  flex-direction: column; 
+  max-width: 200px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 /******************************************************************/
 /*********************** SIDE BAR CONTENT *************************/
 /******************************************************************/
 
-.sidebar__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+.sidebar-content {
+  width: 100%;
+
 }
 
-
 .sidebar__block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  color: black;
 }
 
 .sidebar__block h3 {
@@ -195,21 +189,18 @@ code {
   padding: 10px;
   font-size: 0.85rem;
   text-align: center;
-  border: 1px solid;
-  border-color: rgb(218,220,224);
-  border-radius: 8px;
   width: 300px;
-  color: #56595c;
-}
-
-.sidebar__block-box:hover {
-  background-color: rgb(241, 242, 245);
 }
 
 .sidebar__block-text {
   display: table;
   margin: 0 auto;
-  color: #56595c;
+  color: white;
+}
+
+.sidebar__content-separator {
+  position: relative;
+  border: 1px solid #e0e0e0;
 }
 
 .filler {
@@ -683,7 +674,7 @@ button:hover {
   position: relative;
 }
 
-.close-button {
+.create-marker-close-button {
   position: absolute;
   top: 5px;
   right: 5px;
@@ -694,7 +685,7 @@ button:hover {
   height: fit-content;
 }
 
-.close-button:hover {
+.create-marker-close-button:hover {
   color: #ff0000;
   cursor: pointer;
 }

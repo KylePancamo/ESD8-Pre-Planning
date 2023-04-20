@@ -78,10 +78,9 @@ function EditLocation(props : EditLocationProps) {
   }
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
     Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-preplanning-location", {
       payload: data,
-      googleAddress: searchBox?.getPlace() ? searchBox.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address,
+      googleAddress: searchBox?.getPlace() ? searchBox?.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address,
       id: props.selectedEditLocation.id,
     }, {
       withCredentials: true,
@@ -264,23 +263,53 @@ function EditLocation(props : EditLocationProps) {
                 )}
               </Col>
             </Row>
-            <Row className="row" style={{ width: "25.8%" }}>
+            <Row className="row" style={{ width: "100%"}}>
               <Col>
-                <Form.Label>
-                  Contruction Type
-                </Form.Label>
-                <Form.Control
-                  {...register("constructionType", {
-                    required: { value: true, message: "Please enter a number" },
-                  })}
-                  type="number"
-                  placeholder="Construction Type"
-                />
-                {errors?.constructionType && (
-                  <span style={{ color: "red" }}>
-                    {errors?.constructionType.message}
-                  </span>
-                )}
+                <Form.Label>Construction Type</Form.Label>
+                <Row>
+                  <Col xs={4}>
+                    <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="1"
+                      label="I - Fire Resistive"
+                    />
+                    <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="2"
+                      label="II - Non-Combustible"
+                    />
+                    
+                  </Col>
+                  <Col xs={4}>
+                    <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="3"
+                      label="III - Ordinary"
+                    />
+                    <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="4"
+                      label="IV - Heavy Timber"
+                    />
+                  </Col>
+                  <Col xs={4}>
+                  <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="5"
+                      label="V - Wood Frame"
+                    />
+                  <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="5"
+                      label="VI - Light Weight Wood Truss"
+                    /></Col>
+                </Row>
               </Col>
             </Row>
           </Container>

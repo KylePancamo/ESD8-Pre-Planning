@@ -41,6 +41,7 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
     handleSubmit,
     reset,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<FormValues>();
   const [locationAddedResponse, setLocationAddedResponse] = useState<LocationAddedResponse>({
@@ -240,24 +241,54 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                 )}
               </Col>
             </Row>
-            <Row className="row" style={{ width: "25.8%" }}>
-              <Col>
-                <Form.Label>
-                  Construction Type
-                </Form.Label>
-                <Form.Control
-                  {...register("constructionType", {
-                    required: { value: true, message: "Please enter a number" },
-                  })}
-                  type="number"
-                  placeholder="Construction Type"
-                />
-                {errors.constructionType && (
-                  <span style={{ color: "red" }}>
-                    {errors.constructionType.message}
-                  </span>
-                )}
-              </Col>
+            <Row className="row" style={{ width: "100%"}}>
+            <Col>
+              <Form.Label>Construction Type</Form.Label>
+              <Row>
+                <Col xs={4}>
+                  <Form.Check
+                    {...register("constructionType")}
+                    type="checkbox"
+                    value="1"
+                    label="I - Fire Resistive"
+                  />
+                  <Form.Check
+                    {...register("constructionType")}
+                    type="checkbox"
+                    value="2"
+                    label="II - Non-Combustible"
+                  />
+                  
+                </Col>
+                <Col xs={4}>
+                  <Form.Check
+                    {...register("constructionType")}
+                    type="checkbox"
+                    value="3"
+                    label="III - Ordinary"
+                  />
+                  <Form.Check
+                    {...register("constructionType")}
+                    type="checkbox"
+                    value="4"
+                    label="IV - Heavy Timber"
+                  />
+                </Col>
+                <Col xs={4}>
+                <Form.Check
+                    {...register("constructionType")}
+                    type="checkbox"
+                    value="5"
+                    label="V - Wood Frame"
+                  />
+                <Form.Check
+                    {...register("constructionType")}
+                    type="checkbox"
+                    value="5"
+                    label="VI - Light Weight Wood Truss"
+                  /></Col>
+              </Row>
+            </Col>
             </Row>
           </Container>
         </Form.Group>
