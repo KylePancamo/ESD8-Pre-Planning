@@ -30,14 +30,15 @@ function AdminPanel(props: AdminPanelProps) {
     <>
     {hasPermissions(userData?.permissions, permission.MODIFY) ? (
       <div className="admin-ui">
-        <button
-          className="btn btn-primary"
+        <Button
+          className="admin-ui-trigger"
+          variant="secondary"
           onClick={() => {
             setAdminPanel(true);
           }}
         >
           Admin Panel
-        </button>
+        </Button>
         <GenericPopupWindow
           show={adminPanel}
           onHide={() => {
@@ -68,10 +69,11 @@ function AdminPanel(props: AdminPanelProps) {
                 onClick={() => {
                   setFileUploadPopup(true);
                 }}
+                variant="secondary"
               >
                 Upload File
               </Button>
-              <Button>
+              <Button variant="secondary">
                 <Link style={{color: 'white'}} to='/adminportal' target="_blank">Admin Portal</Link>
               </Button>
               <IconUpload
@@ -113,6 +115,7 @@ function AdminPanel(props: AdminPanelProps) {
                                 setIconEditState(true);
                                 setSelectedIcon(image);
                               }}
+                              variant="secondary"
                             >Edit</Button>
                           </td>
                         </tr>

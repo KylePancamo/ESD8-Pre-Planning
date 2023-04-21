@@ -50,9 +50,9 @@ function GenericPopupWindow(props: GenericPopupWindowProps) {
       <Modal.Footer
         className={props.footerClassName}
       >
-        <Button onClick={props.onHide}>Close</Button>
+        <Button onClick={props.onHide} variant="secondary">Close</Button>
         {props.extraButton ? (
-          <Button variant={props.extraButtonVariant} onClick={props.extraAction}>{props.extraButton}</Button>
+          <Button variant="secondary" onClick={props.extraAction}>{props.extraButton}</Button>
         ) : null }
       </Modal.Footer>
     </Modal>

@@ -43,17 +43,9 @@ code {
   display: flex;
 }
 
-.sidebar-close {
-  display: flex;
-  justify-content: flex-end;
-}
 
-
-.close-button {
-  border: none !important;
-  background-color: white !important;
-  border-radius: 25px 0px 0px 25px;
-  color: #000 !important;
+.close-button.btn.btn-primary {
+  background-color: transparent !important;
 }
 
 .close-button:hover {
@@ -85,15 +77,13 @@ code {
 .sidebar-data-wrapper {
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
 }
 
 .sidebar-edit-location.btn.btn-primary {
-  position: absolute;
+  position: relative;
   top: 0;
-  left: 0;
-  margin: 10px;
-  color: white;
+  right: 0;
+  background-color: transparent !important;
   text-decoration: underline;
   border: 0px solid;
   font-size: 15px;
@@ -119,40 +109,26 @@ code {
 /*****************************************************************/
 
 .sidebar-header {
-  position: relative;
+  background-color: #db4437;
+  color: white;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  height: 80px;
-  padding: 0 20px;
-  color: rgb(0, 0, 0);
-  margin-bottom: 10px;
+  align-items: center;
+  min-height: 75px;
 }
 
 .sidebar-header-bottom {
   background-color: #000;
   width: 100%;
-  border-bottom: 2px solid #000000;
+  border-bottom: 10px solid #000000;
   border-radius: 5px;
 }
 
 .sidebar-header__title {
   font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-.sidebar-header__subtitle {
-  margin-bottom: 5px;
-}
-
-.sidebar-header__subtitle2 {
-  font-size: 0.75rem;
 }
 
 .sidebar-header-left {
   position: relative;
-  top: -50px;
   display: flex;
   flex-direction: column; 
   max-width: 200px;
@@ -237,12 +213,13 @@ code {
   height: 10vh;
 }
 
-.admin-ui {
+.admin-ui-trigger {
   position: fixed;
-  top: 10vh;
+  top: 15vh;
   right: 0;
-  min-width: fit-content;
-  min-height: fit-content;
+  transform-origin: 70% 5%;
+  rotate: 270deg;
+  border-radius: 25px 25px 0px 0px !important;
 }
 
 .admin-panel {
@@ -523,11 +500,13 @@ code {
 }
 
 .preplan-locations__table tr:nth-of-type(even) {
-  background-color: #f58462f0; /* Use a lighter gray background for alternating rows */
+  background-color: #db4437; /* Use a lighter gray background for alternating rows */
+  color: white;
 }
 
 .preplan-locations__table tr:nth-of-type(odd) {
-  background-color: #f5ad38cc;
+  background-color: black;
+  color: white;
 }
 
 .preplan-locations__table-cell {
@@ -548,7 +527,6 @@ code {
   position: absolute;
   left: 50vw;
   top: 1vh;
-  background-image: linear-gradient(to bottom right, #1b1d23, #bebb1c);
   color: white;
   border: none;
   border-radius: 3px;
@@ -557,10 +535,6 @@ code {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s ease;
-}
-
-.logout-btn:hover {
-  background-image: linear-gradient(to bottom right, #25313b, #bebb1c);
 }
 
 .logout-icon {
@@ -688,4 +662,20 @@ button:hover {
 .create-marker-close-button:hover {
   color: #ff0000;
   cursor: pointer;
+}
+
+.btn-primary {
+  background-color: black !important;
+  color: white !important;
+  border: black !important;
+}
+
+.btn-secondary {
+  background-color: #db4437 !important;
+}
+
+.btn-danger {
+  background-color: rgb(255, 115, 0) !important;
+  color: black !important;
+  border: red !important;
 }

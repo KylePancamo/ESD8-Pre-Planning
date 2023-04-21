@@ -407,21 +407,22 @@ function MapContainer(props : MapContainerProps) {
         setOccupancyLocation={setOccupancyLocation}
         setCenter={setCenter}
       />
-      <button onClick={async () => {
+      <Button variant="secondary" onClick={async () => {
         const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/logout", { withCredentials: true });
         if (response.data.status === "success") {
           logout();
         }
       }} className="logout-btn">
         Logout
-      </button>
+      </Button>
       <CurrentUserLocation
         lat={currentUserLocation?.lat as number | (() => number)}
         lng={currentUserLocation?.lng as number | (() => number)}
         setCenter={setCenter}
       />
       {isCreateMarkerUIVisible === false ? (
-        <Button 
+        <Button
+          variant="secondary"
           className="create-marker-trigger d-inline-flex"
           onClick={() => setIsCreateMarkerUIVisible(true)}
         >
@@ -430,6 +431,9 @@ function MapContainer(props : MapContainerProps) {
             height="30"
             viewBox="0 96 960 960"
             width="30"
+            style={{
+              fill: "white",
+            }}
           >
             <path d="M728 413.333h66.667V288H920v-66.667H794.667V96H728v125.333H602.667V288H728v125.333Zm-247.941
             156q30.274 0 51.774-21.559t21.5-51.833q0-30.274-21.559-51.774t-51.833-21.5q-30.274 0-51.774 21.559t-21.5

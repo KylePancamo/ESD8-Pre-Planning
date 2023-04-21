@@ -208,6 +208,7 @@ function PopupWindow(props: PopupWindowProps) {
                   <Button 
                     onClick={handleFileUpload}
                     style={{ width: "fit-content" }}
+                    variant="secondary"
                   >
                     Select Image
                   </Button>
@@ -237,6 +238,7 @@ function PopupWindow(props: PopupWindowProps) {
                 <Col>
                   <DropdownButton
                     id="dropdown-basic-button"
+                    variant="secondary"
                     title={
                       <img
                         src={"/icon_images/" + selectedIcon.icon_name}
@@ -325,9 +327,9 @@ function PopupWindow(props: PopupWindowProps) {
           Delete Marker
         </Button>
         ) : null}
-        <Button onClick={props.onHide}>Close</Button>
+        <Button variant="secondary" onClick={props.onHide}>Close</Button>
         {hasPermissions(userData?.permissions, permission.MODIFY)  ? (
-          <Button onClick={handleSubmit((data) => handleMarkerSaving(data))}>Save</Button>
+          <Button variant="secondary" onClick={handleSubmit((data) => handleMarkerSaving(data))}>Save</Button>
         ) : null}
       </Modal.Footer>
       <MarkerDeletion
