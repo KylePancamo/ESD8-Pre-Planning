@@ -16,7 +16,6 @@ type PreplanningLocationsUIProps = {
 function PreplanningLocationsUI({ setSideBarValue, setOccupancyLocation, setCenter } : PreplanningLocationsUIProps) {
     const { prePlanningLocations } = usePrePlanningLocations();
     const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
-
     return (
         
         <div className="preplan-locations">
@@ -29,11 +28,7 @@ function PreplanningLocationsUI({ setSideBarValue, setOccupancyLocation, setCent
                                     <td onClick={() => {
                                         setOccupancyLocation({lat: location.latitude, lng: location.longitude});
                                         setCenter({lat: location.latitude, lng: location.longitude})
-                                        setSearchedSite({
-                                            location: location.google_formatted_address,
-                                            latitude: location.latitude,
-                                            longitude: location.longitude,
-                                        });
+                                        setSearchedSite(location);
                                         setSideBarValue(true);
                                     }} 
                                     className="preplan-locations__table-cell">{location.occupancyname}</td>

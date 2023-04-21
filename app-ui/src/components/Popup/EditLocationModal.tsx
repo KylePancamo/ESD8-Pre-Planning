@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
 import states from "./states";
-import fetchPreplanData from "./fetchPreplanData";
 import { Autocomplete } from "@react-google-maps/api";  
 import Alert from "react-bootstrap/Alert";
 import { LocationTypes } from "../../types/location-types";
@@ -43,7 +42,29 @@ function EditLocation(props : EditLocationProps) {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({
+    defaultValues: {
+      occupancyName: props.selectedEditLocation.occupancyname,
+      occupancyType: props.selectedEditLocation.occupancy_types,
+      hazards: props.selectedEditLocation.hazards,
+      accessInformation: props.selectedEditLocation.access,
+      breakerBoxLoc: props.selectedEditLocation.breaker_box,
+      constructionType: props.selectedEditLocation.construction_types,
+      contactName: props.selectedEditLocation.contactname,
+      electricMeterLoc: props.selectedEditLocation.electric_meter,
+      emergencyContact: props.selectedEditLocation.emergency_contact_number,
+      gasShutoffLoc: props.selectedEditLocation.gas_shutoff,
+      hydrantAddress: props.selectedEditLocation.hydrant_address,
+      hydrantDistance: props.selectedEditLocation.hydrant_distance.toString(),
+      mutualAid: props.selectedEditLocation.mutual_aids,
+      notes: props.selectedEditLocation.other_notes,
+      occupancyAddress: props.selectedEditLocation.occupancyaddress,
+      occupancyCity: props.selectedEditLocation.occupancycity,
+      state: props.selectedEditLocation.occupancystate,
+      zipCode: props.selectedEditLocation.occupancyzip,
+      waterLoc: props.selectedEditLocation.water,
+    },
+  });
   console.log(props.selectedEditLocation.construction_types)
   const [locationEditResponse, setLocationEditResponse] = useState<LocationEditResponse>({
     status: "",
@@ -69,8 +90,8 @@ function EditLocation(props : EditLocationProps) {
       let city = addressArray[1].trim();
       let state = addressArray[2].split(' ')[1].trim();
       let zip = addressArray[2].split(' ')[2] != undefined ? addressArray[2].split(' ')[2].trim() : "";
-      setValue("streetAddress", occupancyaddress);
-      setValue("city", city);
+      setValue("occupancyAddress", occupancyaddress);
+      setValue("occupancyCity", city);
       setValue("state", state);
       setValue("zipCode", zip);
     } else {
@@ -106,8 +127,8 @@ function EditLocation(props : EditLocationProps) {
           google_formatted_address: searchBox?.getPlace() ? searchBox.getPlace().formatted_address as string : props.selectedEditLocation.google_formatted_address as string, 
           latitude: props.selectedEditLocation.latitude,
           longitude: props.selectedEditLocation.longitude,
-          occupancyaddress: data.streetAddress as string,
-          occupancycity: data.city as string,
+          occupancyaddress: data.occupancyAddress as string,
+          occupancycity: data.occupancyCity as string,
           occupancystate: data.state as string,
           occupancyzip: data.zipCode as string,
           occupancycountry: data.country as string,
@@ -133,8 +154,8 @@ function EditLocation(props : EditLocationProps) {
           google_formatted_address: searchBox?.getPlace() ? searchBox.getPlace().formatted_address as string : props.selectedEditLocation.google_formatted_address as string, 
           latitude: props.selectedEditLocation.latitude,
           longitude: props.selectedEditLocation.longitude,
-          occupancyaddress: data.streetAddress as string,
-          occupancycity: data.city as string,
+          occupancyaddress: data.occupancyAddress as string,
+          occupancycity: data.occupancyCity as string,
           occupancystate: data.state as string,
           occupancyzip: data.zipCode as string,
           occupancycountry: data.country as string,
@@ -152,9 +173,6 @@ function EditLocation(props : EditLocationProps) {
       onHide={() => props.onHide(false)}
       contentClassName="edit-location-modal"
       title="Edit Location"
-      onEntering={() => {
-        fetchPreplanData(reset, props.selectedEditLocation.id as number);
-      }}
       onExit={() => {
         setLocationEditResponse({
           status: "",
@@ -384,7 +402,7 @@ function EditLocation(props : EditLocationProps) {
                   Street Address
                 </Form.Label>
                 <Form.Control
-                  {...register("streetAddress", {
+                  {...register("occupancyAddress", {
                     required: {
                       value: true,
                       message: "Please enter a Street Address",
@@ -393,9 +411,9 @@ function EditLocation(props : EditLocationProps) {
                   type="text"
                   placeholder="Street Address"
                 />
-                {errors?.streetAddress && (
+                {errors?.occupancyAddress && (
                   <span style={{ color: "red" }}>
-                    {errors?.streetAddress.message}
+                    {errors?.occupancyAddress.message}
                   </span>
                 )}
               </Col>
@@ -406,15 +424,15 @@ function EditLocation(props : EditLocationProps) {
                   City
                 </Form.Label>
                 <Form.Control
-                  {...register("city", {
+                  {...register("occupancyCity", {
                     required: { value: true, message: "Please enter a City" },
                   })}
                   style={{ width: "100%" }}
                   type="text"
                   placeholder="City"
                 />
-                {errors?.city && (
-                  <span style={{ color: "red" }}>{errors?.city.message}</span>
+                {errors?.occupancyCity && (
+                  <span style={{ color: "red" }}>{errors?.occupancyCity.message}</span>
                 )}
               </Col>
               <Col>
@@ -740,7 +758,7 @@ function EditLocation(props : EditLocationProps) {
               {locationEditResponse?.message}
           </Alert>
         ) : locationEditResponse?.status === "error" ? (
-          <Alert variant="success" className="m-2">
+          <Alert variant="error" className="m-2">
               {locationEditResponse?.message}
           </Alert>
         ) : null}

@@ -6,8 +6,6 @@ import { Button } from "react-bootstrap";
 import Axios from "axios";
 import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
-import {sideBarDataState} from "../../atoms";
-import {siteIsSetState} from "../../atoms";
 import EditLocation from "../Popup/EditLocationModal";
 import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
 import AddLocationModal from "../Popup/AddLocationModal";
@@ -23,11 +21,9 @@ type SideBarProps = {
 }
 
 function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
-  const [siteIsSet, setSiteIsSet] = useRecoilState(siteIsSetState);
   const [searchedSite, setSearchedSite] = useRecoilState<any>(searchSiteState);
-  const [sidebarData, setSidebarData] = useRecoilState<any>(sideBarDataState);
   const [editLocation, setEditLocation] = useState<boolean>(false);
-  const { updateLocations }= usePrePlanningLocations();
+  const { prePlanningLocations, updateLocations }= usePrePlanningLocations();
   const [addLocationButton, setAddLocationButton] = useState<boolean>(false);
   const { userData } = useAuth();
 
@@ -43,7 +39,7 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
     setSideBarValue(!sideBarValue);
   };
   
-  const canEditLocation = hasPermissions(userData?.permissions as number, permission.MODIFY);
+  const userCanModify = hasPermissions(userData?.permissions as number, permission.MODIFY);
 
   function renderEditLocationButton() {
     return (
@@ -58,13 +54,12 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
   }
 
   function renderEditLocationModal() {
-    console.log(sidebarData);
     return (
       <EditLocation
         show={editLocation}
         onHide={updateEdit}
-        selectedEditLocation={sidebarData}
-        setSelectedEditLocaton={setSidebarData}
+        selectedEditLocation={searchedSite}
+        setSelectedEditLocaton={setSearchedSite}
         updateLocations={updateLocations}
       />
     );
@@ -87,25 +82,6 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
       />
     );
   }
-
-  useEffect(() => {
-    if (searchedSite.location !== "") {
-      Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-sidebar-data", {address: searchedSite.location}, {withCredentials: true})
-      .then((response) => {
-        if(response.data.payload.length > 0) {
-          setSiteIsSet(true);
-          setSidebarData(response.data.payload[0]);
-        } else {
-          setSiteIsSet(false);
-          setSidebarData([]);
-        }
-      })
-      .catch((error) => {
-        setSiteIsSet(false);
-        console.log(error);
-      });
-    }
-  }, [searchedSite.location]);
 
   return (
     <div className="sidebar-wrapper">
@@ -133,18 +109,18 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
               X
             </Button>
           </div>
-            {siteIsSet ? (
+            {searchedSite.id ? (
               <div className="sidebar-data-wrapper">
-                {canEditLocation && renderEditLocationButton()}
+                {userCanModify && renderEditLocationButton()}
                 {editLocation && renderEditLocationModal()}
                 <Header 
-                  sidebarData={sidebarData}
+                  sidebarData={searchedSite}
                 />
                 <Content
-                  sidebarData={sidebarData}
+                  sidebarData={searchedSite}
                 />
               </div>
-              ) : searchedSite.location ? (
+              ) : searchedSite.google_formatted_address ? (
                 <div style={{
                   width: "fit-content",
                   display: "flex",
@@ -158,8 +134,8 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
                     textAlign: "center",
                     marginBottom: "10px"
                     
-                  }}><b>{searchedSite.location}</b> <br/> not found in the database. Please search a different site or add the site.</p>
-                  {canEditLocation && renderAddLocationButton()}
+                  }}><b>{searchedSite.google_formatted_address}</b> <br/> not found in the database. Please search a different site or add the site.</p>
+                  {userCanModify && renderAddLocationButton()}
                   {addLocationButton && renderAddLocationModal()}
                 </div>
               ) : (

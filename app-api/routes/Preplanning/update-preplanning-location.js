@@ -26,8 +26,8 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
       const data = [
         google_formatted_address,
         payload.occupancyName,
-        payload.streetAddress,
-        payload.city,
+        payload.occupancyAddress,
+        payload.occupancyCity,
         payload.state,
         payload.zipCode,
         payload.country,

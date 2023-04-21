@@ -11,8 +11,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
-import {sideBarDataState} from "../../atoms";
-import {siteIsSetState} from "../../atoms";
 import PreplanningLocationsUI from "./PreplanningLocationsUI";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
@@ -21,7 +19,7 @@ import { SearchSite } from "../../types/atoms-types";
 import { marker } from "../../types/marker-types";
 import CurrentUserLocation from "../CurrentUserLocation"
 import MapCreateMarker from "../MapCreateMarker";
-import cluster from "cluster";
+import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
 
 const containerStyle = {
   width: "100vw",
@@ -60,6 +58,7 @@ function MapContainer(props : MapContainerProps) {
   const [searchBox, setSearchBox] = useState<google.maps.places.SearchBox>();
   const [bounds, setBounds] = useState<bounds>();
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
+  const { prePlanningLocations, locationInitalizer } = usePrePlanningLocations();
   const [mapId, setMapId] = useState<string | undefined>("satellite");
   const [currentUserLocation, setCurrentUserLocation] = useState<center>();
   const [trackingLocation, setTrackingLocation] = useState<boolean>(false);
@@ -121,12 +120,16 @@ function MapContainer(props : MapContainerProps) {
       if (!places || !places[0]) {
         return;
       }
+      const location = prePlanningLocations.find((location) => location.google_formatted_address === places[0].formatted_address);
       
-      setSearchedSite({
-        location: places[0].formatted_address as string,
-        latitude: places[0].geometry?.location?.lat() as number,
-        longitude: places[0].geometry?.location?.lng() as number,
-      });
+      if (!location) {
+        setSearchedSite({
+          ...locationInitalizer,
+          google_formatted_address: places[0].formatted_address as string
+        });
+      } else {
+        setSearchedSite(location);
+      }
 
       places.forEach((place) => {
 
@@ -143,20 +146,12 @@ function MapContainer(props : MapContainerProps) {
 
       const nextCenter: center = nextMarkers.length > 0 ? nextMarkers[0].position as center : center;
       setCenter(nextCenter);
+      setOccupancyLocation(nextCenter);
       props.setSideBarValue(true);
     }
   };
-
-  const [sidebarData, setSidebarData] = useRecoilState(sideBarDataState);
-  const [siteIsSet, setSiteIsSet] = useRecoilState(siteIsSetState);
   const clearPlaces = () => {
-    setSearchedSite({
-      location: "",
-      latitude: 0,
-      longitude: 0,
-    });
-    setSidebarData([])
-    setSiteIsSet(false);
+    setSearchedSite(locationInitalizer);
     props.setSideBarValue(false);
   }
 

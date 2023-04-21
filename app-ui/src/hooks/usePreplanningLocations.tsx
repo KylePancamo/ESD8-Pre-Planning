@@ -25,7 +25,33 @@ function usePrePlanningLocations() {
     });
   }, [prePlanningLocations])
 
-  return {prePlanningLocations, updateLocations, addNewLocation};
+  const locationInitalizer: LocationTypes = {
+    google_formatted_address: '',
+    latitude: 0,
+    longitude: 0,
+    occupancyname: '',
+    mutual_aids: [],
+    occupancyaddress: '',
+    occupancycity: '',
+    occupancystate: '',
+    occupancyzip: '',
+    occupancycountry: '',
+    construction_types: [],
+    hazards: '',
+    hydrant_address: '',
+    hydrant_distance: 0,
+    access: '',
+    electric_meter: '',
+    breaker_box: '',
+    water: '',
+    gas_shutoff: '',
+    emergency_contact_number: '',
+    other_notes: '',
+    occupancy_types: [],
+    contactname: '',
+  }
+
+  return {prePlanningLocations, updateLocations, addNewLocation, locationInitalizer};
 }
 
 export default usePrePlanningLocations;

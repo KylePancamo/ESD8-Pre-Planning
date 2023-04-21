@@ -7,23 +7,33 @@ export const imagesState = atom<Image[]>({
     default: [],
 });
 
-export const searchSiteState = atom<SearchSite>({
+export const searchSiteState = atom<LocationTypes>({
     key: 'searchSiteState',
     default: {
-        location: '',
+        google_formatted_address: '',
         latitude: 0,
         longitude: 0,
+        occupancyname: '',
+        mutual_aids: [],
+        occupancyaddress: '',
+        occupancycity: '',
+        occupancystate: '',
+        occupancyzip: '',
+        occupancycountry: '',
+        construction_types: [],
+        hazards: '',
+        hydrant_address: '',
+        hydrant_distance: 0,
+        access: '',
+        electric_meter: '',
+        breaker_box: '',
+        water: '',
+        gas_shutoff: '',
+        emergency_contact_number: '',
+        other_notes: '',
+        occupancy_types: [],
+        contactname: '',
     },
-})
-
-export const sideBarDataState = atom<LocationTypes[]>({
-    key: 'sideBarData',
-    default: [],
-})
-
-export const siteIsSetState = atom<boolean>({
-    key: 'siteIsSet',
-    default: false,
 })
 
 export const boundsState = atom({
