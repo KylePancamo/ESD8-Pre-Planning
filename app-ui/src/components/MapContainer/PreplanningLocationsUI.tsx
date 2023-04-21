@@ -23,7 +23,7 @@ function PreplanningLocationsUI({ setSideBarValue, setOccupancyLocation, setCent
             <div className="preplan-locations__container">
                 <table className="preplan-locations__table">
                     <tbody>
-                        {prePlanningLocations.map((location) => {
+                        {prePlanningLocations?.map((location) => {
                             return (
                                 <tr key={location.id}>
                                     <td onClick={() => {

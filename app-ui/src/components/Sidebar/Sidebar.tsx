@@ -31,6 +31,8 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
   const [addLocationButton, setAddLocationButton] = useState<boolean>(false);
   const { userData } = useAuth();
 
+  
+
   console.log(searchedSite);
 
   const updateEdit = useCallback(() => {

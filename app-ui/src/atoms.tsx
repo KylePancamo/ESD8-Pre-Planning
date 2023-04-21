@@ -1,5 +1,6 @@
 import { atom } from "recoil";
-import { Image, SearchSite, LocationTypes } from "./types/atoms-types";
+import { Image, SearchSite } from "./types/atoms-types";
+import { LocationTypes } from "./types/location-types";
 
 export const imagesState = atom<Image[]>({
     key: 'imagesState',

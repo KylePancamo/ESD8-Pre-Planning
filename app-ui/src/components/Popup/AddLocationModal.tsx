@@ -26,7 +26,7 @@ type AddLocationProps = {
 }
 
 type FormValues = {
-  [key: string]: string;
+  [key: string]: string | string[];
 };
 
 type LocationAddedResponse = {
@@ -43,7 +43,11 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({
+    defaultValues: {
+      mutualAid: ["1", "2", "3", "4"],
+    }
+  });
   const [locationAddedResponse, setLocationAddedResponse] = useState<LocationAddedResponse>({
     status: "",
     message: "",
@@ -89,32 +93,29 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
         console.log(response);
         setLocationAddedResponse(response.data);
         addNewLocation({
-          occupancyname: data.occupancyName,
-          occupancytype: data.occupancyType,
-          hazards: data.hazards,
-          other_notes: data.notes,
-          access: data.accessInformation,
-          breaker_box: data.breakerBoxLoc,
-          constructiontype: parseInt(data.constructionType),
-          contactname: data.contactName,
-          electric_meter: data.electricMeterLoc,
-          emergency_contact_number: data.emergencyContact,
-          gas_shutoff: data.gasShutoffLoc,
-          hydrant_address: data.hydrantAddress,
-          hydrant_distance: Number(data.hydrantDistance),
-          mut_aid_bc2fd: parseInt(data.mutual_aid1),
-          mut_aid_d7fr: parseInt(data.mutual_aid2),
-          mut_aid_helotesfd: parseInt(data.mutual_aid3),
+          occupancyname: data.occupancyName as string,
+          occupancy_types: data.occupancyType as string[],
+          hazards: data.hazards as string,
+          other_notes: data.notes as string,
+          access: data.accessInformation as string,
+          breaker_box: data.breakerBoxLoc as string,
+          construction_types: data.constructionType as string[],
+          contactname: data.contactName as string,
+          electric_meter: data.electricMeterLoc as string,
+          emergency_contact_number: data.emergencyContact as string,
+          gas_shutoff: data.gasShutoffLoc as string,
+          hydrant_address: data.hydrantAddress as string,
+          hydrant_distance: Number(data.hydrantDistance as string),
+          mutual_aids: data.mutualAid as string[],
           google_formatted_address: searchBox?.getPlace() ? searchBox.getPlace().formatted_address as string : address.location as string, 
           latitude: searchBox?.getPlace() ? searchBox.getPlace().geometry?.location?.lat() as number : address.latitude,
           longitude: searchBox?.getPlace() ? searchBox.getPlace().geometry?.location?.lng() as number: address.longitude,
-          mut_aid_leonspringsvfd: parseInt(data.mutual_aid4),
-          occupancyaddress: data.streetAddress,
-          occupancycity: data.city,
-          occupancystate: data.state,
-          occupancycountry: data.country,
-          occupancyzip: data.zipCode,
-          water: data.waterLoc,
+          occupancyaddress: data.streetAddress as string,
+          occupancycity: data.city as string,
+          occupancystate: data.state as string,
+          occupancycountry: data.country as string,
+          occupancyzip: data.zipCode as string,
+          water: data.waterLoc as string,
         });
       })
       .catch((error) => {
@@ -182,26 +183,6 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
               </Col>
               <Col>
                 <Form.Label>
-                  Occupancy Type
-                </Form.Label>
-                <Form.Control
-                  {...register("occupancyType", {
-                    required: {
-                      value: true,
-                      message: "Please enter an Occupancy Type",
-                    },
-                  })}
-                  type="text"
-                  placeholder="Occupancy Type"
-                />
-                {errors.occupancyType && (
-                  <span style={{ color: "red" }}>
-                    {errors.occupancyType.message}
-                  </span>
-                )}
-              </Col>
-              <Col>
-                <Form.Label>
                   Contact Name
                 </Form.Label>
                 <Form.Control
@@ -241,54 +222,132 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                 )}
               </Col>
             </Row>
+          </Container>
+        </Form.Group>
+        <Form.Group>
+          <Container>
+          <Row className="row">
+              <Form.Label style={{ fontWeight: "bold" }}>Occupancy Type</Form.Label>
+          </Row>
+          <Row className="row" style={{ width: "100%"}}>
+              <Col>
+                <Row>
+                  <Col xs={4}>
+                    <Form.Check
+                      {...register("occupancyType")}
+                      type="checkbox"
+                      value="1"
+                      label="Assembly"
+                    />
+                    <Form.Check
+                      {...register("occupancyType")}
+                      type="checkbox"
+                      value="2"
+                      label="Commercial"
+                    />
+                    <Form.Check
+                      {...register("occupancyType")}
+                      type="checkbox"
+                      value="3"
+                      label="Educational"
+                    />
+                  </Col>
+                  <Col xs={4}>
+                    <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="4"
+                      label="Hazardous"
+                    />
+                    <Form.Check
+                      {...register("occupancyType")}
+                      type="checkbox"
+                      value="5"
+                      label="Industrial"
+                    />
+                    <Form.Check
+                      {...register("occupancyType")}
+                      type="checkbox"
+                      value="5"
+                      label="Institutional"
+                    />
+                  </Col>
+                  <Col xs={4}>
+                    <Form.Check
+                      {...register("occupancyType")}
+                      type="checkbox"
+                      value="5"
+                      label="Mercantile"
+                    />
+                    <Form.Check
+                      {...register("occupancyType")}
+                      type="checkbox"
+                      value="5"
+                      label="Residential"
+                    />
+                    <Form.Check
+                      {...register("occupancyType")}
+                      type="checkbox"
+                      value="5"
+                      label="Storage"
+                    />
+                  </Col>
+                </Row>
+              </Col>
+          </Row>
+          </Container>
+        </Form.Group>
+        <Form.Group>
+          <Container>
+            <Row className="row">
+                <Form.Label style={{ fontWeight: "bold" }}>Construction Type</Form.Label>
+            </Row>
             <Row className="row" style={{ width: "100%"}}>
-            <Col>
-              <Form.Label>Construction Type</Form.Label>
-              <Row>
-                <Col xs={4}>
+              <Col>
+                <Row>
+                  <Col xs={4}>
+                    <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="1"
+                      label="I - Fire Resistive"
+                    />
+                    <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="2"
+                      label="II - Non-Combustible"
+                    />
+                  </Col>
+                  <Col xs={4}>
+                    <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="3"
+                      label="III - Ordinary"
+                    />
+                    <Form.Check
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="4"
+                      label="IV - Heavy Timber"
+                    />
+                  </Col>
+                  <Col xs={4}>
                   <Form.Check
-                    {...register("constructionType")}
-                    type="checkbox"
-                    value="1"
-                    label="I - Fire Resistive"
-                  />
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="5"
+                      label="V - Wood Frame"
+                    />
                   <Form.Check
-                    {...register("constructionType")}
-                    type="checkbox"
-                    value="2"
-                    label="II - Non-Combustible"
-                  />
-                  
-                </Col>
-                <Col xs={4}>
-                  <Form.Check
-                    {...register("constructionType")}
-                    type="checkbox"
-                    value="3"
-                    label="III - Ordinary"
-                  />
-                  <Form.Check
-                    {...register("constructionType")}
-                    type="checkbox"
-                    value="4"
-                    label="IV - Heavy Timber"
-                  />
-                </Col>
-                <Col xs={4}>
-                <Form.Check
-                    {...register("constructionType")}
-                    type="checkbox"
-                    value="5"
-                    label="V - Wood Frame"
-                  />
-                <Form.Check
-                    {...register("constructionType")}
-                    type="checkbox"
-                    value="5"
-                    label="VI - Light Weight Wood Truss"
-                  /></Col>
-              </Row>
-            </Col>
+                      {...register("constructionType")}
+                      type="checkbox"
+                      value="5"
+                      label="VI - Light Weight Wood Truss"
+                    /></Col>
+                </Row>
+              </Col>
             </Row>
           </Container>
         </Form.Group>
@@ -437,58 +496,41 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
         <Form.Group className="mutual-aid-group">
           <Container>
             <Row className="row">
-              <Form.Label style={{ fontWeight: "bold" }}>Mutual Aid Information</Form.Label>
+              <Form.Label style={{ fontWeight: "bold" }}>Mutual Aid</Form.Label>
             </Row>
-            <Row className="row">
+            <Row className="row" style={{ width: "100%"}}>
               <Col>
-                <Form.Label>
-                  Mutual Aid
-                </Form.Label>
-                <Form.Control
-                  {...register("mutual_aid1", {
-                    required: { value: true, message: "Please enter a number" },
-                  })}
-                  type="number"
-                  placeholder="Mutual Aid"
-                />
-              </Col>
-              <Col>
-                <Form.Label>
-                  Mutual Aid
-                </Form.Label>
-                <Form.Control
-                  {...register("mutual_aid2", {
-                    required: { value: true, message: "Please enter a number" },
-                  })}
-                  type="number"
-                  placeholder="Mutual Aid"
-                />
-              </Col>
-            </Row>
-            <Row className="row">
-              <Col>
-                <Form.Label>
-                  Mutual Aid
-                </Form.Label>
-                <Form.Control
-                  {...register("mutual_aid3", {
-                    required: { value: true, message: "Please enter a number" },
-                  })}
-                  type="number"
-                  placeholder="Mutual Aid"
-                />
-              </Col>
-              <Col>
-                <Form.Label>
-                  Mutual Aid
-                </Form.Label>
-                <Form.Control
-                  {...register("mutual_aid4", {
-                    required: { value: true, message: "Please enter a number" },
-                  })}
-                  type="number"
-                  placeholder="Mutual Aid"
-                />
+                <Row>
+                  <Col xs={6}>
+                    <Form.Check
+                      {...register("mutualAid")}
+                      type="checkbox"
+                      value="1"
+                      label="Helotes FD"
+                    />
+                    <Form.Check
+                      {...register("mutualAid")}
+                      type="checkbox"
+                      value="2"
+                      label="District 7 FD"
+                    />
+                    
+                  </Col>
+                  <Col xs={6}>
+                    <Form.Check
+                      {...register("mutualAid")}
+                      type="checkbox"
+                      value="3"
+                      label="Leon Springs FD"
+                    />
+                    <Form.Check
+                      {...register("mutualAid")}
+                      type="checkbox"
+                      value="4"
+                      label="District 2 FD"
+                    />
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </Container>

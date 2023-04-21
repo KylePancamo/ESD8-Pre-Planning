@@ -36,6 +36,7 @@ function App() {
     if (!preplanLocations.data.result) {
       console.log("No preplanning locations found");
     }
+    console.log(preplanLocations.data.result);
     setPrePlanningLocations(preplanLocations.data.result);
   }
 

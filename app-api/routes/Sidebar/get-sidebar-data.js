@@ -15,7 +15,19 @@ router.post('/', verifyUserCredentials, (req, res) => {
         return res.status(400).send({message: 'Address must be a string'});
       }
 
-      const query = `SELECT * FROM pre_planning WHERE google_formatted_address = ?`;
+      const query = `SELECT pp.*, 
+                      COALESCE(GROUP_CONCAT(DISTINCT ct.name), '') AS construction_types, 
+                      COALESCE(GROUP_CONCAT(DISTINCT ot.name), '') AS occupancy_types, 
+                      COALESCE(GROUP_CONCAT(DISTINCT ma.name), '') AS mutual_aids
+                    FROM pre_planning pp
+                    LEFT JOIN pre_planning_construction_types ppct ON pp.id = ppct.pre_planning_id
+                    LEFT JOIN construction_types ct ON ppct.construction_type_id = ct.id
+                    LEFT JOIN pre_planning_occupancy_types ppot ON pp.id = ppot.pre_planning_id
+                    LEFT JOIN occupancy_types ot ON ppot.occupancy_id = ot.id
+                    LEFT JOIN pre_planning_mutual_aid ppma ON pp.id = ppma.pre_planning_id
+                    LEFT JOIN mutual_aid ma ON ppma.mutual_aid_id = ma.id
+                    WHERE pp.google_formatted_address = ?
+                    GROUP BY pp.id`;
       const data = [
         googleFormattedAddress
       ]
@@ -28,6 +40,9 @@ router.post('/', verifyUserCredentials, (req, res) => {
             });
             res.status(400).send({status: 'error', message: 'Data was not able to be retrieved'});
           } else {
+            result[0].construction_types = result[0].construction_types.split(',') || '';
+            result[0].occupancy_types = result[0].occupancy_types.split(',') || '';
+            result[0].mutual_aids = result[0].mutual_aids.split(',') || '';
             res.status(200).send({status: 'success', message: 'Data was retrieved', payload: result});
           }
         }

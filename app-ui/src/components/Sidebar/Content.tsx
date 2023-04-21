@@ -19,23 +19,6 @@ function Content({ sidebarData }: { sidebarData: LocationTypes }) {
       <span key={acc}>{acc}<br/></span>
     );
   }
-
-  let mutualAidList = [];
-  if(sidebarData.mut_aid_bc2fd === 1) {
-    mutualAidList.push("BC2 FD - Hazmat");
-  }
-  if(sidebarData.mut_aid_d7fr === 1) {
-    mutualAidList.push("D7 Fire & Rescue");
-  }
-  if(sidebarData.mut_aid_helotesfd === 1) {
-    mutualAidList.push("Helotes FD");
-  }
-  if(sidebarData.mut_aid_leonspringsvfd === 1) {
-    mutualAidList.push("Leon Springs VFD");
-  }
-  mutualAidList = mutualAidList.map((mutAid) =>
-    <span key={mutAid}>{mutAid}<br/></span>
-  );
   
 
 
@@ -46,7 +29,6 @@ function Content({ sidebarData }: { sidebarData: LocationTypes }) {
         <div className="sidebar__block-content">
           <div className="sidebar__block-title">Mutual Aid</div>
           <p className="sidebar__block-box" id="mutual-aid">
-            {mutualAidList}
           </p>
         </div>
       </div>

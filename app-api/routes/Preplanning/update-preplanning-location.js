@@ -12,30 +12,25 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
     const db = getPool(process.env.MYSQL_ESD8_DATABASE);
     try {
       const payload = req.body.payload;
+      console.log(payload);
       const google_formatted_address = req.body.googleAddress;
       const id = req.body.id;
 
       const query = `UPDATE pre_planning SET 
-                      google_formatted_address = ?, occupancyname = ?, mut_aid_helotesfd = ?, mut_aid_d7fr = ?, mut_aid_leonspringsvfd = ?, 
-                      mut_aid_bc2fd = ?, occupancyaddress = ?, occupancycity = ?, occupancystate = ?, occupancyzip = ?,
-                      occupancycountry = ?, constructiontype = ?, hazards = ?, hydrant_address = ?, 
+                      google_formatted_address = ?, occupancyname = ?, occupancyaddress = ?, occupancycity = ?, occupancystate = ?, occupancyzip = ?,
+                      occupancycountry = ?, hazards = ?, hydrant_address = ?, 
                       hydrant_distance = ?, access = ?, electric_meter = ?, breaker_box = ?, water = ?, 
-                      gas_shutoff = ?, emergency_contact_number = ?, other_notes = ?, occupancytype = ?, 
+                      gas_shutoff = ?, emergency_contact_number = ?, other_notes = ?,
                       contactname = ? WHERE id = ?`;
     
       const data = [
         google_formatted_address,
         payload.occupancyName,
-        parseInt(payload.mutual_aid1),
-        parseInt(payload.mutual_aid2),
-        parseInt(payload.mutual_aid3),
-        parseInt(payload.mutual_aid4),
         payload.streetAddress,
         payload.city,
         payload.state,
         payload.zipCode,
         payload.country,
-        parseInt(payload.constructionType),
         payload.hazards,
         payload.hydrantAddress,
         parseInt(payload.hydrantDistance),
@@ -46,7 +41,6 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
         payload.gasShutoffLoc,
         payload.emergencyContact,
         payload.notes,
-        payload.occupancyType,
         payload.contactName,
         id
       ];

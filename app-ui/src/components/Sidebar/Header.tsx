@@ -4,6 +4,10 @@ import { LocationTypes } from "../../types/location-types";
 function Header({sidebarData}: {sidebarData: LocationTypes}) {
   let addressLineOne: string = "";
 
+  let occupancyTypes: string = (sidebarData.occupancy_types || []).join(', ');
+  let constructionTypes: string = (sidebarData.construction_types || []).join(', ');
+
+
   if(sidebarData.occupancyaddress != null) {
     addressLineOne = sidebarData.google_formatted_address;
   }
@@ -16,8 +20,8 @@ function Header({sidebarData}: {sidebarData: LocationTypes}) {
           <p className="sidebar-header__subtitle">{addressLineOne}</p>
         </div>
         <div className="sidebar-header-left">
-          <p>Occupancy - {sidebarData.occupancytype}</p>
-          <p>Fire Resistive, Wood Frame, sidebar-header-leftsidebar-header-left</p>
+          <p>Occupancy - {occupancyTypes}</p>
+          <p>{constructionTypes}</p>
         </div>
       </div>
       <div className="sidebar-header-bottom"/>
