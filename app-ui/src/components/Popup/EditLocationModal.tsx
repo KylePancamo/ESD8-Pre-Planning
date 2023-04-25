@@ -270,19 +270,19 @@ function EditLocation(props : EditLocationProps) {
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="Assembly"
+                      value="1"
                       label="Assembly"
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="Commercial"
+                      value="2"
                       label="Commercial"
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="Educational"
+                      value="3"
                       label="Educational"
                     />
                   </Col>
@@ -290,19 +290,19 @@ function EditLocation(props : EditLocationProps) {
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="Hazardous"
+                      value="4"
                       label="Hazardous"
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="Industrial"
+                      value="5"
                       label="Industrial"
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="Institutional"
+                      value="6"
                       label="Institutional"
                     />
                   </Col>
@@ -310,19 +310,19 @@ function EditLocation(props : EditLocationProps) {
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="Mercantile"
+                      value="7"
                       label="Mercantile"
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="Residential"
+                      value="8"
                       label="Residential"
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="Storage"
+                      value="9"
                       label="Storage"
                     />
                   </Col>
@@ -343,13 +343,13 @@ function EditLocation(props : EditLocationProps) {
                     <Form.Check
                       {...register("constructionType")}
                       type="checkbox"
-                      value="Fire Resistive"
+                      value="1"
                       label="I - Fire Resistive"
                     />
                     <Form.Check
                       {...register("constructionType")}
                       type="checkbox"
-                      value="Non-Combustible"
+                      value="2"
                       label="II - Non-Combustible"
                     />
                   </Col>
@@ -357,13 +357,13 @@ function EditLocation(props : EditLocationProps) {
                     <Form.Check
                       {...register("constructionType")}
                       type="checkbox"
-                      value="Ordinary"
+                      value="3"
                       label="III - Ordinary"
                     />
                     <Form.Check
                       {...register("constructionType")}
                       type="checkbox"
-                      value="Heavy Timber"
+                      value="4"
                       label="IV - Heavy Timber"
                     />
                   </Col>
@@ -371,13 +371,13 @@ function EditLocation(props : EditLocationProps) {
                   <Form.Check
                       {...register("constructionType")}
                       type="checkbox"
-                      value="Wood Frame"
+                      value="5"
                       label="V - Wood Frame"
                     />
                   <Form.Check
                       {...register("constructionType")}
                       type="checkbox"
-                      value="Light Weight Wood Truss"
+                      value="6"
                       label="VI - Light Weight Wood Truss"
                     /></Col>
                 </Row>

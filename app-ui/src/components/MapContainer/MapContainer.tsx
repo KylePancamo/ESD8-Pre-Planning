@@ -125,7 +125,9 @@ function MapContainer(props : MapContainerProps) {
       if (!location) {
         setSearchedSite({
           ...locationInitalizer,
-          google_formatted_address: places[0].formatted_address as string
+          google_formatted_address: places[0].formatted_address as string,
+          latitude: places[0]?.geometry?.location?.lat() as number,
+          longitude: places[0]?.geometry?.location?.lng() as number,
         });
       } else {
         setSearchedSite(location);

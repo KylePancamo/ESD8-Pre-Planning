@@ -10,9 +10,9 @@ const logger = require("../../logger");
 router.get("/", verifyUserCredentials, (req, res) => {
     const db = getPool(process.env.MYSQL_ESD8_DATABASE);
     const query = `SELECT pp.*, 
-                  COALESCE(GROUP_CONCAT(DISTINCT ct.name), '') AS construction_types, 
-                  COALESCE(GROUP_CONCAT(DISTINCT ot.name), '') AS occupancy_types, 
-                  COALESCE(GROUP_CONCAT(DISTINCT ma.name), '') AS mutual_aids
+                  COALESCE(GROUP_CONCAT(DISTINCT ct.id), '') AS construction_types, 
+                  COALESCE(GROUP_CONCAT(DISTINCT ot.id), '') AS occupancy_types, 
+                  COALESCE(GROUP_CONCAT(DISTINCT ma.id), '') AS mutual_aids
               FROM pre_planning pp
               LEFT JOIN pre_planning_construction_types ppct ON pp.id = ppct.pre_planning_id
               LEFT JOIN construction_types ct ON ppct.construction_type_id = ct.id

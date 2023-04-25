@@ -12,17 +12,12 @@ import { Autocomplete } from "@react-google-maps/api";
 import Alert from "react-bootstrap/Alert";
 import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
 import { preplanningLocationsState } from "../../atoms";
-
-type Address = {
-  latitude: number;
-  location: string;
-  longitude: number;
-}
+import { LocationTypes } from "../../types/location-types";
 
 type AddLocationProps = {
   show: boolean;
   onHide: () => void;
-  address: Address;
+  address: LocationTypes;
 }
 
 type FormValues = {
@@ -36,6 +31,7 @@ type LocationAddedResponse = {
 }
 
 function AddLocation({ show, onHide, address } : AddLocationProps) {
+  console.log(address);
   const {
     register,
     handleSubmit,
@@ -45,7 +41,7 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      mutualAid: ["1", "2", "3", "4"],
+      mutualAid: ["1", "2", "3", "4"]
     }
   });
   const [locationAddedResponse, setLocationAddedResponse] = useState<LocationAddedResponse>({
@@ -55,7 +51,7 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
   });
 
   const [searchBox, setSearchBox] = useState<google.maps.places.Autocomplete>();
-  const [formattedAddress, setFormattedAddress] = useState(address.location);
+  const [formattedAddress, setFormattedAddress] = useState(address.google_formatted_address);
   const { addNewLocation } = usePrePlanningLocations();
 
   function onLoad(autocomplete: google.maps.places.Autocomplete) {
@@ -107,7 +103,7 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
           hydrant_address: data.hydrantAddress as string,
           hydrant_distance: Number(data.hydrantDistance as string),
           mutual_aids: data.mutualAid as string[],
-          google_formatted_address: searchBox?.getPlace() ? searchBox.getPlace().formatted_address as string : address.location as string, 
+          google_formatted_address: searchBox?.getPlace() ? searchBox.getPlace().formatted_address as string : address.google_formatted_address as string, 
           latitude: searchBox?.getPlace() ? searchBox.getPlace().geometry?.location?.lat() as number : address.latitude,
           longitude: searchBox?.getPlace() ? searchBox.getPlace().geometry?.location?.lng() as number: address.longitude,
           occupancyaddress: data.streetAddress as string,
@@ -134,7 +130,7 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
       contentClassName="add-location-modal"
       title="Add Location"
       onEntering={() => {
-        let addressArray = address.location.split(',');
+        let addressArray = address.google_formatted_address.split(',');
 
         let occupancyaddress = addressArray[0] ? addressArray[0].trim() : "";
         let city = addressArray[1] ? addressArray[1].trim() : "";
@@ -143,7 +139,7 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
         setValue("streetAddress", occupancyaddress);
         setValue("city", city);
         setValue("state", state);
-        setValue("googleAddress", address.location)
+        setValue("googleAddress", address.google_formatted_address)
         zip ? setValue("zipCode", zip) : setValue("zipCode", "");
       }}
     >
@@ -268,7 +264,7 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="5"
+                      value="6"
                       label="Institutional"
                     />
                   </Col>
@@ -276,19 +272,19 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="5"
+                      value="7"
                       label="Mercantile"
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="5"
+                      value="8"
                       label="Residential"
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
-                      value="5"
+                      value="9"
                       label="Storage"
                     />
                   </Col>
