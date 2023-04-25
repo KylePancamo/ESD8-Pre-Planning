@@ -16,12 +16,7 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
       const google_formatted_address = req.body.googleAddress;
       const id = req.body.id;
 
-      let query = `UPDATE pre_planning SET 
-                      google_formatted_address = ?, occupancyname = ?, occupancyaddress = ?, occupancycity = ?, occupancystate = ?, occupancyzip = ?,
-                      occupancycountry = ?, hazards = ?, hydrant_address = ?, 
-                      hydrant_distance = ?, access = ?, electric_meter = ?, breaker_box = ?, water = ?, 
-                      gas_shutoff = ?, emergency_contact_number = ?, other_notes = ?,
-                      contactname = ? WHERE id = ?`;
+      let query;
   
       db.getConnection((err, connection) => {
         if (err) {
@@ -46,7 +41,6 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
             return;
           }
 
-          console.log(result);
           const constructionTypeIds = result[0].map(constructionType => parseInt(constructionType.construction_type_id));
           const mutualAidIds = result[1].map(mutualAid => parseInt(mutualAid.mutual_aid_id));
           const occupancyTypeIds = result[2].map(occupancyType => parseInt(occupancyType.occupancy_id));
@@ -139,7 +133,7 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
             payload.contactName,
             id
           ];
-          
+
           query = `UPDATE pre_planning SET 
                       google_formatted_address = ?, occupancyname = ?, occupancyaddress = ?, occupancycity = ?, occupancystate = ?, occupancyzip = ?,
                       occupancycountry = ?, hazards = ?, hydrant_address = ?, 
