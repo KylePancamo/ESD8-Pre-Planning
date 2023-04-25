@@ -233,39 +233,45 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                       {...register("occupancyType")}
                       type="checkbox"
                       value="1"
-                      label="Assembly"
+                      id="assembly"
+                      label={<Form.Label htmlFor="assembly">Assembly</Form.Label>}
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
                       value="2"
-                      label="Commercial"
+                      id="commercial"
+                      label={<Form.Label htmlFor="commercial">Commercial</Form.Label>}
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
                       value="3"
-                      label="Educational"
+                      id="educational"
+                      label={<Form.Label htmlFor="educational">Educational</Form.Label>}
                     />
                   </Col>
                   <Col xs={4}>
                     <Form.Check
-                      {...register("constructionType")}
+                      {...register("occupancyType")}
                       type="checkbox"
                       value="4"
-                      label="Hazardous"
+                      id="hazardous"
+                      label={<Form.Label htmlFor="hazardous">Hazardous</Form.Label>}
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
                       value="5"
-                      label="Industrial"
+                      id="industrial"
+                      label={<Form.Label htmlFor="industrial">Industrial</Form.Label>}
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
                       value="6"
-                      label="Institutional"
+                      id="institutional"
+                      label={<Form.Label htmlFor="institutional">Insitiutional</Form.Label>}
                     />
                   </Col>
                   <Col xs={4}>
@@ -273,19 +279,22 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                       {...register("occupancyType")}
                       type="checkbox"
                       value="7"
-                      label="Mercantile"
+                      id="mercantile"
+                      label={<Form.Label htmlFor="mercantile">Mercantile</Form.Label>}
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
                       value="8"
-                      label="Residential"
+                      id="residential"
+                      label={<Form.Label htmlFor="residential">Residential</Form.Label>}
                     />
                     <Form.Check
                       {...register("occupancyType")}
                       type="checkbox"
                       value="9"
-                      label="Storage"
+                      id="storage"
+                      label={<Form.Label htmlFor="storage">Storage</Form.Label>}
                     />
                   </Col>
                 </Row>
@@ -306,13 +315,15 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                       {...register("constructionType")}
                       type="checkbox"
                       value="1"
-                      label="I - Fire Resistive"
+                      id="fireResistive"
+                      label={<Form.Label htmlFor="fireResistive">I - Fire Resistive</Form.Label>}
                     />
                     <Form.Check
                       {...register("constructionType")}
                       type="checkbox"
                       value="2"
-                      label="II - Non-Combustible"
+                      id="nonCombustible"
+                      label={<Form.Label htmlFor="nonCombustible">II - Non-Combustible</Form.Label>}
                     />
                   </Col>
                   <Col xs={4}>
@@ -320,28 +331,33 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                       {...register("constructionType")}
                       type="checkbox"
                       value="3"
-                      label="III - Ordinary"
+                      id="ordinary"
+                      label={<Form.Label htmlFor="ordinary">III - Ordinary</Form.Label>}
                     />
                     <Form.Check
                       {...register("constructionType")}
                       type="checkbox"
                       value="4"
-                      label="IV - Heavy Timber"
+                      id="heavyTimber"
+                      label={<Form.Label htmlFor="heavyTimber">IV - Heavy Timber</Form.Label>}
                     />
                   </Col>
                   <Col xs={4}>
-                  <Form.Check
-                      {...register("constructionType")}
-                      type="checkbox"
-                      value="5"
-                      label="V - Wood Frame"
-                    />
-                  <Form.Check
-                      {...register("constructionType")}
-                      type="checkbox"
-                      value="5"
-                      label="VI - Light Weight Wood Truss"
-                    /></Col>
+                    <Form.Check
+                        {...register("constructionType")}
+                        type="checkbox"
+                        value="5"
+                        id="woodFrame"
+                        label={<Form.Label htmlFor="woodFrame">V - Wood Frame</Form.Label>}
+                      />
+                    <Form.Check
+                        {...register("constructionType")}
+                        type="checkbox"
+                        value="6"
+                        id="lightWeightWoodTruss"
+                        label={<Form.Label htmlFor="lightWeightWoodTruss">VI - Light Weight Wood Truss</Form.Label>}
+                      />
+                  </Col>
                 </Row>
               </Col>
             </Row>
@@ -501,14 +517,16 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                     <Form.Check
                       {...register("mutualAid")}
                       type="checkbox"
+                      id="helotesFD"
                       value="1"
-                      label="Helotes FD"
+                      label={<Form.Label htmlFor="helotesFD">Helotes FD</Form.Label>}
                     />
                     <Form.Check
                       {...register("mutualAid")}
                       type="checkbox"
                       value="2"
-                      label="District 7 FD"
+                      id="district7FD"
+                      label={<Form.Label htmlFor="district7FD">District 7 FD</Form.Label>}
                     />
                     
                   </Col>
@@ -517,13 +535,15 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                       {...register("mutualAid")}
                       type="checkbox"
                       value="3"
-                      label="Leon Springs FD"
+                      id="leonSpringsFD"
+                      label={<Form.Label htmlFor="leonSpringsFD">Leon Springs FD</Form.Label>}
                     />
                     <Form.Check
                       {...register("mutualAid")}
                       type="checkbox"
                       value="4"
-                      label="District 2 FD"
+                      id="district2FD"
+                      label={<Form.Label htmlFor="district2FD">District 2 FD</Form.Label>}
                     />
                   </Col>
                 </Row>
