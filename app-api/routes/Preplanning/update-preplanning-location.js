@@ -78,7 +78,7 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
           if (newlyAddedConstructionTypes.length > 0) {
             query += `
                 INSERT INTO pre_planning_construction_types (pre_planning_id, construction_type_id)
-                VALUES ?
+                VALUES ?;
               `;
             values.push(newlyAddedConstructionTypes);
           }
@@ -86,7 +86,7 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
           if (newlyAddedMutualAids.length > 0) {
             query += `
                 INSERT INTO pre_planning_mutual_aid (pre_planning_id, mutual_aid_id)
-                VALUES ?
+                VALUES ?;
               `;
             values.push(newlyAddedMutualAids);
           }
@@ -94,7 +94,7 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
           if (newlyAddedOccupancyTypes.length > 0) {
             query += `
                 INSERT INTO pre_planning_occupancy_types (pre_planning_id, occupancy_id)
-                VALUES ?
+                VALUES ?;
               `;
             values.push(newlyAddedOccupancyTypes);
           }
