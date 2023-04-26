@@ -41,21 +41,31 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
             return;
           }
 
-          const constructionTypeIds = result[0].map(constructionType => parseInt(constructionType.construction_type_id));
-          const mutualAidIds = result[1].map(mutualAid => parseInt(mutualAid.mutual_aid_id));
-          const occupancyTypeIds = result[2].map(occupancyType => parseInt(occupancyType.occupancy_id));
+          const constructionTypeIds = result[0]?.map(constructionType => parseInt(constructionType.construction_type_id));
+          const mutualAidIds = result[1]?.map(mutualAid => parseInt(mutualAid.mutual_aid_id));
+          const occupancyTypeIds = result[2]?.map(occupancyType => parseInt(occupancyType.occupancy_id));
           
           const uncheckedConstructionTypes = constructionTypeIds.filter(id => !payload.constructionType.includes(id.toString()));
           const uncheckedMutualAids = mutualAidIds.filter(id => !payload.mutualAid.includes(id.toString()));
           const uncheckedOccupancyTypes = occupancyTypeIds.filter(id => !payload.occupancyType.includes(id.toString()));
 
+          if (payload.constructionType === '') {
+            payload.constructionType = [];
+          }
+          if (payload.mutualAid === '') {
+            payload.mutualAid = [];
+          }
+          if (payload.occupancyType === '') {
+            payload.occupancyType = [];
+          }
+          
           let newlyAddedConstructionTypes = payload.constructionType.filter(id => !constructionTypeIds.includes(parseInt(id)));
           let newlyAddedMutualAids = payload.mutualAid.filter(id => !mutualAidIds.includes(parseInt(id)));
           let newlyAddedOccupancyTypes = payload.occupancyType.filter(id => !occupancyTypeIds.includes(parseInt(id)));
 
-          newlyAddedConstructionTypes = newlyAddedConstructionTypes.map(constructionType => [id, parseInt(constructionType)]);
-          newlyAddedMutualAids = newlyAddedMutualAids.map(mutualAid => [id, parseInt(mutualAid)]);
-          newlyAddedOccupancyTypes = newlyAddedOccupancyTypes.map(occupancyType => [id, parseInt(occupancyType)]);
+          newlyAddedConstructionTypes = newlyAddedConstructionTypes?.map(constructionType => [id, parseInt(constructionType)]);
+          newlyAddedMutualAids = newlyAddedMutualAids?.map(mutualAid => [id, parseInt(mutualAid)]);
+          newlyAddedOccupancyTypes = newlyAddedOccupancyTypes?.map(occupancyType => [id, parseInt(occupancyType)]);
           
 
           query = `
@@ -122,7 +132,6 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
             payload.country,
             payload.hazards,
             payload.hydrantAddress,
-            parseInt(payload.hydrantDistance),
             payload.accessInformation,
             payload.electricMeterLoc,
             payload.breakerBoxLoc,
@@ -137,7 +146,7 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
           query = `UPDATE pre_planning SET 
                       google_formatted_address = ?, occupancyname = ?, occupancyaddress = ?, occupancycity = ?, occupancystate = ?, occupancyzip = ?,
                       occupancycountry = ?, hazards = ?, hydrant_address = ?, 
-                      hydrant_distance = ?, access = ?, electric_meter = ?, breaker_box = ?, water = ?, 
+                      access = ?, electric_meter = ?, breaker_box = ?, water = ?, 
                       gas_shutoff = ?, emergency_contact_number = ?, other_notes = ?,
                       contactname = ? WHERE id = ?`;
           connection.query(query, data, (err, result) => {
