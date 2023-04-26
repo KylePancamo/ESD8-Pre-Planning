@@ -31,7 +31,6 @@ type LocationAddedResponse = {
 }
 
 function AddLocation({ show, onHide, address } : AddLocationProps) {
-  console.log(address);
   const {
     register,
     handleSubmit,
@@ -86,7 +85,6 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
       },
     }, { withCredentials: true })
       .then((response) => {
-        console.log(response);
         setLocationAddedResponse(response.data);
         addNewLocation({
           occupancyname: data.occupancyName as string,
@@ -587,29 +585,12 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
                       message: "Please enter a Hydrant Address",
                     },
                   })}
-                  type="text"
+                  as="textarea"
                   placeholder="Hydrant Address"
                 />
                 {errors.hydrantAddress && (
                   <span style={{ color: "red" }}>
                     {errors.hydrantAddress.message}
-                  </span>
-                )}
-              </Col>
-              <Col>
-                <Form.Label>
-                  Hydrant Distance (feet)
-                </Form.Label>
-                <Form.Control
-                  {...register("hydrantDistance", {
-                    required: { value: true, message: "Please enter a number" },
-                  })}
-                  type="number"
-                  placeholder="Hydrant Distance (feet)"
-                />
-                {errors.hydrantDistance && (
-                  <span style={{ color: "red" }}>
-                    {errors.hydrantDistance.message}
                   </span>
                 )}
               </Col>

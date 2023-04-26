@@ -65,7 +65,6 @@ function EditLocation(props : EditLocationProps) {
       waterLoc: props.selectedEditLocation.water,
     },
   });
-  console.log(props.selectedEditLocation.construction_types)
   const [locationEditResponse, setLocationEditResponse] = useState<LocationEditResponse>({
     status: "",
     message: "",
@@ -77,8 +76,6 @@ function EditLocation(props : EditLocationProps) {
   function onLoad(autocomplete: google.maps.places.Autocomplete) {
     setSearchBox(autocomplete);
   }
-
-  console.log(props.selectedEditLocation);
 
   function onPlaceChanged() {
     if (searchBox != null) {
@@ -572,7 +569,7 @@ function EditLocation(props : EditLocationProps) {
             <Row className="row">
               <Col>
                 <Form.Label>
-                  Hazard
+                  Hazards
                 </Form.Label>
                 <Form.Control
                   {...register("hazards", {
@@ -600,29 +597,12 @@ function EditLocation(props : EditLocationProps) {
                       message: "Please enter a Hydrant Address",
                     },
                   })}
-                  type="text"
+                  as="textarea"
                   placeholder="Hydrant Address"
                 />
                 {errors?.hydrantAddress && (
                   <span style={{ color: "red" }}>
                     {errors?.hydrantAddress.message}
-                  </span>
-                )}
-              </Col>
-              <Col>
-                <Form.Label>
-                  Hydrant Distance (feet)
-                </Form.Label>
-                <Form.Control
-                  {...register("hydrantDistance", {
-                    required: { value: true, message: "Please enter a number" },
-                  })}
-                  type="number"
-                  placeholder="Hydrant Distance (feet)"
-                />
-                {errors?.hydrantDistance && (
-                  <span style={{ color: "red" }}>
-                    {errors?.hydrantDistance.message}
                   </span>
                 )}
               </Col>

@@ -54,7 +54,7 @@ code {
 }
 
 .sidebar-menu { 
-  width: 600px;
+  width: 550px;
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
@@ -145,43 +145,15 @@ code {
 
 }
 
-.sidebar__block {
-  color: black;
+.list-group-latlng {
+  border: none !important;
+  align-items: center;
 }
 
-.sidebar__block h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
-.sidebar__block-title {
-  margin: 10px 15px;
-  font-weight: 500;
-}
-
-.sidebar__block-box {
-  margin: 10px 50px;
-  padding: 10px;
-  font-size: 0.85rem;
-  text-align: center;
-  width: 300px;
-}
-
-.sidebar__block-text {
-  display: table;
-  margin: 0 auto;
-  color: white;
-}
-
-.sidebar__content-separator {
-  position: relative;
-  border: 1px solid #e0e0e0;
-}
-
-.filler {
-  margin: 10px 50px;
-  width: 300px;
+.shutoffs .col-3 {
+  height: 100px !important;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 /******************************************************************/

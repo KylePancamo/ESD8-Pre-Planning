@@ -9,7 +9,6 @@ import {searchSiteState} from "../../atoms";
 import EditLocation from "../Popup/EditLocationModal";
 import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
 import AddLocationModal from "../Popup/AddLocationModal";
-
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
