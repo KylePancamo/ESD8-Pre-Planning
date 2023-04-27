@@ -12,12 +12,13 @@ import Button from "react-bootstrap/Button";
 import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
 import PreplanningLocationsUI from "./PreplanningLocationsUI";
+import PlacedMarkersUI from "./PlacedMarkersUI";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
 import { SearchSite } from "../../types/atoms-types";
 import { marker } from "../../types/marker-types";
-import CurrentUserLocation from "../CurrentUserLocation"
+import { CurrentUserLocation, CurrentOccupancyLocation, UpdateUserLocation } from "../VerticalWidgets"
 import MapCreateMarker from "../MapCreateMarker";
 import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
 
@@ -283,34 +284,34 @@ function MapContainer(props : MapContainerProps) {
         ]}
       >
         {(clusterer) => 
-          <div>
-            {markers.map((marker) => {
-              marker.position = {
-                lat: marker.latitude,
-                lng: marker.longitude,
-              };
-              return (
-                <Marker
-                  position={marker.position}
-                  onClick={() => {
-                    if (markerClicked === false) {
-                      setMarkerClicked(true);
-                    }
-                    setSelectedMarker(marker);
-                  }}
-                  icon={(marker.file_name === null) ? undefined : "/icon_images/" + marker.file_name}
-                  key={marker.marker_id}
-                  visible={markerVisibility}
-                  draggable={markerDraggable}
-                  onDragEnd={(e) => {
-                    console.log(e?.latLng?.lat(), e?.latLng?.lng());
-                  }}
-                  clusterer={clusterer}
-                />
-              );
-            }
-            )}
-          </div>
+            <div>
+              {markers.map((marker) => {
+                marker.position = {
+                  lat: marker.latitude,
+                  lng: marker.longitude,
+                };
+                return (
+                    <Marker
+                      position={marker.position}
+                      onClick={() => {
+                        if (markerClicked === false) {
+                          setMarkerClicked(true);
+                        }
+                        setSelectedMarker(marker);
+                      }}
+                      icon={(marker.file_name === null) ? undefined : "/icon_images/" + marker.file_name}
+                      key={marker.marker_id}
+                      visible={markerVisibility}
+                      draggable={markerDraggable}
+                      onDragEnd={(e) => {
+                        console.log(e?.latLng?.lat(), e?.latLng?.lng());
+                      }}
+                      clusterer={clusterer}
+                    />
+                );
+              }
+              )}
+            </div>
         }
       </MarkerClustererF>
 
@@ -386,27 +387,14 @@ function MapContainer(props : MapContainerProps) {
             />
           </Form>
         </div>
-        <div className="update-user-location">
-          <Button
-            onClick={updateUserLocation}
-          >
-            Update Location
-          </Button>
-        </div>
-        <div className="goto-center">
-          <Button
-            onClick={() => {
-              map?.panTo(occupancyLocation as google.maps.LatLng | google.maps.LatLngLiteral);
-              map?.setZoom(15);
-            }}
-          >
-            Goto Location
-          </Button>
-        </div>
       </div>
       <PreplanningLocationsUI
         setSideBarValue={props.setSideBarValue}
         setOccupancyLocation={setOccupancyLocation}
+        setCenter={setCenter}
+      />
+      <PlacedMarkersUI
+        markers={markers}
         setCenter={setCenter}
       />
       <Button variant="secondary" onClick={async () => {
@@ -417,11 +405,20 @@ function MapContainer(props : MapContainerProps) {
       }} className="logout-btn">
         Logout
       </Button>
-      <CurrentUserLocation
-        lat={currentUserLocation?.lat as number | (() => number)}
-        lng={currentUserLocation?.lng as number | (() => number)}
-        setCenter={setCenter}
-      />
+      <div className="vertical-widget-holder">
+        <CurrentUserLocation
+          lat={currentUserLocation?.lat as number | (() => number)}
+          lng={currentUserLocation?.lng as number | (() => number)}
+          setCenter={setCenter}
+        />
+        <CurrentOccupancyLocation
+          map={map}
+          occupancyLocation={occupancyLocation}
+        />
+        <UpdateUserLocation 
+          updateUserLocation={updateUserLocation}
+        />
+      </div>
       {isCreateMarkerUIVisible === false ? (
         <Button
           variant="secondary"

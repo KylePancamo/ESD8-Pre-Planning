@@ -298,11 +298,30 @@ code {
   z-index: 4;
   right: 20px;
   transform: translateZ(0);
+  width: 30px;
+  border-radius: 5px;
+  background-color: #ffffff !important;
+  box-shadow: 0px 1px 4px rgb(0, 0, 0, .3);
 }
 
 .vertical-item {
   margin-top: 3px;
   transform: translateZ(0);
+  position: relative; /* add this line for positioning the ::before element */
+}
+
+.vertical-item::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%; /* adjust the value to your desired position */
+  width: 80%; /* adjust the value to your desired width */
+  height: 1px;
+  background-color: rgb(0, 0, 0, .3);
+}
+
+.vertical-item:last-child::before { /* hide the ::before element for the last .vertical-item */
+  display: none;
 }
 
 .vertical-button {
@@ -312,23 +331,32 @@ code {
   height: 29px;
   overflow: hidden;
   cursor: pointer;
-  transition: background-color .16s ease-out;
-  background-color: white !important;
+
 }
 
 .vertical-button-icon {
   display: block;
-  height: 18px;
-  left: 2px;
-  margin: 0;
-  padding: 0;
+  height: 27.5px;
+  width: 27.5px;
   position: absolute;
   top: 0px;
-  width: 18px;
+  left: 2px;
+
 }
 
 .vertical-button-icon:hover {
   transform: scale(1) !important;
+}
+
+.vertical-widget-line {
+  background: #dadce0;
+  height: 1px;
+  left: 5px;
+  position: absolute;
+  top: 32px;
+  width: 19px;
+  z-index: 3;
+  transition: background-color .16s ease-out;
 }
 
 .icon-legend-header {
@@ -439,6 +467,53 @@ code {
   margin-top: 10px;
 }
 
+.marker-list-ui {
+  position: absolute;
+  bottom: 10%;
+  left: 0px;
+  margin-left: 5vw;
+  height: 200px;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 5px;
+  left: 175px;
+  width: 145px;
+  box-shadow: 0px 1px 4px rgb(0, 0, 0, .3);
+}
+
+.marker-list-ui {
+  scrollbar-width: none;
+}
+
+.marker-list-ui::-webkit-scrollbar {
+  display: none;
+}
+
+.marker-list-ui__table {
+  border-collapse: separate;
+  border-spacing: 10px 15px;
+  font-size: 15px;
+  table-layout: fixed;
+}
+
+.marker-list-ui__table tbody tr {
+  transition: transform 0.1s ease;
+  transform-origin: center center;
+}
+
+.marker-list-ui__table tbody tr:hover {
+  cursor: pointer;
+  transform: scaleX(1.1) scaleY(1.1);
+}
+
+.marker-list-ui__table-cell {
+  padding: 5px 10px;
+  border-radius: 2px;
+  max-width: 125px;
+  word-wrap: break-word;
+}
+
 .preplan-locations {
   position: absolute;
   bottom: 10%;
@@ -446,6 +521,7 @@ code {
   max-height: 200px;
   overflow-y: auto;
 }
+
 .preplan-locations {
   scrollbar-width: none;
 }
@@ -650,4 +726,9 @@ button:hover {
   background-color: rgb(255, 115, 0) !important;
   color: black !important;
   border: red !important;
+}
+
+.btn-light {
+  background-color: transparent !important;
+  border: 0px !important;
 }
