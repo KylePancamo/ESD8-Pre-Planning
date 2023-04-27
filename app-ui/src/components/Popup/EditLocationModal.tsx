@@ -55,7 +55,6 @@ function EditLocation(props : EditLocationProps) {
       emergencyContact: props.selectedEditLocation.emergency_contact_number,
       gasShutoffLoc: props.selectedEditLocation.gas_shutoff,
       hydrantAddress: props.selectedEditLocation.hydrant_address,
-      hydrantDistance: props.selectedEditLocation.hydrant_distance.toString(),
       mutualAid: props.selectedEditLocation.mutual_aids,
       notes: props.selectedEditLocation.other_notes,
       occupancyAddress: props.selectedEditLocation.occupancyaddress,
