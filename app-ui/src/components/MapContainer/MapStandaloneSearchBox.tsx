@@ -20,7 +20,7 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (searchBoxRef.current) {
-      searchBoxRef.current.value = "";
+      searchBoxRef.current.value = ""
     }
     clearPlaces();
   };
@@ -43,7 +43,7 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
                   </Tooltip>
                 }
               >
-                <button onClick={handleClear}>
+                <button onClick={handleClear} style={{ borderTopLeftRadius: "20px", borderBottomLeftRadius: "20px"}}>
                   <AiOutlineClose/>
                 </button>
               </OverlayTrigger> 
@@ -52,10 +52,11 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
               type="text"
               placeholder="Search for a location"
               ref={searchBoxRef}
+              className="autocomplete-input"
             />
             <div className="searchIcon">
               <button 
-                style={{backgroundColor: "white", fontSize: "20px"}}
+                style={{backgroundColor: "white", fontSize: "20px", borderTopRightRadius: "20px", borderBottomRightRadius: "20px"}}
               >
                 <AiOutlineSearch />
               </button>

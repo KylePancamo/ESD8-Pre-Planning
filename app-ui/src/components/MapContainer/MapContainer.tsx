@@ -3,8 +3,8 @@ import MapDrawingManager from "./MapDrawingManager";
 
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import Popup from "../Popup/MarkerPopupWindow";
-import { GoogleMap, useJsApiLoader, Marker, MarkerClustererF } from "@react-google-maps/api";
-
+import { GoogleMap, useJsApiLoader, Marker, MarkerClustererF, InfoWindowF  } from "@react-google-maps/api";
+import Legend from "../Legend";
 import Axios from "axios";
 import AdminPanel from "../AdminPanel/AdminPanelModal";
 import Form from "react-bootstrap/Form";
@@ -21,6 +21,8 @@ import { marker } from "../../types/marker-types";
 import { CurrentUserLocation, CurrentOccupancyLocation, UpdateUserLocation } from "../VerticalWidgets"
 import MapCreateMarker from "../MapCreateMarker";
 import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
+import { LatLngUI } from "./LatLngUI";
+import {MdLogout} from "react-icons/md";
 
 const containerStyle = {
   width: "100vw",
@@ -65,6 +67,7 @@ function MapContainer(props : MapContainerProps) {
   const [trackingLocation, setTrackingLocation] = useState<boolean>(false);
   const [trackingLocationId, setTrackingLocationId] = useState<number | null>();
   const [isCreateMarkerUIVisible, setIsCreateMarkerUIVisible] = useState<boolean>(false);
+  const [infoWindow, setInfoWindow] = useState<boolean>(false);
 
   const [occupancyLocation,  setOccupancyLocation] = useState<center>({
     lat: 29.615106009353045,
@@ -154,6 +157,7 @@ function MapContainer(props : MapContainerProps) {
     }
   };
   const clearPlaces = () => {
+    console.log(searchBox?.getPlaces());
     setSearchedSite(locationInitalizer);
     props.setSideBarValue(false);
   }
@@ -244,7 +248,6 @@ function MapContainer(props : MapContainerProps) {
     }
   }
 
-
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -314,23 +317,34 @@ function MapContainer(props : MapContainerProps) {
             </div>
         }
       </MarkerClustererF>
-
+      
       {/* Marker for occupancy location */}
       <Marker 
         position={occupancyLocation} 
         onClick={() => handleOnClick()}
         icon={"map-pin.png"}
         />
-
+      
       {/* Marker for users location */}
       {currentUserLocation ? (
         <Marker
           position={currentUserLocation}
           icon={"/icon_images/user_location.png"}
-          onMouseOver={() => {
-
-          }}
-        />
+          onClick={() => setInfoWindow(true)}
+        >
+          {infoWindow ? (
+            <InfoWindowF
+              position={currentUserLocation}
+              onCloseClick={() => setInfoWindow(false)}
+            >
+              <div>
+                {currentUserLocation?.lat as number},
+                <br />
+                {currentUserLocation?.lng as number}
+              </div>
+            </InfoWindowF>
+          ) : null}
+        </Marker>
       ) : null}
       {hasPermissions(userData?.permissions, permission.MODIFY) ? (
         <MapDrawingManager 
@@ -339,13 +353,7 @@ function MapContainer(props : MapContainerProps) {
         />
       ) : null}
 
-      <MapStandaloneSearchBox
-        bounds={bounds}
-        onPlacesChanged={onPlacesChanged}
-        onSBLoad={onSBLoad}
-        clearPlaces={clearPlaces}
-        searchBoxRef={searchBoxRef}
-      />
+      
       <AdminPanel flushMarkers={() => FlushMarkers()} />
       <div className="utility-items">
         <div className="marker-visiblity">
@@ -397,14 +405,24 @@ function MapContainer(props : MapContainerProps) {
         markers={markers}
         setCenter={setCenter}
       />
-      <Button variant="secondary" onClick={async () => {
+      <Button variant="none" onClick={async () => {
         const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/logout", { withCredentials: true });
         if (response.data.status === "success") {
           logout();
         }
       }} className="logout-btn">
-        Logout
+        <MdLogout
+          size={30}
+          color="black"
+        />
       </Button>
+      <MapStandaloneSearchBox
+        bounds={bounds}
+        onPlacesChanged={onPlacesChanged}
+        onSBLoad={onSBLoad}
+        clearPlaces={clearPlaces}
+        searchBoxRef={searchBoxRef}
+      />
       <div className="vertical-widget-holder">
         <CurrentUserLocation
           lat={currentUserLocation?.lat as number | (() => number)}
@@ -419,6 +437,8 @@ function MapContainer(props : MapContainerProps) {
           updateUserLocation={updateUserLocation}
         />
       </div>
+      <LatLngUI/>
+      <Legend />
       {isCreateMarkerUIVisible === false ? (
         <Button
           variant="secondary"
