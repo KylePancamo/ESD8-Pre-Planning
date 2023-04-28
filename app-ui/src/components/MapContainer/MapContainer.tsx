@@ -437,7 +437,9 @@ function MapContainer(props : MapContainerProps) {
           updateUserLocation={updateUserLocation}
         />
       </div>
-      <LatLngUI/>
+      <LatLngUI
+        setCenter={setCenter}
+      />
       <Legend />
       {isCreateMarkerUIVisible === false ? (
         <Button
