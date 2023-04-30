@@ -6,6 +6,12 @@ import { LocationTypes } from "../types/location-types";
 function usePrePlanningLocations() {
   const [prePlanningLocations, setPrePlanningLocations] = useRecoilState<LocationTypes[]>(preplanningLocationsState);
 
+  const removeLocation = useCallback((id: number) => {
+    setPrePlanningLocations((locations: LocationTypes[]) => {
+      return locations.filter((location) => location.id !== id);
+    });
+  }, [prePlanningLocations]);
+  
   const updateLocations = useCallback((newVal: LocationTypes, id: number) => {
     setPrePlanningLocations((locations: LocationTypes[]) => {
       return locations.map((location) => {
@@ -51,7 +57,7 @@ function usePrePlanningLocations() {
     contactname: '',
   }
 
-  return {prePlanningLocations, updateLocations, addNewLocation, locationInitalizer};
+  return {prePlanningLocations, updateLocations, addNewLocation, removeLocation, locationInitalizer};
 }
 
 export default usePrePlanningLocations;
