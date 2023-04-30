@@ -232,7 +232,7 @@ function PopupWindow(props: PopupWindowProps) {
                       <img style={{width: "30vw"}} src={preview} />
                     ) : (props.selectedMarker.image !== null && props.selectedMarker.image !== "") ? (
                       <img style={{width: "30vw"}} src={"/marker_images/" + props.selectedMarker.image} />
-                    ) : <>No image present</>
+                    ) : <h5>No image present</h5>
                   }
                 </div>
               </Col>
