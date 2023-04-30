@@ -545,7 +545,7 @@ html {
   position: absolute;
   bottom: 50px;
   left: 0px;
-  min-height: 300px;
+  max-height: 230px;
   overflow-y: auto;
 }
 
