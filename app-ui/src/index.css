@@ -239,8 +239,7 @@ html {
 }
 
 .modal-admin {
-  position: fixed;
-  right: 55%;
+  position: absolute;
   color: white !important;
   width: fit-content !important;
   height: fit-content;
