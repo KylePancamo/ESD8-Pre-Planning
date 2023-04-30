@@ -55,6 +55,34 @@ function Content({ sidebarData }: { sidebarData: LocationTypes }) {
       <span key={acc}>{acc}<br/></span>
     );
   }
+
+  let occupancyList: JSX.Element[] = [];
+  if (sidebarData.occupancy_types) {
+    occupancyList = sidebarData.occupancy_types.map((occupancy: any) => (
+      <span key={occupancy}>
+       {OccupancyType[occupancy]} <br/>
+      </span>
+    ));
+  }
+
+  let constructionList: JSX.Element[] = [];
+  if (sidebarData.construction_types) {
+    constructionList = sidebarData.construction_types.map((construction: any) => (
+      <span key={construction}>
+      {ConstructionType[construction]} <br/>
+      </span>
+    ));
+  }
+
+  let mutualAidList: JSX.Element[] = [];
+  if (sidebarData.mutual_aids) {
+    mutualAidList = sidebarData.mutual_aids.map((aid: any) => (
+    <span key={aid}>
+      {MutualAids[aid]} <br/>
+      </span>
+    ));
+  }
+
   
 
 
@@ -62,24 +90,42 @@ function Content({ sidebarData }: { sidebarData: LocationTypes }) {
   return (
     <div className="sidebar-content break-newline">
       <ListGroup as="ol">
-      <Row>
-        <Col xs={6} className="d-flex justify-content-center">
-          <ListGroup.Item as="li" className="list-group-latlng">
-            <Badge bg="none">
-              <TbWorldLatitude color="black" size={15}/>
-            </Badge>
-            {sidebarData.latitude}
-          </ListGroup.Item>
-        </Col>
-        <Col xs={6} className="d-flex justify-content-center">
-          <ListGroup.Item as="li" className="list-group-latlng">
-            <Badge bg="none">
-              <TbWorldLongitude color="black" size={15}/>
-            </Badge>
-            {sidebarData.longitude}
-          </ListGroup.Item>
-        </Col>
-      </Row>
+        <Row>
+          <Col xs={6} className="d-flex justify-content-center">
+            <ListGroup.Item as="li" className="list-group-latlng">
+              <Badge bg="none">
+                <TbWorldLatitude color="black" size={15}/>
+              </Badge>
+              {sidebarData.latitude}
+            </ListGroup.Item>
+          </Col>
+          <Col xs={6} className="d-flex justify-content-center">
+            <ListGroup.Item as="li" className="list-group-latlng">
+              <Badge bg="none">
+                <TbWorldLongitude color="black" size={15}/>
+              </Badge>
+              {sidebarData.longitude}
+            </ListGroup.Item>
+          </Col>
+        </Row>
+        <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+          <div className="ms-2 me-auto">
+            <div className="fw-bold">Occupancy Types</div>
+            {occupancyList}
+          </div>
+        </ListGroup.Item>
+        <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+          <div className="ms-2 me-auto">
+            <div className="fw-bold">Construction Types</div>
+            {constructionList}
+          </div>
+        </ListGroup.Item>
+        <ListGroup.Item as="li" className="d-flex justify-content-between align-items-start">
+          <div className="ms-2 me-auto">
+            <div className="fw-bold">Mutual Aids</div>
+            {mutualAidList}
+          </div>
+        </ListGroup.Item>
         <ListGroup.Item
           as="li"
           className="d-flex justify-content-between align-items-start"
