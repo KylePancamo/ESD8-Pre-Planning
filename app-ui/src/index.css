@@ -206,7 +206,7 @@ html {
 
 .admin-ui-trigger {
   position: fixed;
-  top: 10vh;
+  top: 10%;
   right: 0;
   transform-origin: 70% 5%;
   rotate: 270deg;
@@ -303,9 +303,9 @@ html {
 .vertical-widget-holder {
   position: absolute;
   width: 29px;
-  bottom: 33vh;
+  bottom: 5vh;
   z-index: 4;
-  right: 20px;
+  right: 80px;
   transform: translateZ(0);
   width: 30px;
   border-radius: 5px;
@@ -376,16 +376,17 @@ html {
   top: 0;
   background-color:rgba(255, 255, 255, 1);
   box-shadow: 0px 1px 4px rgb(0, 0, 0, .3);
-  min-width: fit-content;
+  width: 300px;
   min-height: fit-content;
   padding: 5px;
 }
 
 @media (max-width: 900px) {
   .icon-legend {
-    width: 200px !important;
+    width: 300px;
     top: 70vh;
     left: 475px;
+    border-radius: 0px;
   }
 }
 
@@ -399,7 +400,7 @@ html {
 }
 
 .icon-legend-items {
-  width: 500px;
+  min-width: 100px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -412,6 +413,9 @@ html {
 
 .icon-legend-item {
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon-legend-icon {
@@ -499,7 +503,7 @@ html {
 
 .marker-list-ui {
   position: absolute;
-  top: 20%;
+  top: 23%;
   max-height: 300px;
   overflow-y: auto;
   background-color: white;
