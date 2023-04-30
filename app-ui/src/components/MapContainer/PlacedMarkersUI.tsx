@@ -18,7 +18,7 @@ function PlacedMarkersUI({ markers, setCenter } : PlacedMarkersUIProps) {
                         {markers?.map((marker) => {
                             return (
                                 <OverlayTrigger
-                                    placement={"right"}
+                                    placement={"left"}
                                     overlay={
                                     <Tooltip>
                                         <div style={{display: "flex", flexDirection: "row", gap: "10px"}}>

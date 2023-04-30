@@ -5,11 +5,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+html {
+  overflow: hidden;
 }
 
 
@@ -201,7 +206,7 @@ code {
 
 .admin-ui-trigger {
   position: fixed;
-  top: 15vh;
+  top: 10vh;
   right: 0;
   transform-origin: 70% 5%;
   rotate: 270deg;
@@ -366,20 +371,22 @@ code {
 
 .icon-legend {
   position: absolute;
-  border-radius: 10px;
-  right: 5vw;
+  border-radius: 0px 0px 25px 25px;
+  right: 200px;
   margin-left: 10px;
-  bottom: 10vw;
+  top: 0;
   background-color:rgba(255, 255, 255, 1);
   box-shadow: 0px 1px 4px rgb(0, 0, 0, .3);
-  width: 200px;
-  height: 200px;
+  min-width: fit-content;
+  min-height: fit-content;
+  padding: 5px;
 }
 
-@media (max-width: 865px) {
+@media (max-width: 900px) {
   .icon-legend {
-    width: 150px !important;
-    top: 30vh !important;
+    width: 200px !important;
+    top: 70vh;
+    left: 475px;
   }
 }
 
@@ -493,13 +500,12 @@ code {
 
 .marker-list-ui {
   position: absolute;
-  bottom: 10%;
-  height: 200px;
-  max-height: 200px;
+  top: 20%;
+  max-height: 300px;
   overflow-y: auto;
   background-color: white;
-  border-radius: 5px;
-  left: 200px;
+  border-radius: 25px 0px 0px 25px;
+  right: 0;
   width: 145px;
   box-shadow: 0px 1px 4px rgb(0, 0, 0, .3);
 }
@@ -538,9 +544,9 @@ code {
 
 .preplan-locations {
   position: absolute;
-  bottom: 10%;
-  left: 25px;
-  max-height: 200px;
+  bottom: 50px;
+  left: 0px;
+  min-height: 300px;
   overflow-y: auto;
 }
 
@@ -553,15 +559,24 @@ code {
 }
 
 .preplan-locations__table {
-  border-collapse: separate;
-  border-spacing: 10px 15px;
   font-size: 18px;
   table-layout: fixed;
 }
 
-.preplan-locations__table tbody tr {
-  transition: transform 0.1s ease;
-  transform-origin: center center;
+.preplan-locations__table tbody {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 20px;
+}
+
+.preplan-locations__table tr {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  max-width: 150px;
 }
 
 .preplan-locations__table tbody tr:hover {
@@ -581,7 +596,6 @@ code {
 
 .preplan-locations__table-cell {
   padding: 5px 10px;
-  border-radius: 2px;
   max-width: 150px;
   word-wrap: break-word;
 }
@@ -629,7 +643,7 @@ code {
 
 @media (max-width: 1000px) {
   .searchInputs {
-    left: 125px;
+    left: 150px;
     top: 7vh;
     width: 20vw;
     transform: translateX(-50%);
@@ -679,12 +693,13 @@ button:hover {
 
 .create-marker {
   position: absolute;
-  left: 80%;
+  left: 25%;
   top: 20%;
   transform: translate(-50%, -50%);
-  background-color: #c1b6b2f0;
-  border: 3px solid #ae5f5f;
+  background-color: #fffffff0;
+  box-shadow: 0px 1px 4px rgb(0, 0, 0, .3);
   border-radius: 5px;
+  width: 400px;
   transition: background-color 0.2s ease;
 }
 
@@ -723,7 +738,7 @@ button:hover {
   border-width: 1px;
   border-radius: 0px 0px 15px 15px !important;
   border-color: lightgrey;
-  right: 15%;
+  left: 25%;
 }
 
 .create-marker-trigger svg {
@@ -775,27 +790,29 @@ button:hover {
   padding: 10px;
   border-radius: 25px;
   width: 50vw;
-  left: 50%;
+  left: 50vw;
   transform: translateX(-50%);
   bottom: 0px;
 
 }
-@media (max-width: 1225px) {
-  .lat-lng-ui .row {
-    display: flex;
+@media (max-width: 900px) {
+  .lat-lng-ui {
+    left: 475px;
+    width: 625px;
+    bottom: -5px;
   }
 
-
+  .lat-lng-ui .row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
 
   .lat-lng-ui .col-12 {
     justify-content: start !important;
     align-items: start !important;
   }
-  .lat-lng-ui {
-    left: 625px;
-    width: 625px;
-    bottom: -5px;
-  }
+
 }
 
 .lat-lng-ui .row {

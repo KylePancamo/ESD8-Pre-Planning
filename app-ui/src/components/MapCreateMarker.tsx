@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { defaultMarkerIconExistsState } from "../atoms";
 import Axios from "axios";
 import config from "../config/config";
+import GenericPopupWindow from "./Popup/GenericPopup";
 
 type CreateMarkerProps = {
     setIsCreateMarkerUIVisible: React.Dispatch<React.SetStateAction<boolean>>;
