@@ -73,8 +73,12 @@ function PopupWindow(props: PopupWindowProps) {
       const formData = new FormData();
       const inputFiles = inputRef.current?.files;
       const inputFile = inputFiles ? inputFiles[0] : null;
-      let inputFileName = inputFile ? inputFile.name : props.selectedMarker.image;
-      inputFileName = props.selectedMarker.marker_id + "_" + inputFileName;
+      let inputFileName: string;
+      if (inputFile) {
+        inputFileName = props.selectedMarker.marker_id + "_" + inputFile.name;
+      } else {
+        inputFileName = props.selectedMarker.image as string;
+      }
 
       formData.append("file", inputRef.current?.files ? inputRef.current?.files[0] as string | Blob : "");
       formData.append("marker_id", inputData.selectedMarkerId as string);
