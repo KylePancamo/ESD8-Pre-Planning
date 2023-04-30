@@ -23,7 +23,7 @@ type SideBarProps = {
 function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
   const [searchedSite, setSearchedSite] = useRecoilState<any>(searchSiteState);
   const [editLocation, setEditLocation] = useState<boolean>(false);
-  const { prePlanningLocations, updateLocations }= usePrePlanningLocations();
+  const { prePlanningLocations, updateLocations, removeLocation, locationInitalizer }= usePrePlanningLocations();
   const [addLocationButton, setAddLocationButton] = useState<boolean>(false);
   const { userData } = useAuth();
 
@@ -49,6 +49,8 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
         selectedEditLocation={searchedSite}
         setSelectedEditLocaton={setSearchedSite}
         updateLocations={updateLocations}
+        removeLocation={removeLocation}
+        locationInitalizer={locationInitalizer}
       />
     );
   }
