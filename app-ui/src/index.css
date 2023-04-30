@@ -172,6 +172,11 @@ code {
 }
 
 
+/******************************************************************/
+/*********************** EDIT LOCATION MODAL **********************/
+/******************************************************************/
+
+
 
 .edit-menu-button {
   display: flex;
@@ -183,6 +188,15 @@ code {
 
 .edit-form {
   height: 10vh;
+}
+
+
+.edit-location-footer .close-button {
+  order: 2;
+}
+
+.edit-location-footer .delete-button {
+  order: 1;
 }
 
 .admin-ui-trigger {
