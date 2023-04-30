@@ -45,7 +45,7 @@ router.post('/', verifyUserCredentials, (req, res) => {
       }
 
       try {
-        file.mv('./icon_images/' + filename, (err) => {
+        file.mv('../app-ui/public/icon_images/' + filename, (err) => {
           if (err) {
             logger.warn('Error uploading file', {
               error: `${err.message, err.stack}`,

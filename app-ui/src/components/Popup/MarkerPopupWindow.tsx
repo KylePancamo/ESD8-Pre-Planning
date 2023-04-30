@@ -73,7 +73,8 @@ function PopupWindow(props: PopupWindowProps) {
       const formData = new FormData();
       const inputFiles = inputRef.current?.files;
       const inputFile = inputFiles ? inputFiles[0] : null;
-      const inputFileName = inputFile ? inputFile.name : props.selectedMarker.image;
+      let inputFileName = inputFile ? inputFile.name : props.selectedMarker.image;
+      inputFileName = props.selectedMarker.marker_id + "_" + inputFileName;
 
       formData.append("file", inputRef.current?.files ? inputRef.current?.files[0] as string | Blob : "");
       formData.append("marker_id", inputData.selectedMarkerId as string);
@@ -81,7 +82,7 @@ function PopupWindow(props: PopupWindowProps) {
       formData.append("marker_name", inputData.markerName as string);
       formData.append("latitude", inputData.latitude as string);
       formData.append("longitude", inputData.longitude as string);
-      
+      formData.append("old_image_name", props.selectedMarker.image as string);
       formData.append("image_name", inputFileName as string);
       
       Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-map-marker", formData, {
