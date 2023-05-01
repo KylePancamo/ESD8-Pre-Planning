@@ -73,7 +73,12 @@ function PopupWindow(props: PopupWindowProps) {
       const formData = new FormData();
       const inputFiles = inputRef.current?.files;
       const inputFile = inputFiles ? inputFiles[0] : null;
-      const inputFileName = inputFile ? inputFile.name : props.selectedMarker.image;
+      let inputFileName: string;
+      if (inputFile) {
+        inputFileName = props.selectedMarker.marker_id + "_" + inputFile.name;
+      } else {
+        inputFileName = props.selectedMarker.image as string;
+      }
 
       formData.append("file", inputRef.current?.files ? inputRef.current?.files[0] as string | Blob : "");
       formData.append("marker_id", inputData.selectedMarkerId as string);
@@ -81,7 +86,7 @@ function PopupWindow(props: PopupWindowProps) {
       formData.append("marker_name", inputData.markerName as string);
       formData.append("latitude", inputData.latitude as string);
       formData.append("longitude", inputData.longitude as string);
-      
+      formData.append("old_image_name", props.selectedMarker.image as string);
       formData.append("image_name", inputFileName as string);
       
       Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-map-marker", formData, {
@@ -208,6 +213,7 @@ function PopupWindow(props: PopupWindowProps) {
                   <Button 
                     onClick={handleFileUpload}
                     style={{ width: "fit-content" }}
+                    variant="secondary"
                   >
                     Select Image
                   </Button>
@@ -226,7 +232,7 @@ function PopupWindow(props: PopupWindowProps) {
                       <img style={{width: "30vw"}} src={preview} />
                     ) : (props.selectedMarker.image !== null && props.selectedMarker.image !== "") ? (
                       <img style={{width: "30vw"}} src={"/marker_images/" + props.selectedMarker.image} />
-                    ) : <>No image present</>
+                    ) : <h5>No image present</h5>
                   }
                 </div>
               </Col>
@@ -237,6 +243,7 @@ function PopupWindow(props: PopupWindowProps) {
                 <Col>
                   <DropdownButton
                     id="dropdown-basic-button"
+                    variant="secondary"
                     title={
                       <img
                         src={"/icon_images/" + selectedIcon.icon_name}
@@ -325,9 +332,9 @@ function PopupWindow(props: PopupWindowProps) {
           Delete Marker
         </Button>
         ) : null}
-        <Button onClick={props.onHide}>Close</Button>
+        <Button variant="secondary" onClick={props.onHide}>Close</Button>
         {hasPermissions(userData?.permissions, permission.MODIFY)  ? (
-          <Button onClick={handleSubmit((data) => handleMarkerSaving(data))}>Save</Button>
+          <Button variant="secondary" onClick={handleSubmit((data) => handleMarkerSaving(data))}>Save</Button>
         ) : null}
       </Modal.Footer>
       <MarkerDeletion

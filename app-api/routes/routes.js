@@ -27,6 +27,8 @@ module.exports = (app) => {
     const registerUser = require('./Auth/register-user');
     const resetPassword = require('./Auth/reset-password');
     const deleteRole = require('./Auth/delete-role');
+    const deletePreplanningLocation = require('./Preplanning/delete-preplanning-location');
+    const deleteIcon = require('./Icons/delete-icon');
 
     // mount routes here
     app.use('/api/insert-placed-marker', insertMarkers);
@@ -56,4 +58,6 @@ module.exports = (app) => {
     app.use('/api/register-user', registerUser);
     app.use('/api/reset-password', resetPassword);
     app.use('/api/delete-role', deleteRole);
+    app.use('/api/delete-preplanning-location', deletePreplanningLocation);
+    app.use('/api/delete-icon', deleteIcon);
 }

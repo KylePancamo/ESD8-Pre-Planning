@@ -39,11 +39,20 @@ function Users() {
     useEffect(() => {
       const controller = new AbortController();
       const fetchUserRoles = async () => {
-        const response = await Axios.get<{payload: User[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-user-roles", {
+        const response = await Axios.get<{status: string, payload?: User[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-user-roles", {
           withCredentials: true,
           signal: controller.signal,
         });
-        setUsers(response.data.payload);
+
+        if (response.data.status == 'success') {
+          const payload: User[] | undefined = response.data.payload;
+          if (payload) {
+            setUsers(payload);
+          }
+        } else {
+          setUsers([]);
+        }
+        
       }
 
       const fetchRoles = async () => {
@@ -74,7 +83,7 @@ function Users() {
   
     const filteredUsers = useMemo(
       () =>
-        users.filter((user: User) =>
+        users?.filter((user: User) =>
           user.username.toLowerCase().includes(searchTerm.toLowerCase())
         ),
       [users, searchTerm]
@@ -123,7 +132,7 @@ function Users() {
     return (
       <div className='user-container'>
         <h2>Modify User Roles</h2>
-        {users.length !== 0 ? (
+        {users?.length !== 0 ? (
           <>
             <div className='search-container'>
               <input
@@ -147,7 +156,7 @@ function Users() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers.map((user: User) => (
+                  {filteredUsers?.map((user: User) => (
                     <tr key={user.user_id}>
                       <td>{user.username}</td>
                       <td>
@@ -206,7 +215,17 @@ function Users() {
               </div>
             </div>
           </>
-        ) : null }
+        ) : 
+          <div className='table-container'>
+            <table>
+              <tbody>
+              <tr>
+                <td>No Users Found</td> 
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          }
         {userDeleteWindow ? (
           <GenericModal
             show={userDeleteWindow}

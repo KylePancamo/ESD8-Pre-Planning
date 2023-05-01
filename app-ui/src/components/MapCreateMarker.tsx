@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { defaultMarkerIconExistsState } from "../atoms";
 import Axios from "axios";
 import config from "../config/config";
+import GenericPopupWindow from "./Popup/GenericPopup";
 
 type CreateMarkerProps = {
     setIsCreateMarkerUIVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -84,7 +85,7 @@ const MapCreateMarker = ({setIsCreateMarkerUIVisible, setMarkers, markers} : Cre
     return (
         <div className="create-marker">
             <Button
-                className="close-button d-inline-flex"
+                className="create-marker-close-button d-inline-flex"
                 onClick={() => setIsCreateMarkerUIVisible(false)}
             >X</Button>
             <Form className="create-marker-form">

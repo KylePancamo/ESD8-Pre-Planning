@@ -2,6 +2,10 @@ import React from "react";
 import { StandaloneSearchBox } from "@react-google-maps/api";
 import Form from "react-bootstrap/Form";
 import {AiOutlineClose, AiOutlineSearch} from "react-icons/ai";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import { Button } from "react-bootstrap";
+
 
 type MapStandaloneSearchBoxProps = {
   bounds: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral | undefined;
@@ -16,7 +20,7 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (searchBoxRef.current) {
-      searchBoxRef.current.value = "";
+      searchBoxRef.current.value = ""
     }
     clearPlaces();
   };
@@ -31,18 +35,29 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
         <div className="search">
           <div className="searchInputs">
             <div className="searchIcon">
-              <button onClick={handleClear}>
-                <AiOutlineClose/>
-              </button>
+              <OverlayTrigger
+                placement={"left"}
+                overlay={
+                  <Tooltip id="tooltip-bottom">
+                    Clear Search
+                  </Tooltip>
+                }
+              >
+                <button onClick={handleClear} style={{ borderTopLeftRadius: "20px", borderBottomLeftRadius: "20px"}}>
+                  <AiOutlineClose/>
+                </button>
+              </OverlayTrigger> 
             </div>
             <Form.Control
               type="text"
               placeholder="Search for a location"
               ref={searchBoxRef}
+              className="autocomplete-input"
             />
             <div className="searchIcon">
               <button 
-                style={{backgroundColor: "white", fontSize: "20px"}} >
+                style={{backgroundColor: "white", fontSize: "20px", borderTopRightRadius: "20px", borderBottomRightRadius: "20px"}}
+              >
                 <AiOutlineSearch />
               </button>
             </div>

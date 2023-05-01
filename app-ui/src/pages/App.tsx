@@ -1,5 +1,5 @@
 import MapContainer from "../components/MapContainer/MapContainer";
-import Legend from "../components/Legend";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Axios from "axios";
@@ -36,6 +36,7 @@ function App() {
     if (!preplanLocations.data.result) {
       console.log("No preplanning locations found");
     }
+    console.log(preplanLocations.data.result);
     setPrePlanningLocations(preplanLocations.data.result);
   }
 
@@ -76,7 +77,7 @@ function App() {
         sideBarValue={sideBarValue}
         setSideBarValue={setSideBarValue}
       />
-      <Legend />
+      
     </div>
   );
 }

@@ -4,16 +4,13 @@ export type LocationTypes = {
     latitude: number;
     longitude: number;
     occupancyname: string;
-    mut_aid_helotesfd: number;
-    mut_aid_d7fr: number;
-    mut_aid_leonspringsvfd: number;
-    mut_aid_bc2fd: number;
+    mutual_aids: string[];
     occupancyaddress: string;
     occupancycity: string;
     occupancystate: string;
     occupancyzip: string;
     occupancycountry: string;
-    constructiontype: number;
+    construction_types: string[];
     hazards: string;
     hydrant_address: string;
     hydrant_distance: number;
@@ -24,6 +21,6 @@ export type LocationTypes = {
     gas_shutoff: string;
     emergency_contact_number: string;
     other_notes: string;
-    occupancytype: string;
+    occupancy_types: string[];
     contactname: string;
 };
