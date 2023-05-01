@@ -64,15 +64,17 @@ routes(app);
 
 
 const httpsOptions = {
-  key: fs.readFileSync('/etc/letsencrypt/live/esd8.eastus2.cloudapp.azure.com/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/esd8.eastus2.cloudapp.azure.com/fullchain.pem')
+  key: fs.readFileSync('/etc/letsencrypt/live/esd8preplan.eastus.cloudapp.azure.com/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/esd8preplan.eastus.cloudapp.azure.com/fullchain.pem')
 }
 
 
 const PORT = process.env.SERVER_PORT;
 
 try {
-  https.createServer(httpsOptions, app).listen(PORT);
+  https.createServer(httpsOptions, app).listen(PORT, () => {
+    console.log("Node running on PORT " + PORT)
+  });
 } catch (err) {
   console.log(err);
 }

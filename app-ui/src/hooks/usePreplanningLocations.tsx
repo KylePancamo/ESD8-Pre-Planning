@@ -6,6 +6,12 @@ import { LocationTypes } from "../types/location-types";
 function usePrePlanningLocations() {
   const [prePlanningLocations, setPrePlanningLocations] = useRecoilState<LocationTypes[]>(preplanningLocationsState);
 
+  const removeLocation = useCallback((id: number) => {
+    setPrePlanningLocations((locations: LocationTypes[]) => {
+      return locations.filter((location) => location.id !== id);
+    });
+  }, [prePlanningLocations]);
+  
   const updateLocations = useCallback((newVal: LocationTypes, id: number) => {
     setPrePlanningLocations((locations: LocationTypes[]) => {
       return locations.map((location) => {
@@ -25,7 +31,33 @@ function usePrePlanningLocations() {
     });
   }, [prePlanningLocations])
 
-  return {prePlanningLocations, updateLocations, addNewLocation};
+  const locationInitalizer: LocationTypes = {
+    google_formatted_address: '',
+    latitude: 0,
+    longitude: 0,
+    occupancyname: '',
+    mutual_aids: [],
+    occupancyaddress: '',
+    occupancycity: '',
+    occupancystate: '',
+    occupancyzip: '',
+    occupancycountry: '',
+    construction_types: [],
+    hazards: '',
+    hydrant_address: '',
+    hydrant_distance: 0,
+    access: '',
+    electric_meter: '',
+    breaker_box: '',
+    water: '',
+    gas_shutoff: '',
+    emergency_contact_number: '',
+    other_notes: '',
+    occupancy_types: [],
+    contactname: '',
+  }
+
+  return {prePlanningLocations, updateLocations, addNewLocation, removeLocation, locationInitalizer};
 }
 
 export default usePrePlanningLocations;

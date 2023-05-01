@@ -3,25 +3,26 @@ import MapDrawingManager from "./MapDrawingManager";
 
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import Popup from "../Popup/MarkerPopupWindow";
-import { GoogleMap, useJsApiLoader, Marker, MarkerClustererF } from "@react-google-maps/api";
-
+import { GoogleMap, useJsApiLoader, Marker, MarkerClustererF, InfoWindowF  } from "@react-google-maps/api";
+import Legend from "../Legend";
 import Axios from "axios";
 import AdminPanel from "../AdminPanel/AdminPanelModal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
-import {sideBarDataState} from "../../atoms";
-import {siteIsSetState} from "../../atoms";
 import PreplanningLocationsUI from "./PreplanningLocationsUI";
+import PlacedMarkersUI from "./PlacedMarkersUI";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
 import { SearchSite } from "../../types/atoms-types";
 import { marker } from "../../types/marker-types";
-import CurrentUserLocation from "../CurrentUserLocation"
+import { CurrentUserLocation, CurrentOccupancyLocation, UpdateUserLocation } from "../VerticalWidgets"
 import MapCreateMarker from "../MapCreateMarker";
-import cluster from "cluster";
+import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
+import { LatLngUI } from "./LatLngUI";
+import {MdLogout} from "react-icons/md";
 
 const containerStyle = {
   width: "100vw",
@@ -60,11 +61,13 @@ function MapContainer(props : MapContainerProps) {
   const [searchBox, setSearchBox] = useState<google.maps.places.SearchBox>();
   const [bounds, setBounds] = useState<bounds>();
   const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
+  const { prePlanningLocations, locationInitalizer } = usePrePlanningLocations();
   const [mapId, setMapId] = useState<string | undefined>("satellite");
   const [currentUserLocation, setCurrentUserLocation] = useState<center>();
   const [trackingLocation, setTrackingLocation] = useState<boolean>(false);
   const [trackingLocationId, setTrackingLocationId] = useState<number | null>();
   const [isCreateMarkerUIVisible, setIsCreateMarkerUIVisible] = useState<boolean>(false);
+  const [infoWindow, setInfoWindow] = useState<boolean>(false);
 
   const [occupancyLocation,  setOccupancyLocation] = useState<center>({
     lat: 29.615106009353045,
@@ -83,8 +86,6 @@ function MapContainer(props : MapContainerProps) {
           lng: position.coords.longitude,
         }
         );
-      }, (error) => {
-        console.log(error);
       });
     }
   }, []);
@@ -123,12 +124,18 @@ function MapContainer(props : MapContainerProps) {
       if (!places || !places[0]) {
         return;
       }
-
-      setSearchedSite({
-        location: places[0].formatted_address as string,
-        latitude: places[0].geometry?.location?.lat() as number,
-        longitude: places[0].geometry?.location?.lng() as number,
-      });
+      const location = prePlanningLocations.find((location) => location.google_formatted_address === places[0].formatted_address);
+      
+      if (!location) {
+        setSearchedSite({
+          ...locationInitalizer,
+          google_formatted_address: places[0].formatted_address as string,
+          latitude: places[0]?.geometry?.location?.lat() as number,
+          longitude: places[0]?.geometry?.location?.lng() as number,
+        });
+      } else {
+        setSearchedSite(location);
+      }
 
       places.forEach((place) => {
 
@@ -145,20 +152,13 @@ function MapContainer(props : MapContainerProps) {
 
       const nextCenter: center = nextMarkers.length > 0 ? nextMarkers[0].position as center : center;
       setCenter(nextCenter);
+      setOccupancyLocation(nextCenter);
       props.setSideBarValue(true);
     }
   };
-
-  const [sidebarData, setSidebarData] = useRecoilState(sideBarDataState);
-  const [siteIsSet, setSiteIsSet] = useRecoilState(siteIsSetState);
   const clearPlaces = () => {
-    setSearchedSite({
-      location: "",
-      latitude: 0,
-      longitude: 0,
-    });
-    setSidebarData([])
-    setSiteIsSet(false);
+    console.log(searchBox?.getPlaces());
+    setSearchedSite(locationInitalizer);
     props.setSideBarValue(false);
   }
 
@@ -248,7 +248,6 @@ function MapContainer(props : MapContainerProps) {
     }
   }
 
-
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -288,53 +287,64 @@ function MapContainer(props : MapContainerProps) {
         ]}
       >
         {(clusterer) => 
-          <div>
-            {markers.map((marker) => {
-              marker.position = {
-                lat: marker.latitude,
-                lng: marker.longitude,
-              };
-              return (
-                <Marker
-                  position={marker.position}
-                  onClick={() => {
-                    if (markerClicked === false) {
-                      setMarkerClicked(true);
-                    }
-                    setSelectedMarker(marker);
-                  }}
-                  icon={(marker.file_name === null) ? undefined : "/icon_images/" + marker.file_name}
-                  key={marker.marker_id}
-                  visible={markerVisibility}
-                  draggable={markerDraggable}
-                  onDragEnd={(e) => {
-                    console.log(e?.latLng?.lat(), e?.latLng?.lng());
-                  }}
-                  clusterer={clusterer}
-                />
-              );
-            }
-            )}
-          </div>
+            <div>
+              {markers.map((marker) => {
+                marker.position = {
+                  lat: marker.latitude,
+                  lng: marker.longitude,
+                };
+                return (
+                    <Marker
+                      position={marker.position}
+                      onClick={() => {
+                        if (markerClicked === false) {
+                          setMarkerClicked(true);
+                        }
+                        setSelectedMarker(marker);
+                      }}
+                      icon={(marker.file_name === null) ? undefined : "/icon_images/" + marker.file_name}
+                      key={marker.marker_id}
+                      visible={markerVisibility}
+                      draggable={markerDraggable}
+                      onDragEnd={(e) => {
+                        console.log(e?.latLng?.lat(), e?.latLng?.lng());
+                      }}
+                      clusterer={clusterer}
+                    />
+                );
+              }
+              )}
+            </div>
         }
       </MarkerClustererF>
-
+      
       {/* Marker for occupancy location */}
       <Marker 
         position={occupancyLocation} 
         onClick={() => handleOnClick()}
         icon={"map-pin.png"}
         />
-
+      
       {/* Marker for users location */}
       {currentUserLocation ? (
         <Marker
           position={currentUserLocation}
           icon={"/icon_images/user_location.png"}
-          onMouseOver={() => {
-
-          }}
-        />
+          onClick={() => setInfoWindow(true)}
+        >
+          {infoWindow ? (
+            <InfoWindowF
+              position={currentUserLocation}
+              onCloseClick={() => setInfoWindow(false)}
+            >
+              <div>
+                {currentUserLocation?.lat as number},
+                <br />
+                {currentUserLocation?.lng as number}
+              </div>
+            </InfoWindowF>
+          ) : null}
+        </Marker>
       ) : null}
       {hasPermissions(userData?.permissions, permission.MODIFY) ? (
         <MapDrawingManager 
@@ -343,13 +353,7 @@ function MapContainer(props : MapContainerProps) {
         />
       ) : null}
 
-      <MapStandaloneSearchBox
-        bounds={bounds}
-        onPlacesChanged={onPlacesChanged}
-        onSBLoad={onSBLoad}
-        clearPlaces={clearPlaces}
-        searchBoxRef={searchBoxRef}
-      />
+      
       <AdminPanel flushMarkers={() => FlushMarkers()} />
       <div className="utility-items">
         <div className="marker-visiblity">
@@ -391,44 +395,55 @@ function MapContainer(props : MapContainerProps) {
             />
           </Form>
         </div>
-        <div className="update-user-location">
-          <Button
-            onClick={updateUserLocation}
-          >
-            Update Location
-          </Button>
-        </div>
-        <div className="goto-center">
-          <Button
-            onClick={() => {
-              map?.panTo(occupancyLocation as google.maps.LatLng | google.maps.LatLngLiteral);
-              map?.setZoom(15);
-            }}
-          >
-            Goto Location
-          </Button>
-        </div>
       </div>
       <PreplanningLocationsUI
         setSideBarValue={props.setSideBarValue}
         setOccupancyLocation={setOccupancyLocation}
         setCenter={setCenter}
       />
-      <button onClick={async () => {
+      <PlacedMarkersUI
+        markers={markers}
+        setCenter={setCenter}
+      />
+      <Button variant="none" onClick={async () => {
         const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/logout", { withCredentials: true });
         if (response.data.status === "success") {
           logout();
         }
       }} className="logout-btn">
-        Logout
-      </button>
-      <CurrentUserLocation
-        lat={currentUserLocation?.lat as number | (() => number)}
-        lng={currentUserLocation?.lng as number | (() => number)}
+        <MdLogout
+          size={30}
+          color="black"
+        />
+      </Button>
+      <MapStandaloneSearchBox
+        bounds={bounds}
+        onPlacesChanged={onPlacesChanged}
+        onSBLoad={onSBLoad}
+        clearPlaces={clearPlaces}
+        searchBoxRef={searchBoxRef}
+      />
+      <div className="vertical-widget-holder">
+        <CurrentUserLocation
+          lat={currentUserLocation?.lat as number | (() => number)}
+          lng={currentUserLocation?.lng as number | (() => number)}
+          setCenter={setCenter}
+        />
+        <CurrentOccupancyLocation
+          map={map}
+          occupancyLocation={occupancyLocation}
+        />
+        <UpdateUserLocation 
+          updateUserLocation={updateUserLocation}
+        />
+      </div>
+      <LatLngUI
         setCenter={setCenter}
       />
+      <Legend />
       {isCreateMarkerUIVisible === false ? (
-        <Button 
+        <Button
+          variant="secondary"
           className="create-marker-trigger d-inline-flex"
           onClick={() => setIsCreateMarkerUIVisible(true)}
         >
@@ -437,6 +452,9 @@ function MapContainer(props : MapContainerProps) {
             height="30"
             viewBox="0 96 960 960"
             width="30"
+            style={{
+              fill: "white",
+            }}
           >
             <path d="M728 413.333h66.667V288H920v-66.667H794.667V96H728v125.333H602.667V288H728v125.333Zm-247.941
             156q30.274 0 51.774-21.559t21.5-51.833q0-30.274-21.559-51.774t-51.833-21.5q-30.274 0-51.774 21.559t-21.5

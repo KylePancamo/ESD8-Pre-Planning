@@ -11,6 +11,8 @@ import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
 import { Link } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
+import Axios from "axios";
 
 type AdminPanelProps = {
   flushMarkers: () => void;
@@ -23,21 +25,45 @@ function AdminPanel(props: AdminPanelProps) {
   const [images, setImages] = useRecoilState<Image[]>(imagesState);
   const [iconEditState, setIconEditState] = useState<boolean>(false);
   const [selectedIcon, setSelectedIcon] = useState<Image>();
+  const [deleteIconWindow, setDeleteIconWindow] = useState<boolean>(false);
+  const [iconDeleteStatus, setIconDeleteStatus] = useState<{status: string, message: string}>({status: "", message: ""}); // ["none", "success", "error"
+  const icon = React.useRef<any>();
 
   const { userData } = useAuth();
+
+  const deleteIcon = async () => {
+    if (selectedIcon) {
+      const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + `/api/delete-icon/`, {
+        selectedIcon
+      },{
+        withCredentials: true
+      });
+
+
+      if (response.data.status === "success") {
+        setImages(images.filter((image) => image.icon_id !== selectedIcon?.icon_id));
+        setDeleteIconWindow(false);
+        setIconDeleteStatus({status: "success", message: "Icon deleted successfully!"});
+      } else if (response.data.status === "error") {
+        setDeleteIconWindow(false);
+        setIconDeleteStatus({status: "error", message: response.data.message});
+      }
+    }
+  }
 
   return (
     <>
     {hasPermissions(userData?.permissions, permission.MODIFY) ? (
       <div className="admin-ui">
-        <button
-          className="btn btn-primary"
+        <Button
+          className="admin-ui-trigger"
+          variant="secondary"
           onClick={() => {
             setAdminPanel(true);
           }}
         >
           Admin Panel
-        </button>
+        </Button>
         <GenericPopupWindow
           show={adminPanel}
           onHide={() => {
@@ -68,10 +94,11 @@ function AdminPanel(props: AdminPanelProps) {
                 onClick={() => {
                   setFileUploadPopup(true);
                 }}
+                variant="secondary"
               >
                 Upload File
               </Button>
-              <Button>
+              <Button variant="secondary">
                 <Link style={{color: 'white'}} to='/adminportal' target="_blank">Admin Portal</Link>
               </Button>
               <IconUpload
@@ -95,7 +122,7 @@ function AdminPanel(props: AdminPanelProps) {
                   <tbody>
                     {images.map((image) => {
                       return (
-                        <tr className="image-body" key={image.icon_id}>
+                        <tr className="image-body" key={image.icon_id} ref={icon}>
                           <td>{image.icon_id}</td>
                           <td>
                             <img
@@ -113,8 +140,20 @@ function AdminPanel(props: AdminPanelProps) {
                                 setIconEditState(true);
                                 setSelectedIcon(image);
                               }}
+                              variant="secondary"
                             >Edit</Button>
                           </td>
+                          {image.icon_id !== 1 ? (
+                          <td>
+                            <Button
+                              onClick={() => {
+                                setDeleteIconWindow(true);
+                                setSelectedIcon(image);
+                              }}
+                              variant="danger"
+                            >Delete</Button>
+                          </td>
+                          ) : null}
                         </tr>
                       );
                     })}
@@ -122,6 +161,27 @@ function AdminPanel(props: AdminPanelProps) {
                 </table>
               </div>
             </div>
+          </div>
+          <div style={{marginTop: "10px"}}>
+            {deleteIconWindow ? (
+                <Alert variant="danger" onClose={() => setDeleteIconWindow(false)} dismissible>
+                  <Alert.Heading>WARNING!</Alert.Heading>
+                  <div className="d-flex justify-content-between">
+                    <p>You are about to perform a deletion on <strong><i><u>{selectedIcon?.icon_name}</u></i></strong> icon. Are you sure?</p>
+                    <Button variant="outline-danger" onClick={deleteIcon}>
+                      Delete
+                    </Button>
+                  </div>
+                </Alert>
+            ) : (iconDeleteStatus.status === "success") ? (
+              <Alert variant="success" onClose={() => setIconDeleteStatus({status: "none", message: ""})} dismissible>
+                {iconDeleteStatus.message}
+              </Alert>
+            ) : (iconDeleteStatus.status === "error") ? (
+              <Alert variant="danger" onClose={() => setIconDeleteStatus({status: "", message: ""})} dismissible>
+                <Alert.Heading>{iconDeleteStatus.message}</Alert.Heading>
+              </Alert>
+            ) : null}
           </div>
         </GenericPopupWindow>
         {iconEditState ? (

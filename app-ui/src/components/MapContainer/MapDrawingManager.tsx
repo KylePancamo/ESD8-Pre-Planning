@@ -9,7 +9,6 @@ import { marker } from "../../types/marker-types";
 import { useRecoilState } from "recoil";
 import { defaultMarkerIconExistsState } from "../../atoms";
 
-
 type MapDrawingManagerProps = {
   markers: marker[];
   setMarkers: React.Dispatch<React.SetStateAction<marker[]>>;
