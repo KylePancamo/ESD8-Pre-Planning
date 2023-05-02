@@ -11,12 +11,8 @@ services:
       - 3307:3306
     volumes:
       - db:/var/lib/mysql
-      - ./database/create_databases/auth.sql:/docker-entrypoint-initdb.d/auth.sql
       - ./database/create_databases/esd8_preplanning_db.sql:/docker-entrypoint-initdb.d/esd8_preplanning_db.sql
-      - ./database/updates/auth_accounts.sql:/docker-entrypoint-initdb.d/auth_accounts.sql
-      - ./database/updates/auth_roles_02_28_2023.sql:/docker-entrypoint-initdb.d/auth_roles_02_28_2023.sql
-      - ./database/updates/role_permissions_02_02_2023.sql:/docker-entrypoint-initdb.d/role_permissions_02_02_2023.sql
-      - ./database/updates/sessions_03_26_2023.sql:/docker-entrypoint-initdb.d/sessions_03_26_2023.sql
+      - ./database/create_databases/auth.sql:/docker-entrypoint-initdb.d/auth.sql
     networks:
       - backend
 
