@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf16;
 
--- Dumping data for table auth.accounts: ~2 rows (approximately)
+-- Dumping data for table auth.accounts: ~1 rows (approximately)
 DELETE FROM `accounts`;
 /*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
 INSERT INTO `accounts` (`id`, `username`, `password`) VALUES
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
 DELETE FROM `user_roles`;
 /*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
 INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
-	(1, 1),
+	(1, 1);
 /*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
