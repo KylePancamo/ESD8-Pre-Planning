@@ -1,7 +1,3 @@
-import Axios from "axios";
-import React from "react";
-import { useState, useEffect } from "react";
-import Modal from "react-bootstrap/Modal";
 import { useRecoilState } from "recoil";
 import { imagesState } from "../atoms";
 import { Image } from "../types/atoms-types";
@@ -23,7 +19,7 @@ function Legend() {
             Legend
         </div>
         <div className="icon-legend-items">
-          {images.map((image: any) => {
+          {images.map((image) => {
             return <LegendItem image={image} key={image.icon_id}/>
           })}
         </div>

@@ -34,12 +34,11 @@ function Users() {
     const [userDeleteWindow, setUserDeleteWindow] = useState<boolean>(false);
     const [user, setUser] = useState<User | undefined>(undefined);
     const [forgotPasswordWindow, setForgotPasswordWindow] = useState<boolean>(false);
-    const [showPassword, setShowPassword] = useState<boolean>(false);
 
     useEffect(() => {
       const controller = new AbortController();
       const fetchUserRoles = async () => {
-        const response = await Axios.get<{status: string, payload?: User[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-user-roles", {
+        const response = await Axios.get<{status: string, payload?: User[]}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/get-user-roles", {
           withCredentials: true,
           signal: controller.signal,
         });
@@ -56,7 +55,7 @@ function Users() {
       }
 
       const fetchRoles = async () => {
-        const response = await Axios.get<{payload: Role[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-roles", {
+        const response = await Axios.get<{payload: Role[]}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/get-roles", {
           withCredentials: true,
           signal: controller.signal,
         });
@@ -91,19 +90,28 @@ function Users() {
 
     const updateUser = async (user: User) => {
       console.log(user);
-      const response = await Axios.post<{status: string, err: string}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-user-role", user, {withCredentials: true});
-
-      if (response.data.status == 'success') {
-        setUpdateStatus({
-          status: true,
-          message: `${user.username}'s role was updated to ${roles.find((role: Role) => role.id == user.role_id)?.name} `
-        });
-      } else if (response.data.status == 'error') {
-        setUpdateStatus({
-          status: false,
-          message: response.data.err
-        });
+      try {
+        const response = await Axios.post<{status: string, message: string}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/update-user-role", user, {withCredentials: true});
+        if (response.data.status == 'success') {
+          setUpdateStatus({
+            status: true,
+            message: `${user.username}'s role was updated to ${roles.find((role: Role) => role.id == user.role_id)?.name} `
+          });
+        } else if (response.data.status == 'error' || response.status === 403) {
+          setUpdateStatus({
+            status: false,
+            message: response.data.message || 'Error updating user role'
+          });
+        }
+      } catch (error: any) {
+        if (error?.response && error.response.status === 403) {
+          setUpdateStatus({
+            status: false,
+            message: error.response.data.message || 'Error updating user role'
+          });
+        }
       }
+      
     }
 
     const deleteUser = async () => {
@@ -111,22 +119,30 @@ function Users() {
         return;
       }
 
-      const response = await Axios.post<{status: string}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-user", user, {withCredentials: true});
-    
-      if (response.data.status == 'success') {
-        setUsers((prevUsers: User[]) => prevUsers.filter((currUser: User) => currUser.user_id !== user.user_id));
-        setUpdateStatus({
-          status: true,
-          message: 'User deleted successfully'
-        });
-        setUserDeleteWindow(false);
-      } else if (response.data.status == 'error') {
-        setUpdateStatus({
-          status: false,
-          message: 'Error deleting user'
-        });
+      try {
+        const response = await Axios.post<{status: string}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/delete-user", user, {withCredentials: true});
+      
+        if (response.data.status == 'success') {
+          setUsers((prevUsers: User[]) => prevUsers.filter((currUser: User) => currUser.user_id !== user.user_id));
+          setUpdateStatus({
+            status: true,
+            message: 'User deleted successfully'
+          });
+          setUserDeleteWindow(false);
+        } else if (response.data.status == 'error') {
+          setUpdateStatus({
+            status: false,
+            message: 'Error deleting user'
+          });
+        }
+      } catch (error: any) {
+        if (error?.response && error.response.status === 403) {
+          setUpdateStatus({
+            status: false,
+            message: error.response.data.message || 'Error deleting user'
+          });
+        }
       }
-
     }
 
     return (

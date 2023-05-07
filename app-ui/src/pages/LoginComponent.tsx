@@ -1,12 +1,12 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useAuth } from '../hooks/AuthProvider';
 import Axios from 'axios';
 import { decodeToken } from "react-jwt";
 import '../Login.css';
-import Logo from '../esd8_logo.png';
-import firetruck from '../firetruck.png';
+import Logo from '/esd8_logo.png';
+import firetruck from '/firetruck.png';
 
 import { UserData } from '../types/auth-types';
 
@@ -25,13 +25,12 @@ export default function Login() {
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/login", {username, password}, {
+        const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/login", {username, password}, {
             withCredentials: true
         });
         if (response.data.status === "success") {
             const token = response.data.token;
             if (!token) {
-                console.log(response.data);
                 setLoginStatus({
                     status: false,
                     message: "Internal Error. No token returned.",
@@ -52,6 +51,11 @@ export default function Login() {
             setLoginStatus({
                 status: false,
                 message: response.data.err as string,
+            })
+        } else {
+            setLoginStatus({
+                status: false,
+                message: "Unknown error.",
             })
         }
     }

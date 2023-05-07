@@ -33,11 +33,11 @@ function RoleTypes() {
   useEffect(() => {
     const controller = new AbortController();
     const fetchRolePermissions = async () => {
-      const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-role-permissions", {
+      const response = await Axios.get(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/get-role-permissions", {
         withCredentials: true,
         signal: controller.signal
       });
-      console.log(response.data.payload);
+
       setRolePermissions(response.data.payload);
     }
     
@@ -82,7 +82,7 @@ function RoleTypes() {
     const removedPermissions = ~newPermissions & role.combined_permissions;
 
     if (addedPermissions) {
-      const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/insert-role-permissions", {role, addedPermissions, key}, {
+      const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/insert-role-permissions", {role, addedPermissions, key}, {
         withCredentials: true
       });
       if (response.data.status === 'success') {
@@ -100,7 +100,7 @@ function RoleTypes() {
         })
       }
     } else if (removedPermissions) {
-      const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-role-permissions", {role, removedPermissions}, {
+      const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/delete-role-permissions", {role, removedPermissions}, {
         withCredentials: true
       });
       if (response.data.status === 'success') {
@@ -121,7 +121,7 @@ function RoleTypes() {
   }
 
   const handleDeleteRole = async (role: RolePermission) => {
-    const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-role", {role}, {
+    const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/delete-role", {role}, {
       withCredentials: true
     });
     if (response.data.status === 'success') {

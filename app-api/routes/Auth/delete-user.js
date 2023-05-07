@@ -10,12 +10,21 @@ const logger = require("../../logger");
 router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
     const db = getPool(process.env.MYSQL_AUTH_DATABASE);
 
-    const user = req.body;
-    const user_id = user.user_id;
+    const userToDelete = req.body;
+    const deleteUserId = userToDelete.user_id;
 
-    if (user.username === process.env.ADMIN_USERNAME) {
-        logger.warn(`User ${user.username} tried to delete perform a suspicious action in file ${__filename}`);
-        res.send({status: 'error'});
+    // grab user who sent the request
+    const requestUser = req.user;
+
+    if (requestUser.userName === userToDelete.username) {
+        logger.warn(`User ${requestUser.username} tried to delete themselves in file`);
+        res.status(403).send({status: 'error', message: "You cannot delete yourself."});
+        return;
+    }
+
+    if (requestUser.username !== process.env.ADMIN_USERNAME) {
+        logger.warn(`User ${requestUser.username} tried to delete perform a suspicious action in file ${__filename}`);
+        res.status(403).send({status: 'error', message: "You are not authorized to perform this action."});
         return;
     }
 
@@ -24,16 +33,16 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
             DELETE FROM accounts WHERE id = ?;
         `;
 
-    db.query(query, [user_id, user_id], (err, result) => {
+    db.query(query, [deleteUserId, deleteUserId], (err, result) => {
         if (err) {
-            logger.warn(`Error deleting user ${user_id}`, {
+            logger.warn(`Error deleting user ${deleteUserId}`, {
                 error: `${err.message, err.stack}`
             })
             res.send({ status: 'error', err: err });
             return;
         }
 
-        logger.info(`User ${user.username} with ID ${user_id} was deleted successfully`);
+        logger.info(`User ${userToDelete.username} with ID ${deleteUserId} was deleted successfully`);
         res.send({status: 'success'});
     })
 });

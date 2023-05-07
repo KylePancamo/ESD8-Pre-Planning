@@ -1,83 +1,12 @@
 import './404Unauthorized.css';
-import { useEffect, useRef, useState } from 'react';
 import { useAuth } from "../hooks/AuthProvider";
-import React from "react";
+import { Button } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+
 
 const RouteUnauthorized = () => {
-
-        // We need ref in this, because we are dealing
-    // with JS setInterval to keep track of it and
-    // stop it when needed
-    const Ref = useRef<NodeJS.Timer>();
     const { logout } = useAuth();
-  
-    // The state for our timer
-    const [timer, setTimer] = useState('00');
-  
-  
-    const getTimeRemaining = (e: string) => {
-        const total = Date.parse(e) - Date.parse(new Date().toString());
-        const seconds = Math.floor((total / 1000) % 60);
-        return {
-            total, seconds
-        };
-    }
-  
-  
-    const startTimer = (e: string) => {
-        let { total, seconds } = getTimeRemaining(e);
-        if (total >= 0) {
-
-            // update the timer
-            // check if less than 10 then we need to 
-            // add '0' at the beginning of the variable
-            setTimer((seconds > 9 ? seconds : '0' + seconds).toString())
-        }
-        else {
-            console.log('Time is up')
-            logout();
-        }
-    }
-  
-  
-    const clearTimer = (e: string) => {
-
-        // If you adjust it you should also need to
-        // adjust the Endtime formula we are about
-        // to code next    
-        setTimer('10');
-
-        // If you try to remove this line the 
-        // updating of timer Variable will be
-        // after 1000ms or 1sec
-        if (Ref.current) clearInterval(Ref.current);
-        const id: NodeJS.Timer = setInterval(() => {
-            startTimer(e);
-        }, 1000)
-        Ref.current = id;
-    }
-  
-    const getDeadTime = () => {
-        let deadline = new Date();
-
-        // This is where you need to adjust if 
-        // you intend to add more time
-        deadline.setSeconds(deadline.getSeconds() + 10);
-        return deadline.toString();
-    }
-  
-    // We can use useEffect so that when the component
-    // mount the timer will start as soon as possible
-  
-    // We put empty array to act as componentDid
-    // mount only
-    useEffect(() => {
-        clearTimer(getDeadTime());
-
-        return () => {
-            if (Ref.current) clearInterval(Ref.current);
-        }
-    }, []);
+    const navigate = useNavigate();
 
     return (
         <div className="Unauthorized">
@@ -88,7 +17,17 @@ const RouteUnauthorized = () => {
                 <h1>404</h1>
                 <h2>Unauthorized</h2>
                 <p>Sorry, you do not have permissions to view this page.</p>
-                <p>Logging out in... {timer} seconds</p>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '1rem',
+                }}>
+                    <Button onClick={logout}>Logout</Button>
+                    <strong>or</strong>
+                    <Button onClick={() => navigate(-1)}>Go Back</Button>
+                </div>
             </div>
         </div>
     );

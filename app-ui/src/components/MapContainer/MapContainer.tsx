@@ -1,8 +1,8 @@
 import MapStandaloneSearchBox from "./MapStandaloneSearchBox";
 import MapDrawingManager from "./MapDrawingManager";
 
-import React, { useState, useCallback, useEffect, useMemo } from "react";
-import Popup from "../Popup/MarkerPopupWindow";
+import React, { useState, useCallback, useEffect, useRef } from "react";
+import MarkerPopupWindow from "../Popup/MarkerPopupWindow";
 import { GoogleMap, useJsApiLoader, Marker, MarkerClustererF, InfoWindowF  } from "@react-google-maps/api";
 import Legend from "../Legend";
 import Axios from "axios";
@@ -16,7 +16,6 @@ import PlacedMarkersUI from "./PlacedMarkersUI";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
-import { SearchSite } from "../../types/atoms-types";
 import { marker } from "../../types/marker-types";
 import { CurrentUserLocation, CurrentOccupancyLocation, UpdateUserLocation } from "../VerticalWidgets"
 import MapCreateMarker from "../MapCreateMarker";
@@ -39,7 +38,6 @@ type MapContainerProps = {
 
 function MapContainer(props : MapContainerProps) {
   const [libraries] = useState<Libraries>(["drawing", "places"]);
-  const [drawManagerMarker, setDrawManagerMarker] = useState();
   const [markers, setMarkers] = useState<marker[]>([]);
   const [selectedMarker, setSelectedMarker] = useState<marker>({
     marker_id: 0,
@@ -68,6 +66,7 @@ function MapContainer(props : MapContainerProps) {
   const [trackingLocationId, setTrackingLocationId] = useState<number | null>();
   const [isCreateMarkerUIVisible, setIsCreateMarkerUIVisible] = useState<boolean>(false);
   const [infoWindow, setInfoWindow] = useState<boolean>(false);
+  const accuracyCircle = useRef<google.maps.Circle | null>(null);
 
   const [occupancyLocation,  setOccupancyLocation] = useState<center>({
     lat: 29.615106009353045,
@@ -79,25 +78,29 @@ function MapContainer(props : MapContainerProps) {
   const searchBoxRef = React.useRef(null);
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setCurrentUserLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        }
-        );
-      });
-    }
-  }, []);
-
-  useEffect(() => {
     if (trackingLocation) {
       const id: number = navigator.geolocation.watchPosition((position) => {
-        console.log(position.coords.latitude, position.coords.longitude);
         setCurrentUserLocation({
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         });
+
+        if (accuracyCircle.current) {
+          accuracyCircle.current.setMap(null);
+        }
+
+        accuracyCircle.current = new google.maps.Circle({
+          center: { lat: position.coords.latitude, lng: position.coords.longitude },
+          radius: position.coords.accuracy,
+          fillColor: "#61a0bf",
+          fillOpacity: 0.4,
+          strokeColor: "#1bb6ff", 
+          strokeOpacity: 0.4,
+          strokeWeight: 1,
+          zIndex: 1,
+        });
+    
+        accuracyCircle.current.setMap(map as google.maps.Map);
       }, (error) => {
         console.log(error);
       }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 });
@@ -108,7 +111,6 @@ function MapContainer(props : MapContainerProps) {
     }
 
     return () => {
-      console.log(trackingLocationId)
       if (trackingLocationId) {
         navigator.geolocation.clearWatch(trackingLocationId);
       }
@@ -116,16 +118,20 @@ function MapContainer(props : MapContainerProps) {
   }, [trackingLocation]);
 
 
+  // Function that gets called when the search box input changes
   const onPlacesChanged = () => {
     if (searchBox) {
+      // Get the places from the search box
       const places = searchBox.getPlaces();
       const bounds = new window.google.maps.LatLngBounds();
       
       if (!places || !places[0]) {
         return;
       }
+      // Find the pre-planning location that matches the first place in the array
       const location = prePlanningLocations.find((location) => location.google_formatted_address === places[0].formatted_address);
-      
+
+      // If no matching pre-planning location was found, set the searched site as a new location object
       if (!location) {
         setSearchedSite({
           ...locationInitalizer,
@@ -137,8 +143,8 @@ function MapContainer(props : MapContainerProps) {
         setSearchedSite(location);
       }
 
+      // Loop through each place and adjust the bounds accordingly
       places.forEach((place) => {
-
         if (place?.geometry?.viewport) {
           bounds.union(place.geometry.viewport);
         } else if (place?.geometry?.location){
@@ -146,18 +152,20 @@ function MapContainer(props : MapContainerProps) {
         }
       });
 
+      // Create a new array of markers for each place and set the center of the map to the first marker's position
       const nextMarkers = places.map((place) => ({
         position: place?.geometry?.location,
       }));
 
       const nextCenter: center = nextMarkers.length > 0 ? nextMarkers[0].position as center : center;
       setCenter(nextCenter);
+
+      // Set the occupancy location and show the sidebar
       setOccupancyLocation(nextCenter);
       props.setSideBarValue(true);
     }
   };
   const clearPlaces = () => {
-    console.log(searchBox?.getPlaces());
     setSearchedSite(locationInitalizer);
     props.setSideBarValue(false);
   }
@@ -169,7 +177,7 @@ function MapContainer(props : MapContainerProps) {
   const { isLoaded } = useJsApiLoader({
     version: "weekly",
     id: "google-map-script",
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY as string | "",
+    googleMapsApiKey: import.meta.env.VITE_APP_GOOGLE_API_KEY as string | "",
     libraries,
   });
 
@@ -180,37 +188,62 @@ function MapContainer(props : MapContainerProps) {
     const bounds = new window.google.maps.LatLngBounds(center);
     map.fitBounds(bounds);
     setMap(map);
+    
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setCurrentUserLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+
+        if (accuracyCircle.current) {
+          accuracyCircle.current.setMap(null);
+        }
+
+        accuracyCircle.current = new google.maps.Circle({
+          center: { lat: position.coords.latitude, lng: position.coords.longitude },
+          radius: position.coords.accuracy,
+          fillColor: "#61a0bf",
+          fillOpacity: 0.4,
+          strokeColor: "#1bb6ff", 
+          strokeOpacity: 0.4,
+          strokeWeight: 1,
+          zIndex: 1,
+        });
+    
+        accuracyCircle.current.setMap(map as google.maps.Map);
+      });
+    }
   }, []);
 
   const placeMarkers = () => {
-    let localMarkers = JSON.parse(localStorage.getItem("markers") as string);
-    console.log(localMarkers);
-    // fetch data if local storage is empty
+    // Access and parse the value of the "markers" key in local storage
+    const localMarkers = JSON.parse(localStorage.getItem("markers") as string);
+
+    // If local storage is empty, fetch marker data from the API and set it as markers
     if (localMarkers == null) {
-      console.log('fetching markers');
-      Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/fetch-placed-markers", {
+      Axios.get(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/fetch-placed-markers", {
         withCredentials: true,
       })
         .then((res) => {
+          // Check if the response data has a payload with at least one marker
           if (res.data.payload.length > 0) {
             setMarkers(res.data.payload);
             localStorage.setItem("markers", JSON.stringify(res.data.payload));
           }
         })
-        .catch((err) => {});
+
+    // If local storage has a value for "markers", set the state variable "markers" to the value of "markers" in local storage
     } else {
-      console.log('using local markers');
       setMarkers(JSON.parse(localStorage.getItem("markers") || ""));
     }
   };
-
-  console.log(markers)
-
+  
   const handleOnClick = () => {
     props.setSideBarValue(!props.sideBarValue);
   };
 
-  let MapStyle = [
+  const MapStyle = [
     {
       featureType: "poi",
       elementType: "labels.icon",
@@ -223,7 +256,7 @@ function MapContainer(props : MapContainerProps) {
   ];
 
   const FlushMarkers = () => {
-    Axios.delete(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-all-markers", {
+    Axios.delete(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/delete-all-markers", {
       withCredentials: true,
     })
       .then((response) => {
@@ -242,11 +275,30 @@ function MapContainer(props : MapContainerProps) {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         });
+
+        if (accuracyCircle.current) {
+          accuracyCircle.current.setMap(null);
+        }
+
+        accuracyCircle.current = new google.maps.Circle({
+          center: { lat: position.coords.latitude, lng: position.coords.longitude },
+          radius: position.coords.accuracy,
+          fillColor: "#61a0bf",
+          fillOpacity: 0.4,
+          strokeColor: "#1bb6ff", 
+          strokeOpacity: 0.4,
+          strokeWeight: 1,
+          zIndex: 1,
+        });
+
+        accuracyCircle.current.setMap(map as google.maps.Map);
       }, (error) => {
         console.log(error);
       });
     }
   }
+
+  console.log(markers);
 
   return isLoaded ? (
     <GoogleMap
@@ -263,7 +315,7 @@ function MapContainer(props : MapContainerProps) {
     >
 
     {markerClicked ? (
-      <Popup
+      <MarkerPopupWindow
         show={markerClicked}
         onHide={() => setMarkerClicked(false)}
         selectedMarker={selectedMarker}
@@ -288,6 +340,7 @@ function MapContainer(props : MapContainerProps) {
       >
         {(clusterer) => 
             <div>
+              {/* map over the markers array to render individual markers */}
               {markers.map((marker) => {
                 marker.position = {
                   lat: marker.latitude,
@@ -306,8 +359,33 @@ function MapContainer(props : MapContainerProps) {
                       key={marker.marker_id}
                       visible={markerVisibility}
                       draggable={markerDraggable}
-                      onDragEnd={(e) => {
-                        console.log(e?.latLng?.lat(), e?.latLng?.lng());
+                      onDragEnd={async (e) => {
+                        const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/update-map-marker-latlng", {
+                          latitude: e?.latLng?.lat().toFixed(8),
+                          longitude: e?.latLng?.lng().toFixed(8),
+                          markerId: marker.marker_id,
+                        },
+                        { withCredentials: true }
+                        );
+
+                        if (response.data.status === "success") {
+                          console.log("successful")
+                          if (e?.latLng) {
+                            setMarkers((markers) => {
+                              const updatedMarkers = markers.map((currMarker) => {
+                                if (e?.latLng) {
+                                  if (currMarker.marker_id === marker.marker_id) {
+                                    currMarker.latitude = Number(e.latLng.lat().toFixed(8));
+                                    currMarker.longitude = Number(e.latLng.lng().toFixed(8));
+                                  }
+                                }
+                                return currMarker;
+                              })
+                              localStorage.setItem("markers", JSON.stringify(updatedMarkers));
+                              return updatedMarkers;
+                            })
+                          }
+                        }
                       }}
                       clusterer={clusterer}
                     />
@@ -319,17 +397,26 @@ function MapContainer(props : MapContainerProps) {
       </MarkerClustererF>
       
       {/* Marker for occupancy location */}
-      <Marker 
+      <Marker
         position={occupancyLocation} 
         onClick={() => handleOnClick()}
-        icon={"map-pin.png"}
+        icon={"/map-pin.png"}
         />
       
       {/* Marker for users location */}
       {currentUserLocation ? (
         <Marker
           position={currentUserLocation}
-          icon={"/icon_images/user_location.png"}
+          icon={
+            {
+              path: google.maps.SymbolPath.CIRCLE,
+              fillColor: "#4285F4",
+              scale: 8,
+              strokeColor: "rgb(255,255,255)",
+              strokeWeight: 2,
+              fillOpacity: 1,
+            }
+          }
           onClick={() => setInfoWindow(true)}
         >
           {infoWindow ? (
@@ -348,7 +435,6 @@ function MapContainer(props : MapContainerProps) {
       ) : null}
       {hasPermissions(userData?.permissions, permission.MODIFY) ? (
         <MapDrawingManager 
-          markers={markers} 
           setMarkers={setMarkers}
         />
       ) : null}
@@ -360,9 +446,10 @@ function MapContainer(props : MapContainerProps) {
           <Form>
             <Form.Check
               type="switch"
-              label="Marker Visibility"
+              id="marker-visibility"
+              label={<Form.Label htmlFor="marker-visibility">Marker Visibility</Form.Label>}
               style={
-                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
+                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { backgroundColor: "white", borderRadius: "5px", boxShadow: "0px 1px 4px rgb(0, 0, 0, .3)" }
               }
               checked={markerVisibility}
               onChange={() => setMarkerVisibility(!markerVisibility)}
@@ -373,9 +460,10 @@ function MapContainer(props : MapContainerProps) {
           <Form>
             <Form.Check
               type="switch"
-              label="Marker Draggable"
+              id="marker-draggable"
+              label={<Form.Label htmlFor="marker-draggable">Marker Draggable</Form.Label>}
               style={
-                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
+                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { backgroundColor: "white", borderRadius: "5px", boxShadow: "0px 1px 4px rgb(0, 0, 0, .3)" }
               }
               checked={markerDraggable}
               onChange={() => setMarkerDraggable(!markerDraggable)}
@@ -386,9 +474,10 @@ function MapContainer(props : MapContainerProps) {
           <Form>
             <Form.Check
               type="switch"
-              label="Track Location"
+              id="track-user-location"
+              label={<Form.Label htmlFor="track-user-location">Track User Location</Form.Label>}
               style={
-                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
+                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { backgroundColor: "white", borderRadius: "5px", boxShadow: "0px 1px 4px rgb(0, 0, 0, .3)" }
               }
               checked={trackingLocation}
               onChange={() => setTrackingLocation(!trackingLocation)}
@@ -406,7 +495,7 @@ function MapContainer(props : MapContainerProps) {
         setCenter={setCenter}
       />
       <Button variant="none" onClick={async () => {
-        const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/logout", { withCredentials: true });
+        const response = await Axios.get(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/logout", { withCredentials: true });
         if (response.data.status === "success") {
           logout();
         }

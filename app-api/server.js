@@ -26,39 +26,42 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+try {
+  const options = {
+    host: process.env.MYSQL_HOST_NAME,
+    port: 3306,
+    user: process.env.MYSQL_USERNAME,
+    password: process.env.MYSQL_ROOT_PASSWORD,
+    database: process.env.MYSQL_AUTH_DATABASE,
+    schema: {
+      tableName: 'sessions',
+      columnNames: {
+        session_id: 'session_id',
+        expires: 'expires',
+        data: 'data'
+      }
+    },
+    clearExpired: true,
+    checkExpirationInterval: 90000,
+  };
 
-const options = {
-  host: process.env.MYSQL_HOST_NAME,
-  port: 3306,
-  user: process.env.MYSQL_USERNAME,
-  password: process.env.MYSQL_ROOT_PASSWORD,
-  database: process.env.MYSQL_AUTH_DATABASE,
-  schema: {
-    tableName: 'sessions',
-    columnNames: {
-      session_id: 'session_id',
-      expires: 'expires',
-      data: 'data'
-    }
-  },
-  clearExpired: true,
-  checkExpirationInterval: 90000,
-};
-
-const sessionStore = new MySQLStore(options);
+  const sessionStore = new MySQLStore(options);
 
 
-app.use(session({
-  name: "sid",
-  secret: process.env.SECRET_KEY_SESSION,
-  resave: false,
-  saveUninitialized: false,
-  store: sessionStore,
-  cookie: {
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24, // 24 hours
-  },
-}));
+  app.use(session({
+    name: "sid",
+    secret: process.env.SECRET_KEY_SESSION,
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24, // 24 hours
+    },
+  }));
+} catch (err) {
+  console.log(err);
+}
 
 routes(app);
 

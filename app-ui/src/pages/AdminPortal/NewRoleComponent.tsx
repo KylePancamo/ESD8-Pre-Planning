@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
 import { permission } from "../../permissions"
 import Form from "react-bootstrap/Form";
@@ -31,7 +31,7 @@ function NewRoleComponent({setRolePermissions, setUpdateStatus} : NewRoleCompone
 
     const onSubmitData = async (data: FormData) => {
       const {role} = data;
-      const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/insert-role-and-permissions", {role, addedPermissions: selectedPermission}, {
+      const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/insert-role-and-permissions", {role, addedPermissions: selectedPermission}, {
         withCredentials: true
       });
       if (response.data.status === 'success') {

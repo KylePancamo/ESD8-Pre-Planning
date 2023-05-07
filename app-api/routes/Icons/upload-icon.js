@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 var fs = require('fs');
+const sizeOf = require('image-size');
 
 const getPool = require("../mysql");
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
@@ -10,13 +11,20 @@ router.post('/', verifyUserCredentials, (req, res) => {
     const db = getPool(process.env.MYSQL_ESD8_DATABASE);
     let file = req.files.file;
     let iconName = req.body.iconName;
+    const dimensions = sizeOf(file.data);
+
     try {
       if (file.mimetype !== 'image/png') {
         res.status(400).send({message: 'File must be a png image'});
         return;
       }
     
-      if (fs.existsSync('./icon_images/' + file.name)) {
+      if (dimensions.width > 50 || dimensions.height > 50) {
+        res.status(400).send({ message: 'File dimensions are too large' });
+        return;
+      }
+
+      if (fs.existsSync('../app-ui/public/icon_images/' + file.name)) {
         res.status(400).send({message: 'File already exists'});
     
         return;

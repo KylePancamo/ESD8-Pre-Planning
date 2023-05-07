@@ -33,7 +33,7 @@ function AdminPanel(props: AdminPanelProps) {
 
   const deleteIcon = async () => {
     if (selectedIcon) {
-      const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + `/api/delete-icon/`, {
+      const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + `/api/delete-icon/`, {
         selectedIcon
       },{
         withCredentials: true
@@ -96,7 +96,7 @@ function AdminPanel(props: AdminPanelProps) {
                 }}
                 variant="secondary"
               >
-                Upload File
+                Upload Icon
               </Button>
               <Button variant="secondary">
                 <Link style={{color: 'white'}} to='/adminportal' target="_blank">Admin Portal</Link>
@@ -143,7 +143,7 @@ function AdminPanel(props: AdminPanelProps) {
                               variant="secondary"
                             >Edit</Button>
                           </td>
-                          {image.icon_id !== 1 ? (
+                          {(image.icon_id !== 1 && hasPermissions(userData?.permissions, permission.DELETE)) ? (
                           <td>
                             <Button
                               onClick={() => {

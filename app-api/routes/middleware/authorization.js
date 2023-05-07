@@ -20,7 +20,7 @@ const isAdmin = (req, res, next) => {
     if (role !== "admin") {
         const ip = getRequestIP(req);
         logger.info(`Unauthorized access attempt at ${new Date().toISOString()} from IP ${ip}. URL: ${req.originalUrl}. Method: ${req.method}`);
-        return res.status(403).send({error: "Forbidden"});
+        return res.status(403).send({status: "error", message: "Unauthorized access attempt. Access attempt has been logged. "});
     }
 
     next();

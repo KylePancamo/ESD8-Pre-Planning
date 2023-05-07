@@ -31,6 +31,7 @@ function usePrePlanningLocations() {
     });
   }, [prePlanningLocations])
 
+  // Provides an initial empty location object with all properties initialized
   const locationInitalizer: LocationTypes = {
     google_formatted_address: '',
     latitude: 0,

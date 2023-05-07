@@ -1,6 +1,5 @@
-import React from "react";
 import { LocationTypes } from "../../types/location-types";
-import { Col, Container, FloatingLabel, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
 import "../../styles/default.css";
@@ -38,12 +37,11 @@ enum MutualAids {
 }
   
 function Content({ sidebarData }: { sidebarData: LocationTypes }) {
-  console.log(sidebarData);
 
   let hazardList: JSX.Element[] = [];
   if(sidebarData.hazards != null) {
     const hazards = sidebarData.hazards.split(";");
-    hazardList = hazards.map((hazard: any) =>
+    hazardList = hazards.map((hazard: string) =>
       <span key={hazard}>{hazard}<br/></span>
     );
   }
@@ -51,41 +49,58 @@ function Content({ sidebarData }: { sidebarData: LocationTypes }) {
   let accessList: JSX.Element[] = [];
   if(sidebarData.access != null) {
     const access = sidebarData.access.split(";");
-    accessList = access.map((acc: any) =>
+    accessList = access.map((acc: string) =>
       <span key={acc}>{acc}<br/></span>
     );
   }
 
   let occupancyList: JSX.Element[] = [];
   if (sidebarData.occupancy_types) {
-    occupancyList = sidebarData.occupancy_types.map((occupancy: any) => (
-      <span key={occupancy}>
-       {OccupancyType[occupancy]} <br/>
-      </span>
-    ));
+    occupancyList = sidebarData.occupancy_types.map((occupancy: string) => {
+      const occupancyNumber: number = parseInt(occupancy);
+      if (isNaN(occupancyNumber)) {
+        return undefined;
+      }
+      return (
+        <span key={occupancyNumber}>
+          {OccupancyType[occupancyNumber]} <br/>
+        </span>
+      );
+      // Filter out any undefined elements
+    }).filter((element): element is JSX.Element => element !== undefined);
   }
 
   let constructionList: JSX.Element[] = [];
   if (sidebarData.construction_types) {
-    constructionList = sidebarData.construction_types.map((construction: any) => (
-      <span key={construction}>
-      {ConstructionType[construction]} <br/>
-      </span>
-    ));
+    constructionList = sidebarData.construction_types.map((construction: string) => {
+      const constructionNumber: number = parseInt(construction);
+      if (isNaN(constructionNumber)) {
+        return undefined;
+      }
+      return (
+        <span key={constructionNumber}>
+          {ConstructionType[constructionNumber]} <br/>
+        </span>
+      );
+      // Filter out any undefined elements
+    }).filter((element): element is JSX.Element => element !== undefined);
   }
 
   let mutualAidList: JSX.Element[] = [];
   if (sidebarData.mutual_aids) {
-    mutualAidList = sidebarData.mutual_aids.map((aid: any) => (
-    <span key={aid}>
-      {MutualAids[aid]} <br/>
-      </span>
-    ));
+    mutualAidList = sidebarData.mutual_aids.map((aid: string) => {
+      const aidNumber: number = parseInt(aid);
+      if (isNaN(aidNumber)) {
+        return undefined;
+      }
+      return (
+        <span key={aidNumber}>
+          {MutualAids[aidNumber]} <br/>
+        </span>
+      );
+      // Filter out any undefined elements
+    }).filter((element): element is JSX.Element => element !== undefined);
   }
-
-  
-
-
 
   return (
     <div className="sidebar-content break-newline">

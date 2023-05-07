@@ -1,5 +1,5 @@
 import "./AdminPortal.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Axios from "axios";
 import Form from "react-bootstrap/Form";
@@ -26,7 +26,7 @@ function RegisterUsers() {
     };
 
     const registerUser = async (data: FormValues) => {
-        const response = await Axios.post<{status: string, message?: string, err?: string}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/register-user", data, {
+        const response = await Axios.post<{status: string, message?: string, err?: string}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/register-user", data, {
             withCredentials: true
         });
 

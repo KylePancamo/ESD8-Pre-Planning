@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import { useForm } from "react-hook-form";
 import Button from "react-bootstrap/Button";
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 import states from "./states";
 import { Autocomplete } from "@react-google-maps/api";  
 import Alert from "react-bootstrap/Alert";
@@ -38,9 +38,7 @@ function EditLocation(props : EditLocationProps) {
   const {
     register,
     handleSubmit,
-    reset,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -81,12 +79,12 @@ function EditLocation(props : EditLocationProps) {
     if (searchBox != null) {
       const place = searchBox.getPlace();
       const formattedAddress: string = place.formatted_address === undefined ? "" : place.formatted_address;
-      let addressArray = formattedAddress.split(',');
+      const addressArray = formattedAddress.split(',');
 
-      let occupancyaddress = addressArray[0].trim();
-      let city = addressArray[1].trim();
-      let state = addressArray[2].split(' ')[1].trim();
-      let zip = addressArray[2].split(' ')[2] != undefined ? addressArray[2].split(' ')[2].trim() : "";
+      const occupancyaddress = addressArray[0].trim();
+      const city = addressArray[1].trim();
+      const state = addressArray[2].split(' ')[1].trim();
+      const zip = addressArray[2].split(' ')[2] != undefined ? addressArray[2].split(' ')[2].trim() : "";
       setValue("occupancyAddress", occupancyaddress);
       setValue("occupancyCity", city);
       setValue("state", state);
@@ -97,7 +95,7 @@ function EditLocation(props : EditLocationProps) {
   }
 
   const onSubmit = (data: FormValues) => {
-    Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-preplanning-location", {
+    Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/update-preplanning-location", {
       payload: data,
       googleAddress: searchBox?.getPlace() ? searchBox?.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address,
       id: props.selectedEditLocation.id,
@@ -165,8 +163,9 @@ function EditLocation(props : EditLocationProps) {
   };
 
   const deleteLocation = async (id: number) => {
+  
     try {
-      const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-preplanning-location", {
+      const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/delete-preplanning-location", {
         id: id,
       }, {
         withCredentials: true,
@@ -182,8 +181,13 @@ function EditLocation(props : EditLocationProps) {
       } else if (response.data.status === "error") {
         alert(response.data.error);
       }
-    } catch (error: any) {
-      alert(error.response.data.error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(error);
+      } else if (error instanceof AxiosError) {
+        console.log(error);
+      }
+      alert("Any error occured");
     }
   }
 

@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import React from "react";
 import Header from "./Header";
 import Content from "./Content";
 import { Button } from "react-bootstrap";
-import Axios from "axios";
 import {useRecoilState} from 'recoil';
 import {searchSiteState} from "../../atoms";
 import EditLocation from "../Popup/EditLocationModal";
@@ -12,6 +11,7 @@ import AddLocationModal from "../Popup/AddLocationModal";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
+import { LocationTypes } from "../../types/location-types";
 
 
 
@@ -21,15 +21,11 @@ type SideBarProps = {
 }
 
 function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
-  const [searchedSite, setSearchedSite] = useRecoilState<any>(searchSiteState);
+  const [searchedSite, setSearchedSite] = useRecoilState<LocationTypes>(searchSiteState);
   const [editLocation, setEditLocation] = useState<boolean>(false);
-  const { prePlanningLocations, updateLocations, removeLocation, locationInitalizer }= usePrePlanningLocations();
+  const { updateLocations, removeLocation, locationInitalizer }= usePrePlanningLocations();
   const [addLocationButton, setAddLocationButton] = useState<boolean>(false);
   const { userData } = useAuth();
-
-  
-
-  console.log(searchedSite);
 
   const updateEdit = useCallback(() => {
     setEditLocation(false);

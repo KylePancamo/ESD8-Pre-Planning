@@ -28,13 +28,13 @@ router.post("/", verifyUserCredentials, canDelete, (req, res) => {
                 res.status(400).send({ error: err.message });
                 return
             }
-
-            if (fs.existsSync("../app-ui/public/icon_images/" + icon.icon_name)) {
-                fs.unlinkSync("../app-ui/public/icon_images/" + icon.icon_name);
+            if (fs.existsSync("../app-ui/public/icon_images/" + icon.file_name)) {
+                fs.unlinkSync("../app-ui/public/icon_images/" + icon.file_name);
+                logger.info(`Icon deleted: ${iconId}`);
+                res.status(200).send({ status: "success",message: `Icon deleted: ${iconId}` });
             }
 
-            logger.info(`Icon deleted: ${iconId}`);
-            res.status(200).send({ status: "success",message: `Icon deleted: ${iconId}` });
+            
         });
     } catch (err) {
         logger.error(`Error: ${err.message}`);

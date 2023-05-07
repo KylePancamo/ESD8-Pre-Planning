@@ -1,5 +1,5 @@
 import "../AdminPortal.css"
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Axios from "axios";
 import Alert from "react-bootstrap/Alert";
@@ -41,7 +41,7 @@ const PasswordReset = ({forgotPasswordWindow, setForgotPasswordWindow, user} : P
         }
 
         const { password } = data;
-        const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/reset-password", {
+        const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/reset-password", {
             user_id: user?.user_id,
             password: password,
         }, {withCredentials: true});

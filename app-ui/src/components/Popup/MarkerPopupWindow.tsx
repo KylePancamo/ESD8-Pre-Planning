@@ -29,8 +29,8 @@ interface PopupWindowProps {
 
 type FormData = Record<string, string>;
 
-function PopupWindow(props: PopupWindowProps) {
-  let inputRef = useRef<HTMLInputElement>(null);
+function MarkerPopupWindow(props: PopupWindowProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [imageIcons, setImageIcons] = useRecoilState<Icon[]>(imagesState);
   const [selectedIcon, setSelectedIcon] = useState<{
     icon_id: number;
@@ -40,11 +40,9 @@ function PopupWindow(props: PopupWindowProps) {
     icon_name: "",
   });
   const {userData} = useAuth();
-  // console.log(props.markers);
 
   const [markerSaved, setMarkerSaved] = useState(false);
   const [markerDeleted, setMarkerDeleted] = useState(false);
-  const [markerName, setMarkerName] = useState("");
   const {
     register,
     handleSubmit,
@@ -65,7 +63,7 @@ function PopupWindow(props: PopupWindowProps) {
   // form submission handler
   const handleMarkerSaving = (inputData: FormData) => {
     inputData.imageName = selectedFile?.name;
-    let markerFoundOnMap = props.markers.find(
+    const markerFoundOnMap = props.markers.find(
       (marker) => marker.marker_id === props.selectedMarker.marker_id
     );
 
@@ -89,11 +87,11 @@ function PopupWindow(props: PopupWindowProps) {
       formData.append("old_image_name", props.selectedMarker.image as string);
       formData.append("image_name", inputFileName as string);
       
-      Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-map-marker", formData, {
+      Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/update-map-marker", formData, {
         withCredentials: true,
       })
         .then((response) => {
-          console.log(response);
+          console.log(selectedIcon.icon_name);
           props.setSelectedMarker({
             ...props.selectedMarker,
             file_name: selectedIcon.icon_name,
@@ -103,7 +101,7 @@ function PopupWindow(props: PopupWindowProps) {
             image: inputFileName,
           })
           props.setMarkers((markers) => {
-            let newMarkers = markers.map((marker) => {
+            const newMarkers = markers.map((marker) => {
               if (marker.marker_id === props.selectedMarker.marker_id) {
                 marker.file_name = selectedIcon.icon_name;
                 marker.marker_name = inputData.markerName;
@@ -134,15 +132,25 @@ function PopupWindow(props: PopupWindowProps) {
   //used for file preview
   const [preview, setPreview] = useState<string>();
 
-  const handleFileUpload = (e: any) => {
+  const handleFileUpload = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     inputRef.current?.click();
   };
 
   useEffect(() => {
+    const resetFormData = () => {
+      reset({
+        markerName: props.selectedMarker.marker_name,
+        latitude: props.selectedMarker.latitude,
+        longitude: props.selectedMarker.longitude,
+        activeIcon: props.selectedMarker.file_name,
+        activeIconId: props.selectedMarker.icon_id,
+        selectedMarkerId: props.selectedMarker.marker_id,
+        image_name: props.selectedMarker.image,
+      })
+    }
     resetFormData();
-    console.log(props.selectedMarker.image);
-  }, [props.selectedMarker]);
+  }, [props.selectedMarker, reset]);
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
@@ -158,20 +166,9 @@ function PopupWindow(props: PopupWindowProps) {
     return () => URL.revokeObjectURL(objectUrl)
   }, [selectedFile])
 
-  const resetFormData = () => {
-    //console.log(props.selectedMarker);
-    reset({
-      markerName: props.selectedMarker.marker_name,
-      latitude: props.selectedMarker.latitude,
-      longitude: props.selectedMarker.longitude,
-      activeIcon: props.selectedMarker.file_name,
-      activeIconId: props.selectedMarker.icon_id,
-      selectedMarkerId: props.selectedMarker.marker_id,
-      image_name: props.selectedMarker.image,
-    })
-  }
+  
 
-  const onSelectFile = (e: any) => {
+  const onSelectFile = () => {
     if (!inputRef.current?.files || inputRef.current?.files.length === 0) {
         setSelectedFile(undefined)
         return
@@ -223,8 +220,8 @@ function PopupWindow(props: PopupWindowProps) {
                   className="d-none"
                   type="file"
                   ref={inputRef}
-                  onChange={(e) => {
-                    onSelectFile(e);
+                  onChange={() => {
+                    onSelectFile();
                   }}
                 />
                 <div className="marker-image">
@@ -323,7 +320,7 @@ function PopupWindow(props: PopupWindowProps) {
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        {hasPermissions(userData?.permissions, permission.MODIFY)  ? (
+        {hasPermissions(userData?.permissions, permission.DELETE)  ? (
         <Button
           onClick={deleteMarkerPopup}
           variant={"danger"}
@@ -348,4 +345,4 @@ function PopupWindow(props: PopupWindowProps) {
   );
 }
 
-export default PopupWindow;
+export default MarkerPopupWindow;

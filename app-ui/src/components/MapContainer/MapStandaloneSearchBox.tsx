@@ -4,7 +4,6 @@ import Form from "react-bootstrap/Form";
 import {AiOutlineClose, AiOutlineSearch} from "react-icons/ai";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { Button } from "react-bootstrap";
 
 
 type MapStandaloneSearchBoxProps = {
@@ -17,6 +16,7 @@ type MapStandaloneSearchBoxProps = {
 
 function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces, searchBoxRef } : MapStandaloneSearchBoxProps) {
 
+  // clears the searchbox sidebar.
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (searchBoxRef.current) {
@@ -24,7 +24,6 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
     }
     clearPlaces();
   };
-
 
   return (
     <StandaloneSearchBox

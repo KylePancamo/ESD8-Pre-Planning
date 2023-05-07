@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import { useLoaderData, useOutlet, Await } from "react-router-dom";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import AwaitFailedLayout from "./AwaitFailedLayout";
-import React from "react";
 
 export const AuthProviderLayout = () => {
   const outlet = useOutlet();

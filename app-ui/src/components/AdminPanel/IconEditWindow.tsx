@@ -18,6 +18,7 @@ type IconEditWindowProps = {
 }
 
 function IconEditWindow(props: IconEditWindowProps) {
+  console.log("icon edit window")
   const [images, setImages] = useRecoilState(imagesState);
   const [iconUpdateStatus, setIconUpdateStatus] = useState({
     variant: "",
@@ -26,19 +27,21 @@ function IconEditWindow(props: IconEditWindowProps) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      iconName: props.selectedIcon?.icon_name
+    }
+  });
 
   const onSave = (data: any) => {
-    Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-icon-name", {
+    Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/update-icon-name", {
       id: props.selectedIcon?.icon_id,
       formData: data,
     }, {
       withCredentials: true
     })
       .then((response) => {
-        console.log(response.data.message);
         setIconUpdateStatus({
           variant: "success",
           message: response.data.message,
@@ -66,11 +69,6 @@ function IconEditWindow(props: IconEditWindowProps) {
       extraButton="Save"
       contentClassName="icon-edit-window"
       extraAction={handleSubmit((data) => onSave(data))}
-      onEntering={() => {
-        reset({
-          iconName: props.selectedIcon?.icon_name,
-        });
-      }}
       onExit={() => setIconUpdateStatus({ variant: "", message: "" })}
     >
       <Form onSubmit={(e) => e.preventDefault()}>

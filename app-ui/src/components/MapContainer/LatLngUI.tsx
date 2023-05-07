@@ -1,5 +1,4 @@
 import React from "react";
-import { useForm } from "react-hook-form";
 import { Button, Container, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 
 type center = google.maps.LatLng | google.maps.LatLngLiteral;
