@@ -103,7 +103,8 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
   KEY `user_roles_ibfk_1` (`user_id`),
   KEY `user_roles_ibfk_2` (`role_id`),
   CONSTRAINT `user_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `accounts` (`id`),
-  CONSTRAINT `user_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
+  CONSTRAINT `user_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
+  PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table auth.user_roles: ~2 rows (approximately)
