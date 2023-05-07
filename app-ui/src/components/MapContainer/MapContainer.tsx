@@ -362,7 +362,7 @@ function MapContainer(props : MapContainerProps) {
               type="switch"
               label="Marker Visibility"
               style={
-                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
+                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { backgroundColor: "white", borderRadius: "5px", boxShadow: "0px 1px 4px rgb(0, 0, 0, .3)" }
               }
               checked={markerVisibility}
               onChange={() => setMarkerVisibility(!markerVisibility)}
@@ -375,7 +375,7 @@ function MapContainer(props : MapContainerProps) {
               type="switch"
               label="Marker Draggable"
               style={
-                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
+                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { backgroundColor: "white", borderRadius: "5px", boxShadow: "0px 1px 4px rgb(0, 0, 0, .3)" }
               }
               checked={markerDraggable}
               onChange={() => setMarkerDraggable(!markerDraggable)}
@@ -388,7 +388,7 @@ function MapContainer(props : MapContainerProps) {
               type="switch"
               label="Track Location"
               style={
-                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { color: "white", backgroundColor: "black", borderRadius: "10px",border: "5px solid black" }
+                mapId !== "satellite" && mapId !== "hybrid" ? { color: "black" } : { backgroundColor: "white", borderRadius: "5px", boxShadow: "0px 1px 4px rgb(0, 0, 0, .3)" }
               }
               checked={trackingLocation}
               onChange={() => setTrackingLocation(!trackingLocation)}

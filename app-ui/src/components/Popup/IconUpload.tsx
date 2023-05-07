@@ -27,7 +27,7 @@ function FileUpload(props: FileUploadProps) {
   const [iconName, setIconName] = useState<string>("");
   const [images, setImages] = useRecoilState<any>(imagesState);
 
-  const handleFileUpload = () => {
+  const handleFileUpload = (e: React.MouseEvent<HTMLButtonElement>) => {
     inputRef.current?.click();
   };
 
@@ -78,14 +78,14 @@ function FileUpload(props: FileUploadProps) {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter" className="m-2">
-            File Upload
+            Icon Upload
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div>
             <div className="file-uploads">
               <label className="mx-3">Choose File: </label>
-                <input
+                <Form.Control
                   id="input-file"
                   className="d-none"
                   type="file"
@@ -93,7 +93,6 @@ function FileUpload(props: FileUploadProps) {
                   onChange={handleDisplayFileDetails}
                 />
                 {(FileUploadStatus === undefined || FileUploadStatus === false) ? (
-                  <Form>
                     <Form.Group>
                       <Form.Control
                         type="text"
@@ -104,15 +103,14 @@ function FileUpload(props: FileUploadProps) {
                         style={{width: "75%"}}
                       />
                     </Form.Group>
-                  </Form>
                   ) : null }
-                <button
+                <Button
                   onClick={handleFileUpload}
                   style={{ width: "fit-content" }}
                   className={`btn btn-outline-${fileName ? "success" : "danger"}`}
                 >
                   {fileName ? fileName : "Upload"}
-                </button>
+                </Button>
             </div>
           </div>
           {FileUploadStatus === true ? (

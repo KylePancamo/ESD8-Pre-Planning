@@ -80,10 +80,10 @@ function Header({sidebarData, toggleSideBar, userData, setEditLocation}: HeaderP
           {sidebarData.id ? (
             <>
               
-              <Col xs={4} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+              <Col xs={5} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
                 <p className="sidebar-header__title">{sidebarData.occupancyname}</p>
               </Col>
-              <Col xs={6} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+              <Col xs={5} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
                 <p className="sidebar-header__subtitle">{addressLineOne}</p>
               </Col>
               <Col xs={1}  style={{display: 'flex', justifyContent: 'flex-end'}}>  

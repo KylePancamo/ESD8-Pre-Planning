@@ -492,7 +492,7 @@ html {
 .utility-items {
   position: absolute;
   left: 1vw;
-  top: 18vh;
+  top: 20vh;
   display: flex;
   flex-direction: column
 }
@@ -500,6 +500,7 @@ html {
 .utility-items > div {
   margin-top: 10px;
 }
+
 
 .marker-list-ui {
   position: absolute;
@@ -633,8 +634,8 @@ html {
 }
 
 .searchInputs {
-  position: absolute;
-  top: 3vh;
+  position: fixed;
+  top: 5vh;
   display: flex;
   justify-content: space-between;
   left: 50vw;

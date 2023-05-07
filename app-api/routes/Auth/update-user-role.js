@@ -13,7 +13,7 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
     const user = req.body;
 
     if (user.role_id === 0) {
-        res.send({ status: 'error', err: 'Please select an appropriate role' });
+        res.send({ status: 'error', message: 'Please select an appropriate role' });
         return;
     }
 
@@ -29,7 +29,7 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
             logger.warn(`Error updating role for user ${user.user_id}`, {
                 error: `${err.message, err.stack}`
             });
-            res.send({ status: 'error', err: 'Error updating role.' });
+            res.send({ status: 'error', message: 'Error updating role.' });
             return;
         }
 

@@ -18,6 +18,7 @@ type AddLocationProps = {
   show: boolean;
   onHide: () => void;
   address: LocationTypes;
+  setSearchedSite: React.Dispatch<React.SetStateAction<LocationTypes | null>>;
 }
 
 type FormValues = {
@@ -30,7 +31,7 @@ type LocationAddedResponse = {
   err?: string;
 }
 
-function AddLocation({ show, onHide, address } : AddLocationProps) {
+function AddLocation({ show, onHide, address, setSearchedSite } : AddLocationProps) {
   const {
     register,
     handleSubmit,
@@ -85,8 +86,12 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
       },
     }, { withCredentials: true })
       .then((response) => {
-        setLocationAddedResponse(response.data);
+        setLocationAddedResponse({
+          status: response.data.status,
+          message: response.data.message,
+        });
         addNewLocation({
+          id: response.data.locationId,
           occupancyname: data.occupancyName as string,
           occupancy_types: data.occupancyType as string[],
           hazards: data.hazards as string,

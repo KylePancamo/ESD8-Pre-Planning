@@ -96,7 +96,7 @@ function AdminPanel(props: AdminPanelProps) {
                 }}
                 variant="secondary"
               >
-                Upload File
+                Upload Icon
               </Button>
               <Button variant="secondary">
                 <Link style={{color: 'white'}} to='/adminportal' target="_blank">Admin Portal</Link>
@@ -143,7 +143,7 @@ function AdminPanel(props: AdminPanelProps) {
                               variant="secondary"
                             >Edit</Button>
                           </td>
-                          {image.icon_id !== 1 ? (
+                          {(image.icon_id !== 1 && hasPermissions(userData?.permissions, permission.DELETE)) ? (
                           <td>
                             <Button
                               onClick={() => {

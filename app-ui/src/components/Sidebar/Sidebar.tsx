@@ -69,6 +69,7 @@ function Sidebar({sideBarValue, setSideBarValue} : SideBarProps) {
         show={addLocationButton}
         onHide={() => setAddLocationButton(false)}
         address={searchedSite}
+        setSearchedSite={setSearchedSite}
       />
     );
   }

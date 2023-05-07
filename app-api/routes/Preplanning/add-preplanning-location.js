@@ -120,7 +120,7 @@ router.post("/", verifyUserCredentials, canModify, (req, res) => {
                               error: `${err.message, err.stack}`,
                             });
                           } else {
-                            res.status(200).send({status: "success", message: "Preplanning location added"});
+                            res.status(200).send({status: "success", message: "Preplanning location added", locationId: locationId});
                           }
                         }
                       )

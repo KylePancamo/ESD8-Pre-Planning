@@ -323,7 +323,7 @@ function PopupWindow(props: PopupWindowProps) {
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        {hasPermissions(userData?.permissions, permission.MODIFY)  ? (
+        {hasPermissions(userData?.permissions, permission.DELETE)  ? (
         <Button
           onClick={deleteMarkerPopup}
           variant={"danger"}
