@@ -736,7 +736,7 @@ body {
   }
   
   .create-marker-trigger {
-    position: fixed;
+    position: absolute;
     background-color: inherit;
     border-style: solid;
     border-width: 1px;
