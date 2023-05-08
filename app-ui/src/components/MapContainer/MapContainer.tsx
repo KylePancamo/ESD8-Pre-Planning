@@ -3,7 +3,7 @@ import MapDrawingManager from "./MapDrawingManager";
 
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import Popup from "../Popup/MarkerPopupWindow";
-import { GoogleMap, useJsApiLoader, Marker, MarkerClustererF, InfoWindowF  } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, MarkerF, MarkerClustererF, InfoWindowF  } from "@react-google-maps/api";
 import Legend from "../Legend";
 import Axios from "axios";
 import AdminPanel from "../AdminPanel/AdminPanelModal";
@@ -169,7 +169,7 @@ function MapContainer(props : MapContainerProps) {
   const { isLoaded } = useJsApiLoader({
     version: "weekly",
     id: "google-map-script",
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY as string | "",
+    googleMapsApiKey: import.meta.env.VITE_APP_GOOGLE_API_KEY as string | "",
     libraries,
   });
 
@@ -188,7 +188,7 @@ function MapContainer(props : MapContainerProps) {
     // fetch data if local storage is empty
     if (localMarkers == null) {
       console.log('fetching markers');
-      Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/fetch-placed-markers", {
+      Axios.get(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/fetch-placed-markers", {
         withCredentials: true,
       })
         .then((res) => {
@@ -223,7 +223,7 @@ function MapContainer(props : MapContainerProps) {
   ];
 
   const FlushMarkers = () => {
-    Axios.delete(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-all-markers", {
+    Axios.delete(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/delete-all-markers", {
       withCredentials: true,
     })
       .then((response) => {
@@ -294,7 +294,7 @@ function MapContainer(props : MapContainerProps) {
                   lng: marker.longitude,
                 };
                 return (
-                    <Marker
+                    <MarkerF
                       position={marker.position}
                       onClick={() => {
                         if (markerClicked === false) {
@@ -319,17 +319,17 @@ function MapContainer(props : MapContainerProps) {
       </MarkerClustererF>
       
       {/* Marker for occupancy location */}
-      <Marker 
+      <MarkerF
         position={occupancyLocation} 
         onClick={() => handleOnClick()}
-        icon={"map-pin.png"}
+        icon={"/map-pin.png"}
         />
       
       {/* Marker for users location */}
       {currentUserLocation ? (
-        <Marker
+        <MarkerF
           position={currentUserLocation}
-          icon={"/icon_images/user_location.png"}
+          icon={"/user_location.png"}
           onClick={() => setInfoWindow(true)}
         >
           {infoWindow ? (
@@ -344,7 +344,7 @@ function MapContainer(props : MapContainerProps) {
               </div>
             </InfoWindowF>
           ) : null}
-        </Marker>
+        </MarkerF>
       ) : null}
       {hasPermissions(userData?.permissions, permission.MODIFY) ? (
         <MapDrawingManager 
@@ -406,7 +406,7 @@ function MapContainer(props : MapContainerProps) {
         setCenter={setCenter}
       />
       <Button variant="none" onClick={async () => {
-        const response = await Axios.get(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/logout", { withCredentials: true });
+        const response = await Axios.get(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/logout", { withCredentials: true });
         if (response.data.status === "success") {
           logout();
         }

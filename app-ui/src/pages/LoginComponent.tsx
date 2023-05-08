@@ -5,8 +5,8 @@ import { useAuth } from '../hooks/AuthProvider';
 import Axios from 'axios';
 import { decodeToken } from "react-jwt";
 import '../Login.css';
-import Logo from '../esd8_logo.png';
-import firetruck from '../firetruck.png';
+import Logo from '/esd8_logo.png';
+import firetruck from '/firetruck.png';
 
 import { UserData } from '../types/auth-types';
 
@@ -25,7 +25,7 @@ export default function Login() {
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/login", {username, password}, {
+        const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/login", {username, password}, {
             withCredentials: true
         });
         if (response.data.status === "success") {

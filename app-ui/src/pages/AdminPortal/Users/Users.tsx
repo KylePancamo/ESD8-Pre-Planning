@@ -39,7 +39,7 @@ function Users() {
     useEffect(() => {
       const controller = new AbortController();
       const fetchUserRoles = async () => {
-        const response = await Axios.get<{status: string, payload?: User[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-user-roles", {
+        const response = await Axios.get<{status: string, payload?: User[]}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/get-user-roles", {
           withCredentials: true,
           signal: controller.signal,
         });
@@ -56,7 +56,7 @@ function Users() {
       }
 
       const fetchRoles = async () => {
-        const response = await Axios.get<{payload: Role[]}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/get-roles", {
+        const response = await Axios.get<{payload: Role[]}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/get-roles", {
           withCredentials: true,
           signal: controller.signal,
         });
@@ -92,7 +92,7 @@ function Users() {
     const updateUser = async (user: User) => {
       console.log(user);
       try {
-        const response = await Axios.post<{status: string, message: string}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-user-role", user, {withCredentials: true});
+        const response = await Axios.post<{status: string, message: string}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/update-user-role", user, {withCredentials: true});
         if (response.data.status == 'success') {
           setUpdateStatus({
             status: true,
@@ -121,7 +121,7 @@ function Users() {
       }
 
       try {
-        const response = await Axios.post<{status: string}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-user", user, {withCredentials: true});
+        const response = await Axios.post<{status: string}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/delete-user", user, {withCredentials: true});
       
         if (response.data.status == 'success') {
           setUsers((prevUsers: User[]) => prevUsers.filter((currUser: User) => currUser.user_id !== user.user_id));

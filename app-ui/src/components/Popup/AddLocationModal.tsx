@@ -79,7 +79,7 @@ function AddLocation({ show, onHide, address, setSearchedSite } : AddLocationPro
     }
   }
   const onSubmit = (data: FormValues) => {
-    Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/add-preplanning-location", {
+    Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/add-preplanning-location", {
       payload: {
         data: data,
         address: address,

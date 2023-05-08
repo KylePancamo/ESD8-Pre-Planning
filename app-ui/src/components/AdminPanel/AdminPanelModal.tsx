@@ -33,7 +33,7 @@ function AdminPanel(props: AdminPanelProps) {
 
   const deleteIcon = async () => {
     if (selectedIcon) {
-      const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + `/api/delete-icon/`, {
+      const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + `/api/delete-icon/`, {
         selectedIcon
       },{
         withCredentials: true

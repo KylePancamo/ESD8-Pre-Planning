@@ -25,7 +25,7 @@ function MarkerDeletion({
       marker: props.selectedMarker,
     };
     console.log(props.selectedMarker)
-    Axios.delete(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-selected-marker",  {
+    Axios.delete(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/delete-selected-marker",  {
       data: data,
       withCredentials: true,
     })

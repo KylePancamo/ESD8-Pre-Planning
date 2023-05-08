@@ -89,7 +89,7 @@ function PopupWindow(props: PopupWindowProps) {
       formData.append("old_image_name", props.selectedMarker.image as string);
       formData.append("image_name", inputFileName as string);
       
-      Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-map-marker", formData, {
+      Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/update-map-marker", formData, {
         withCredentials: true,
       })
         .then((response) => {

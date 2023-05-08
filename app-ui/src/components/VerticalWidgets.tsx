@@ -40,7 +40,7 @@ export const CurrentUserLocation = ({ lat, lng, setCenter }: CurrentUserLocation
           variant="light"
         >
           <div className="vertical-button-icon">
-            <img src="icon_images/user_location.png"/>
+            <img src="/user_location.png"/>
           </div>
       </Button>
       </OverlayTrigger>
@@ -69,7 +69,7 @@ export const CurrentOccupancyLocation = ({map, occupancyLocation}: CurrentOccupa
         >
           <div className="vertical-button-icon">
             <img 
-              src="map-pin.png"
+              src="/map-pin.png"
               style={{
                 width: "25px",
               }}

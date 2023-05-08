@@ -26,7 +26,7 @@ function RegisterUsers() {
     };
 
     const registerUser = async (data: FormValues) => {
-        const response = await Axios.post<{status: string, message?: string, err?: string}>(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/register-user", data, {
+        const response = await Axios.post<{status: string, message?: string, err?: string}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/register-user", data, {
             withCredentials: true
         });
 

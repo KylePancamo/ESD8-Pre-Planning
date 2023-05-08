@@ -41,7 +41,7 @@ function FileUpload(props: FileUploadProps) {
           formData.append("file", file[0]);
           formData.append('iconName', iconName);
 
-          Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/upload-icon", formData, {withCredentials: true})
+          Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/upload-icon", formData, {withCredentials: true})
             .then((response) => {
               setFileUploadStatus(true);
               setFileUploadString(response.data.message);

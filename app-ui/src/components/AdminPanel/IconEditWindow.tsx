@@ -31,7 +31,7 @@ function IconEditWindow(props: IconEditWindowProps) {
   } = useForm();
 
   const onSave = (data: any) => {
-    Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-icon-name", {
+    Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/update-icon-name", {
       id: props.selectedIcon?.icon_id,
       formData: data,
     }, {

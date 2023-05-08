@@ -25,7 +25,6 @@ function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces
     clearPlaces();
   };
 
-
   return (
     <StandaloneSearchBox
       bounds={bounds}

@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    DrawingManager,
+    DrawingManagerF,
   } from "@react-google-maps/api";
 import Axios from "axios";
 import { useEffect } from "react";
@@ -19,11 +19,11 @@ function MapDrawingManager({ markers, setMarkers } : MapDrawingManagerProps) {
   const [fileExists, setFileExists] = useRecoilState(defaultMarkerIconExistsState);
 
   return (
-    <DrawingManager
+    <DrawingManagerF
       onMarkerComplete={(marker: google.maps.Marker) => {
         if (fileExists) {
           marker.setIcon(
-            "/icon_images/" + config.DEFAULT_MARKER_NAME
+            "./icon_images/" + config.DEFAULT_MARKER_NAME
           ); 
           
         }
@@ -37,7 +37,7 @@ function MapDrawingManager({ markers, setMarkers } : MapDrawingManagerProps) {
           fileName: config.DEFAULT_MARKER_NAME,
           fileExists: fileExists,
         }
-        Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/insert-placed-marker", {
+        Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/insert-placed-marker", {
             payload,
         }, {
           withCredentials: true,

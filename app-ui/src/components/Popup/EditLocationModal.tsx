@@ -97,7 +97,7 @@ function EditLocation(props : EditLocationProps) {
   }
 
   const onSubmit = (data: FormValues) => {
-    Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/update-preplanning-location", {
+    Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/update-preplanning-location", {
       payload: data,
       googleAddress: searchBox?.getPlace() ? searchBox?.getPlace().formatted_address : props.selectedEditLocation.google_formatted_address,
       id: props.selectedEditLocation.id,
@@ -165,8 +165,9 @@ function EditLocation(props : EditLocationProps) {
   };
 
   const deleteLocation = async (id: number) => {
+  
     try {
-      const response = await Axios.post(process.env.REACT_APP_CLIENT_API_BASE_URL + "/api/delete-preplanning-location", {
+      const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/delete-preplanning-location", {
         id: id,
       }, {
         withCredentials: true,
