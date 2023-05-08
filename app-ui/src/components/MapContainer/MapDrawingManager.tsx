@@ -3,7 +3,6 @@ import {
     DrawingManagerF,
   } from "@react-google-maps/api";
 import Axios from "axios";
-import { useEffect } from "react";
 import config from "../../config/config";
 import { marker } from "../../types/marker-types";
 import { useRecoilState } from "recoil";
@@ -46,7 +45,7 @@ function MapDrawingManager({ markers, setMarkers } : MapDrawingManagerProps) {
             console.log(response.data.payload);
             if (markers) {
               setMarkers((markers) => {
-                let newMarkers = [
+                const newMarkers = [
                   ...markers,
                   {
                     marker_id: response.data.payload.marker_id,
@@ -67,7 +66,7 @@ function MapDrawingManager({ markers, setMarkers } : MapDrawingManagerProps) {
               });
             } else {
               setMarkers(() => {
-                let newMarker = [{
+                const newMarker = [{
                   marker_id: response.data.payload.marker_id,
                   marker_name: response.data.payload.marker_name,
                   latitude: parseFloat(response.data.payload.latitude),

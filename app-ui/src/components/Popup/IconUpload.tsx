@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Axios from "axios";
@@ -6,6 +6,7 @@ import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import { useRecoilState } from "recoil";
 import { imagesState } from "../../atoms";
+import { Image } from "../../types/atoms-types";
 
 type FileUploadProps = {
   show: boolean;
@@ -20,14 +21,14 @@ type IconUpload = {
 
 
 function FileUpload(props: FileUploadProps) {
-  let inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>("");
   const [FileUploadStatus, setFileUploadStatus] = useState<boolean | undefined>(undefined);
   const [FileUploadString, setFileUploadString] = useState<string>("");
   const [iconName, setIconName] = useState<string>("");
-  const [images, setImages] = useRecoilState<any>(imagesState);
+  const [images, setImages] = useRecoilState<Image[]>(imagesState);
 
-  const handleFileUpload = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleFileUpload = () => {
     inputRef.current?.click();
   };
 

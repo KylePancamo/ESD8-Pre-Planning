@@ -1,7 +1,6 @@
 import { useState, createContext, useContext, useMemo } from "react";
 import { useNavigate }  from 'react-router-dom';
 import { UserData, AuthContextValues } from "../types/auth-types";
-import React from "react";
 
 const AuthContext = createContext<AuthContextValues>({
     userData: null,
@@ -11,14 +10,12 @@ const AuthContext = createContext<AuthContextValues>({
 
 type AuthProviderProps = {
     children: React.ReactNode;
-    response: any;
+    response: { data: UserData } | null;
 }
 
 export const AuthProvider = ({ children, response } : AuthProviderProps) => {
-    if (!response.data.username) {
-        console.log(response.data);
-    }
-    const [userData, setUserData] = useState<UserData | null>(response.data ? response.data : null);
+
+    const [userData, setUserData] = useState<UserData | null>(response?.data ?? null);
     const navigate = useNavigate();
 
     const login = (decodedToken: UserData) => {

@@ -20,16 +20,19 @@ import HomeLayout from './components/Layouts/HomeLayout';
 import PageNotFound from './pages/404NotFound';
 import AdminPortal from './pages/AdminPortal/AdminPortal';
 
+// Setting up the router using createBrowserRouter and specifying the routes
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
       element={<AuthProviderLayout/>}
+      // Checking if user is authenticated using Axios
       loader = {() => {
         const response = Axios.get(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/get-user", {
           withCredentials: true,
         });
         return defer({ response });
       }}
+      // Rendering 404 page if there's an error
       errorElement={<PageNotFound/>}
     >
       <Route element={<HomeLayout/>} >
@@ -44,6 +47,8 @@ const router = createBrowserRouter(
     </Route>
   )
 );
+
+// Rendering the application with the router and global state management using Recoil
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>

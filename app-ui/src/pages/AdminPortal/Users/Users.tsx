@@ -34,7 +34,6 @@ function Users() {
     const [userDeleteWindow, setUserDeleteWindow] = useState<boolean>(false);
     const [user, setUser] = useState<User | undefined>(undefined);
     const [forgotPasswordWindow, setForgotPasswordWindow] = useState<boolean>(false);
-    const [showPassword, setShowPassword] = useState<boolean>(false);
 
     useEffect(() => {
       const controller = new AbortController();

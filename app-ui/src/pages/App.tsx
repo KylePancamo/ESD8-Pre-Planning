@@ -6,13 +6,10 @@ import Axios from "axios";
 import {useState, useEffect} from "react";
 import {useRecoilState} from 'recoil';
 import {imagesState, preplanningLocationsState, defaultMarkerIconExistsState} from "../atoms";
-import { SearchSite } from "../types/atoms-types";
-import React from "react";
 import config from "../config/config";
 
 function App() {
   const [sideBarValue, setSideBarValue] = useState(false);
-  const [searchedSite, setSearchedSite] = useState<SearchSite>();
   const [images, setImages] = useRecoilState(imagesState);
   const [defaultMarkerIconExist, setDefaultMarkerIconExist] = useRecoilState<boolean>(defaultMarkerIconExistsState);
   const [prePlanningLocations, setPrePlanningLocations] = useRecoilState(preplanningLocationsState);

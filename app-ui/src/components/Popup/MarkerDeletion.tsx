@@ -32,7 +32,7 @@ function MarkerDeletion({
       .then((response) => {
         // remove marker from props.markers array
         props.setMarkers((markers: marker[]) => {
-          let newMarkers = markers.filter(
+          const newMarkers = markers.filter(
             (marker: marker) => marker.marker_id !== props.selectedMarker.marker_id
           );
           localStorage.setItem("markers", JSON.stringify(newMarkers));

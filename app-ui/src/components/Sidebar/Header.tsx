@@ -1,4 +1,3 @@
-import React from "react";
 import { LocationTypes } from "../../types/location-types"; 
 import { Button } from "react-bootstrap";
 import { permission } from "../../permissions";
@@ -16,11 +15,7 @@ type HeaderProps = {
 }
 
 function Header({sidebarData, toggleSideBar, userData, setEditLocation}: HeaderProps) {
-  let addressLineOne: string = "";
-
-  let occupancyTypes: string = (sidebarData.occupancy_types || []).join(', ');
-  let constructionTypes: string = (sidebarData.construction_types || []).join(', ');
-
+  let addressLineOne = "";
 
   if(sidebarData.occupancyaddress != null) {
     addressLineOne = sidebarData.google_formatted_address;

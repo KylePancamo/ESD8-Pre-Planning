@@ -1,7 +1,7 @@
 import MapStandaloneSearchBox from "./MapStandaloneSearchBox";
 import MapDrawingManager from "./MapDrawingManager";
 
-import React, { useState, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Popup from "../Popup/MarkerPopupWindow";
 import { GoogleMap, useJsApiLoader, MarkerF, MarkerClustererF, InfoWindowF  } from "@react-google-maps/api";
 import Legend from "../Legend";
@@ -16,7 +16,6 @@ import PlacedMarkersUI from "./PlacedMarkersUI";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
-import { SearchSite } from "../../types/atoms-types";
 import { marker } from "../../types/marker-types";
 import { CurrentUserLocation, CurrentOccupancyLocation, UpdateUserLocation } from "../VerticalWidgets"
 import MapCreateMarker from "../MapCreateMarker";
@@ -39,7 +38,6 @@ type MapContainerProps = {
 
 function MapContainer(props : MapContainerProps) {
   const [libraries] = useState<Libraries>(["drawing", "places"]);
-  const [drawManagerMarker, setDrawManagerMarker] = useState();
   const [markers, setMarkers] = useState<marker[]>([]);
   const [selectedMarker, setSelectedMarker] = useState<marker>({
     marker_id: 0,
@@ -108,7 +106,6 @@ function MapContainer(props : MapContainerProps) {
     }
 
     return () => {
-      console.log(trackingLocationId)
       if (trackingLocationId) {
         navigator.geolocation.clearWatch(trackingLocationId);
       }
@@ -183,11 +180,9 @@ function MapContainer(props : MapContainerProps) {
   }, []);
 
   const placeMarkers = () => {
-    let localMarkers = JSON.parse(localStorage.getItem("markers") as string);
-    console.log(localMarkers);
+    const localMarkers = JSON.parse(localStorage.getItem("markers") as string);
     // fetch data if local storage is empty
     if (localMarkers == null) {
-      console.log('fetching markers');
       Axios.get(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/fetch-placed-markers", {
         withCredentials: true,
       })
@@ -197,9 +192,7 @@ function MapContainer(props : MapContainerProps) {
             localStorage.setItem("markers", JSON.stringify(res.data.payload));
           }
         })
-        .catch((err) => {});
     } else {
-      console.log('using local markers');
       setMarkers(JSON.parse(localStorage.getItem("markers") || ""));
     }
   };
@@ -210,7 +203,7 @@ function MapContainer(props : MapContainerProps) {
     props.setSideBarValue(!props.sideBarValue);
   };
 
-  let MapStyle = [
+  const MapStyle = [
     {
       featureType: "poi",
       elementType: "labels.icon",

@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { marker } from "../types/marker-types";
 import { useRecoilState } from "recoil";
 import { defaultMarkerIconExistsState } from "../atoms";
 import Axios from "axios";
 import config from "../config/config";
-import GenericPopupWindow from "./Popup/GenericPopup";
+
 
 type CreateMarkerProps = {
     setIsCreateMarkerUIVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,7 +38,7 @@ const MapCreateMarker = ({setIsCreateMarkerUIVisible, setMarkers, markers} : Cre
                 console.log(response.data.payload);
                 if (markers) {
                   setMarkers((markers) => {
-                    let newMarkers = [
+                    const newMarkers = [
                       ...markers,
                       {
                         marker_id: response.data.payload.marker_id,
@@ -59,7 +59,7 @@ const MapCreateMarker = ({setIsCreateMarkerUIVisible, setMarkers, markers} : Cre
                   });
                 } else {
                   setMarkers(() => {
-                    let newMarker = [{
+                    const newMarker = [{
                       marker_id: response.data.payload.marker_id,
                       marker_name: response.data.payload.marker_name,
                       latitude: parseFloat(response.data.payload.latitude),

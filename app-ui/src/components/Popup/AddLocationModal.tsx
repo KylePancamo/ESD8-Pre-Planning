@@ -11,14 +11,12 @@ import states from "./states";
 import { Autocomplete } from "@react-google-maps/api";
 import Alert from "react-bootstrap/Alert";
 import usePrePlanningLocations from "../../hooks/usePreplanningLocations";
-import { preplanningLocationsState } from "../../atoms";
 import { LocationTypes } from "../../types/location-types";
 
 type AddLocationProps = {
   show: boolean;
   onHide: () => void;
   address: LocationTypes;
-  setSearchedSite: React.Dispatch<React.SetStateAction<LocationTypes | null>>;
 }
 
 type FormValues = {
@@ -31,13 +29,12 @@ type LocationAddedResponse = {
   err?: string;
 }
 
-function AddLocation({ show, onHide, address, setSearchedSite } : AddLocationProps) {
+function AddLocation({ show, onHide, address } : AddLocationProps) {
   const {
     register,
     handleSubmit,
     reset,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -64,12 +61,12 @@ function AddLocation({ show, onHide, address, setSearchedSite } : AddLocationPro
       const formattedAddress = place.formatted_address === undefined ? "" : place.formatted_address;
       setFormattedAddress(formattedAddress);
 
-      let addressArray = formattedAddress.split(',');
+      const addressArray = formattedAddress.split(',');
 
-      let occupancyaddress = addressArray[0].trim();
-      let city = addressArray[1].trim();
-      let state = addressArray[2].split(' ')[1].trim();
-      let zip = addressArray[2].split(' ')[2] ? addressArray[2].split(' ')[2].trim() : null;
+      const occupancyaddress = addressArray[0].trim();
+      const city = addressArray[1].trim();
+      const state = addressArray[2].split(' ')[1].trim();
+      const zip = addressArray[2].split(' ')[2] ? addressArray[2].split(' ')[2].trim() : null;
       setValue("streetAddress", occupancyaddress);
       setValue("city", city);
       setValue("state", state);
@@ -133,12 +130,12 @@ function AddLocation({ show, onHide, address, setSearchedSite } : AddLocationPro
       contentClassName="add-location-modal"
       title="Add Location"
       onEntering={() => {
-        let addressArray = address.google_formatted_address.split(',');
+        const addressArray = address.google_formatted_address.split(',');
 
-        let occupancyaddress = addressArray[0] ? addressArray[0].trim() : "";
-        let city = addressArray[1] ? addressArray[1].trim() : "";
-        let state = addressArray[2] ? addressArray[2].split(' ')[1].trim() : "";
-        let zip = addressArray[2] ? addressArray[2].split(' ')[2].trim() : "";
+        const occupancyaddress = addressArray[0] ? addressArray[0].trim() : "";
+        const city = addressArray[1] ? addressArray[1].trim() : "";
+        const state = addressArray[2] ? addressArray[2].split(' ')[1].trim() : "";
+        const zip = addressArray[2] ? addressArray[2].split(' ')[2].trim() : "";
         setValue("streetAddress", occupancyaddress);
         setValue("city", city);
         setValue("state", state);

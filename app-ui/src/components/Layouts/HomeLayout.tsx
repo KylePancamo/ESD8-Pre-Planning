@@ -1,6 +1,5 @@
 import { Navigate, useOutlet } from "react-router-dom";
 import { useAuth } from "../../hooks/AuthProvider";
-import React from "react";
 
 const HomeLayout = () => {
     const { userData } = useAuth();

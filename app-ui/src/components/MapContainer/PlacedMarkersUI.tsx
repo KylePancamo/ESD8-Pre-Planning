@@ -58,6 +58,6 @@ function PlacedMarkersUI({ markers, setCenter } : PlacedMarkersUIProps) {
             </div>
         </div>
     );
-};
+}
 
 export default PlacedMarkersUI;

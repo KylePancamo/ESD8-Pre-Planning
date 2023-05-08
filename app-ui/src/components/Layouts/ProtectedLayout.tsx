@@ -2,7 +2,6 @@ import { Navigate, useOutlet } from "react-router-dom";
 import { useAuth } from "../../hooks/AuthProvider";
 import { permission } from "../../permissions";
 import { hasPermissions } from '../../helpers';
-import React from "react";
 import Unauthorized from "../../pages/404Unauthorized"
 
 export const ProtectedLayout = () => {

@@ -40,6 +40,6 @@ function PreplanningLocationsUI({ setSideBarValue, setOccupancyLocation, setCent
             </div>
         </div>
     );
-};
+}
 
 export default PreplanningLocationsUI;
