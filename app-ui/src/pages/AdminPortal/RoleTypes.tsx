@@ -37,7 +37,7 @@ function RoleTypes() {
         withCredentials: true,
         signal: controller.signal
       });
-      console.log(response.data.payload);
+
       setRolePermissions(response.data.payload);
     }
     

@@ -500,6 +500,11 @@ body {
   .utility-items > div {
     margin-top: 10px;
   }
+
+  .utility-items > div .form-check-input:hover,
+  .utility-items > div .form-label:hover {
+    cursor: pointer;
+  }
   
   
   .marker-list-ui {
@@ -565,6 +570,7 @@ body {
   .preplan-locations__table {
     font-size: 18px;
     table-layout: fixed;
+    width: 275px !important;
   }
   
   .preplan-locations__table tbody {
@@ -580,7 +586,6 @@ body {
     display: flex;
     flex-direction: column;
     border-radius: 5px;
-    max-width: 150px;
   }
   
   .preplan-locations__table tbody tr:hover {
@@ -600,7 +605,11 @@ body {
   
   .preplan-locations__table-cell {
     padding: 5px 10px;
-    max-width: 150px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 250px;
     word-wrap: break-word;
   }
   
@@ -878,4 +887,9 @@ body {
   }
   .pac-item-query	{
       color: rgb(0, 0, 0);
-  }  
+  }
+
+.search-locations-container input {
+  padding: 10px;
+  width: 205px !important;
+}

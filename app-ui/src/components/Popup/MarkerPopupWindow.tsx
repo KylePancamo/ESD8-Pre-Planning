@@ -29,7 +29,7 @@ interface PopupWindowProps {
 
 type FormData = Record<string, string>;
 
-function PopupWindow(props: PopupWindowProps) {
+function MarkerPopupWindow(props: PopupWindowProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [imageIcons, setImageIcons] = useRecoilState<Icon[]>(imagesState);
   const [selectedIcon, setSelectedIcon] = useState<{
@@ -40,7 +40,6 @@ function PopupWindow(props: PopupWindowProps) {
     icon_name: "",
   });
   const {userData} = useAuth();
-  // console.log(props.markers);
 
   const [markerSaved, setMarkerSaved] = useState(false);
   const [markerDeleted, setMarkerDeleted] = useState(false);
@@ -92,7 +91,7 @@ function PopupWindow(props: PopupWindowProps) {
         withCredentials: true,
       })
         .then((response) => {
-          console.log(response);
+          console.log(selectedIcon.icon_name);
           props.setSelectedMarker({
             ...props.selectedMarker,
             file_name: selectedIcon.icon_name,
@@ -346,4 +345,4 @@ function PopupWindow(props: PopupWindowProps) {
   );
 }
 
-export default PopupWindow;
+export default MarkerPopupWindow;

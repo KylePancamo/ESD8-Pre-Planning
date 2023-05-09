@@ -81,7 +81,7 @@ export const CurrentOccupancyLocation = ({map, occupancyLocation}: CurrentOccupa
   );
 }
 
-export const UpdateUserLocation = ({updateUserLocation}: UpdateCurrentLocationProps) => {
+export const UpdateUserLocation = React.memo(({updateUserLocation}: UpdateCurrentLocationProps) => {
   return (
     <div className="vertical-item">
       <OverlayTrigger
@@ -104,5 +104,4 @@ export const UpdateUserLocation = ({updateUserLocation}: UpdateCurrentLocationPr
       </OverlayTrigger>
     </div>
   );
-}
-
+});

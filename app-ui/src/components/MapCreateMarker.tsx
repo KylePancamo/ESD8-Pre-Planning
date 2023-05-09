@@ -18,6 +18,28 @@ const MapCreateMarker = ({setIsCreateMarkerUIVisible, setMarkers, markers} : Cre
     const [longitude, setLongitude] = React.useState(0);
     const [defaultMarkerIconExists, SetDefaultMarkerIconExists] = useRecoilState(defaultMarkerIconExistsState);
 
+    const createMarkerAndUpdate = (payload: marker) => {
+      const newMarker: marker = {
+        marker_id: payload.marker_id,
+        marker_name: payload.marker_name,
+        latitude: Number(payload.latitude),
+        longitude: Number(payload.longitude),
+        icon_id: payload.icon_id,
+        image: null,
+        file_name: defaultMarkerIconExists ? config.DEFAULT_MARKER_NAME : "",
+        position: {
+          lat: Number(payload.latitude),
+          lng: Number(payload.longitude),
+        },
+      };
+  
+      setMarkers((prevMarkers) => {
+        const newMarkers = prevMarkers ? [...prevMarkers, newMarker] : [newMarker];
+        localStorage.setItem("markers", JSON.stringify(newMarkers));
+        return newMarkers;
+      });
+    };
+
     const handleMarkerCreation = () => {
         if (defaultMarkerIconExists) {
             const payload = {
@@ -35,47 +57,7 @@ const MapCreateMarker = ({setIsCreateMarkerUIVisible, setMarkers, markers} : Cre
               withCredentials: true,
             })
               .then((response) => {
-                console.log(response.data.payload);
-                if (markers) {
-                  setMarkers((markers) => {
-                    const newMarkers = [
-                      ...markers,
-                      {
-                        marker_id: response.data.payload.marker_id,
-                        marker_name: response.data.payload.marker_name,
-                        latitude: parseFloat(response.data.payload.latitude),
-                        longitude: parseFloat(response.data.payload.longitude),
-                        icon_id: response.data.payload.icon_id,
-                        image: null,
-                        file_name: defaultMarkerIconExists ? config.DEFAULT_MARKER_NAME : "",
-                        position: {
-                          lat: Number(response.data.payload.latitude),
-                          lng: Number(response.data.payload.longitude),
-                        },
-                      }
-                    ]
-                    localStorage.setItem("markers", JSON.stringify(newMarkers));
-                    return newMarkers;
-                  });
-                } else {
-                  setMarkers(() => {
-                    const newMarker = [{
-                      marker_id: response.data.payload.marker_id,
-                      marker_name: response.data.payload.marker_name,
-                      latitude: parseFloat(response.data.payload.latitude),
-                      longitude: parseFloat(response.data.payload.longitude),
-                      icon_id: response.data.payload.icon_id,
-                      image: null,
-                      file_name: defaultMarkerIconExists ? config.DEFAULT_MARKER_NAME : "",
-                      position: {
-                        lat: Number(response.data.payload.latitude),
-                        lng: Number(response.data.payload.longitude),
-                      },
-                    }]
-                    localStorage.setItem("markers", JSON.stringify(newMarker));
-                    return newMarker;
-                })
-                }
+                createMarkerAndUpdate(response.data.payload);
               }).catch((error) => {
                 console.log(error);
               });

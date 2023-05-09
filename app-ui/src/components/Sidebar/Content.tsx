@@ -37,7 +37,6 @@ enum MutualAids {
 }
   
 function Content({ sidebarData }: { sidebarData: LocationTypes }) {
-  console.log(sidebarData);
 
   let hazardList: JSX.Element[] = [];
   if(sidebarData.hazards != null) {
@@ -67,6 +66,7 @@ function Content({ sidebarData }: { sidebarData: LocationTypes }) {
           {OccupancyType[occupancyNumber]} <br/>
         </span>
       );
+      // Filter out any undefined elements
     }).filter((element): element is JSX.Element => element !== undefined);
   }
 
@@ -82,6 +82,7 @@ function Content({ sidebarData }: { sidebarData: LocationTypes }) {
           {ConstructionType[constructionNumber]} <br/>
         </span>
       );
+      // Filter out any undefined elements
     }).filter((element): element is JSX.Element => element !== undefined);
   }
 
@@ -97,6 +98,7 @@ function Content({ sidebarData }: { sidebarData: LocationTypes }) {
           {MutualAids[aidNumber]} <br/>
         </span>
       );
+      // Filter out any undefined elements
     }).filter((element): element is JSX.Element => element !== undefined);
   }
 

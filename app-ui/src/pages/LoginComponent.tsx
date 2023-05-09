@@ -31,7 +31,6 @@ export default function Login() {
         if (response.data.status === "success") {
             const token = response.data.token;
             if (!token) {
-                console.log(response.data);
                 setLoginStatus({
                     status: false,
                     message: "Internal Error. No token returned.",
@@ -52,6 +51,11 @@ export default function Login() {
             setLoginStatus({
                 status: false,
                 message: response.data.err as string,
+            })
+        } else {
+            setLoginStatus({
+                status: false,
+                message: "Unknown error.",
             })
         }
     }

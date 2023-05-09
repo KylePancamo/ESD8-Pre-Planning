@@ -48,7 +48,6 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
   });
 
   const [searchBox, setSearchBox] = useState<google.maps.places.Autocomplete>();
-  const [formattedAddress, setFormattedAddress] = useState(address.google_formatted_address);
   const { addNewLocation } = usePrePlanningLocations();
 
   function onLoad(autocomplete: google.maps.places.Autocomplete) {
@@ -59,7 +58,6 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
     if (searchBox != null) {
       const place = searchBox.getPlace();
       const formattedAddress = place.formatted_address === undefined ? "" : place.formatted_address;
-      setFormattedAddress(formattedAddress);
 
       const addressArray = formattedAddress.split(',');
 
@@ -87,6 +85,7 @@ function AddLocation({ show, onHide, address } : AddLocationProps) {
           status: response.data.status,
           message: response.data.message,
         });
+        // add a new location to the preplanning locations state
         addNewLocation({
           id: response.data.locationId,
           occupancyname: data.occupancyName as string,

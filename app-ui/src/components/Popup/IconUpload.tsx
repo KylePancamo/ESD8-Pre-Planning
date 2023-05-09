@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Axios from "axios";
@@ -7,6 +7,7 @@ import Form from "react-bootstrap/Form";
 import { useRecoilState } from "recoil";
 import { imagesState } from "../../atoms";
 import { Image } from "../../types/atoms-types";
+import { useForm } from "react-hook-form";
 
 type FileUploadProps = {
   show: boolean;
@@ -21,27 +22,38 @@ type IconUpload = {
 
 
 function FileUpload(props: FileUploadProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [fileName, setFileName] = useState<string | null>("");
   const [FileUploadStatus, setFileUploadStatus] = useState<boolean | undefined>(undefined);
   const [FileUploadString, setFileUploadString] = useState<string>("");
-  const [iconName, setIconName] = useState<string>("");
   const [images, setImages] = useRecoilState<Image[]>(imagesState);
+  const {
+    register,
+    reset,
+    getValues,
+    formState: { errors },
+  } = useForm();
 
+  // Opens the file upload dialog by programmatically clicking the input element.
   const handleFileUpload = () => {
     inputRef.current?.click();
   };
 
+  //Handles the file selection event by sending the selected file to the server and displaying upload status to the user.
   const handleDisplayFileDetails = () => {
-    if (iconName.length > 0) {
-      const file: FileList | null | undefined = inputRef.current?.files;
+    const iconName = getValues("iconName");
+    console.log(iconName);
+    const file: FileList | null | undefined = inputRef.current?.files;
+  
+  
+    if (iconName !== "") {
       if (file?.length !== undefined) {
         if (file?.length > 0) {
           // create formData object and append file data to it. Then make axios request to backend
           const formData = new FormData();
           formData.append("file", file[0]);
           formData.append('iconName', iconName);
-
+  
           Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/upload-icon", formData, {withCredentials: true})
             .then((response) => {
               setFileUploadStatus(true);
@@ -62,6 +74,9 @@ function FileUpload(props: FileUploadProps) {
     } else {
       setFileUploadStatus(false);
       setFileUploadString("Please enter an icon name");
+      if (inputRef.current) {
+        inputRef.current.value = ""; // Reset inputRef
+      }
     }
   };
 
@@ -74,8 +89,11 @@ function FileUpload(props: FileUploadProps) {
           setFileUploadStatus(undefined);
           setFileUploadString("");
           setFileName("");
-          setIconName("");
-        }}
+          reset({
+            iconName: "",
+          });
+        }
+        }
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter" className="m-2">
@@ -98,9 +116,7 @@ function FileUpload(props: FileUploadProps) {
                       <Form.Control
                         type="text"
                         placeholder="Enter icon name"
-                        onChange={(e) => {
-                          setIconName(e.target.value);
-                        }}
+                        {...register("iconName")}
                         style={{width: "75%"}}
                       />
                     </Form.Group>

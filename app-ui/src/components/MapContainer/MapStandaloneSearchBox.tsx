@@ -16,6 +16,7 @@ type MapStandaloneSearchBoxProps = {
 
 function MapStandaloneSearchBox({ bounds, onPlacesChanged, onSBLoad, clearPlaces, searchBoxRef } : MapStandaloneSearchBoxProps) {
 
+  // clears the searchbox sidebar.
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (searchBoxRef.current) {

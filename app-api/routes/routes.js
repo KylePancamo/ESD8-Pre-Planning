@@ -29,6 +29,7 @@ module.exports = (app) => {
     const deleteRole = require('./Auth/delete-role');
     const deletePreplanningLocation = require('./Preplanning/delete-preplanning-location');
     const deleteIcon = require('./Icons/delete-icon');
+    const updateMapMarkerLatLng = require('./Markers/update-map-marker-latlng');
 
     // mount routes here
     app.use('/api/insert-placed-marker', insertMarkers);
@@ -60,4 +61,5 @@ module.exports = (app) => {
     app.use('/api/delete-role', deleteRole);
     app.use('/api/delete-preplanning-location', deletePreplanningLocation);
     app.use('/api/delete-icon', deleteIcon);
+    app.use('/api/update-map-marker-latlng', updateMapMarkerLatLng);
 }

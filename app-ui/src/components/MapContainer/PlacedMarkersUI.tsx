@@ -1,6 +1,7 @@
 import { marker } from "../../types/marker-types";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import React from "react";
 
 type center = google.maps.LatLng | google.maps.LatLngLiteral;
 
@@ -20,36 +21,37 @@ function PlacedMarkersUI({ markers, setCenter } : PlacedMarkersUIProps) {
                                 <OverlayTrigger
                                     placement={"left"}
                                     overlay={
-                                    <Tooltip>
-                                        <div style={{display: "flex", flexDirection: "row", gap: "10px"}}>
-                                            <div>
-                                                <h6>Latitude</h6>
-                                                <strong>{marker.latitude} </strong>
+                                        <Tooltip>
+                                            <div style={{display: "flex", flexDirection: "row", gap: "10px"}}>
+                                                <div>
+                                                    <h6>Latitude</h6>
+                                                    <strong>{marker.latitude} </strong>
+                                                </div>
+                                                <div>
+                                                    <h6>Longitude</h6>
+                                                    <strong>{marker.longitude}</strong>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h6>Longitude</h6>
-                                                <strong>{marker.longitude}</strong>
-                                            </div>
-                                        </div>
-                                    </Tooltip>
-                                }
+                                        </Tooltip>
+                                    }
+                                key={marker.marker_id}
                                 >
-                                <tr key={marker.marker_id}>
-                                    <td onClick={() => {
-                                        setCenter({lat: marker.latitude, lng: marker.longitude})
+                                    <tr key={marker.marker_id}>
+                                        <td onClick={() => {
+                                            setCenter({lat: marker.latitude, lng: marker.longitude})
 
-                                    }} 
-                                    className="marker-list-ui__table-cell">
-                                        <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
-                                            <div>
-                                                <img src={"/icon_images/" + marker.file_name}/>
+                                        }} 
+                                        className="marker-list-ui__table-cell">
+                                            <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
+                                                <div>
+                                                    <img src={"/icon_images/" + marker.file_name}/>
+                                                </div>
+                                                <div>
+                                                    <strong>{marker.marker_name}</strong>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <strong>{marker.marker_name}</strong>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 </OverlayTrigger>
                             )
                         })}
@@ -60,4 +62,4 @@ function PlacedMarkersUI({ markers, setCenter } : PlacedMarkersUIProps) {
     );
 }
 
-export default PlacedMarkersUI;
+export default React.memo(PlacedMarkersUI);

@@ -21,7 +21,9 @@ function App() {
     });
     if (!uploadedIcons.data) {
       console.log("No icons found");
-    } 
+      return;
+    }
+    
     setImages(uploadedIcons.data);
   }
 
@@ -32,8 +34,9 @@ function App() {
     });
     if (!preplanLocations.data.result) {
       console.log("No preplanning locations found");
+      return;
     }
-    console.log(preplanLocations.data.result);
+
     setPrePlanningLocations(preplanLocations.data.result);
   }
 
