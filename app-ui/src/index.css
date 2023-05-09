@@ -509,13 +509,13 @@ body {
   
   .marker-list-ui {
     position: absolute;
-    top: 23%;
+    top: 25%;
     max-height: 300px;
     overflow-y: auto;
     background-color: white;
     border-radius: 25px 0px 0px 25px;
     right: 0;
-    width: 145px;
+    width: 123px;
     box-shadow: 0px 1px 4px rgb(0, 0, 0, .3);
   }
   
@@ -706,9 +706,8 @@ body {
   
   .create-marker {
     position: absolute;
-    left: 25%;
-    top: 20%;
-    transform: translate(-50%, -50%);
+    right: 10%;
+    bottom: 25%;
     background-color: #fffffff0;
     box-shadow: 0px 1px 4px rgb(0, 0, 0, .3);
     border-radius: 5px;
@@ -746,17 +745,19 @@ body {
   
   .create-marker-trigger {
     position: absolute;
-    background-color: inherit;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 0px 0px 15px 15px !important;
+    border-radius: 15px 15px 0px 0px !important;
     border-color: lightgrey;
-    left: 25%;
+    right: 20%;    background-color: inherit;
+    bottom: 0px;
   }
   
   .create-marker-trigger svg {
     fill: lightgrey;
     position: relative;
+    top: 2px;
+    /*set size*/
+    height: 25px;
+    width: 25px;
   }
   
   .create-marker-close-button {
@@ -892,4 +893,17 @@ body {
 .search-locations-container input {
   padding: 10px;
   width: 205px !important;
+}
+.welcome-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0%;
+  left: 15%;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 4px rgb(0, 0, 0, 0.3);
+
 }
