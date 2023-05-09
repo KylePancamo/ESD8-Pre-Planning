@@ -151,7 +151,7 @@ function RoleTypes() {
         <div className='search-container'>
                 <input
                   type='text'
-                  placeholder='Search users'
+                  placeholder='Search roles'
                   value={searchTerm}
                   onChange={(e) => {
                       setSearchTerm(e.target.value)
