@@ -91,7 +91,6 @@ function MarkerPopupWindow(props: PopupWindowProps) {
         withCredentials: true,
       })
         .then((response) => {
-          console.log(selectedIcon.icon_name);
           props.setSelectedMarker({
             ...props.selectedMarker,
             file_name: selectedIcon.icon_name,

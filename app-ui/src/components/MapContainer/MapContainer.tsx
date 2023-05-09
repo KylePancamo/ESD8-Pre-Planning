@@ -298,8 +298,6 @@ function MapContainer(props : MapContainerProps) {
     }
   }
 
-  console.log(markers);
-
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -369,7 +367,6 @@ function MapContainer(props : MapContainerProps) {
                         );
 
                         if (response.data.status === "success") {
-                          console.log("successful")
                           if (e?.latLng) {
                             setMarkers((markers) => {
                               const updatedMarkers = markers.map((currMarker) => {

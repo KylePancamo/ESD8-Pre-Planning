@@ -6,9 +6,11 @@ import Axios from "axios";
 import {useState, useEffect} from "react";
 import {useRecoilState} from 'recoil';
 import {imagesState, preplanningLocationsState, defaultMarkerIconExistsState} from "../atoms";
+import { useAuth } from "../hooks/AuthProvider";
 import config from "../config/config";
 
 function App() {
+  const { userData } = useAuth();
   const [sideBarValue, setSideBarValue] = useState(false);
   const [images, setImages] = useRecoilState(imagesState);
   const [defaultMarkerIconExist, setDefaultMarkerIconExist] = useRecoilState<boolean>(defaultMarkerIconExistsState);
@@ -78,7 +80,21 @@ function App() {
         sideBarValue={sideBarValue}
         setSideBarValue={setSideBarValue}
       />
-      
+      <div style={{
+        position: "absolute",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        top: "0px",
+        left: "20%",
+        backgroundColor: "rgb(0, 0, 0, 0.2)",
+        padding: "5px",
+        borderRadius: "0px 0px 10px 10px",
+        color: "black",
+      }}>
+        <strong>Welcome, {userData?.username}</strong>
+      </div>
     </div>
   );
 }
