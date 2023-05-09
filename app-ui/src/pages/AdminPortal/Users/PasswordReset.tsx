@@ -42,7 +42,7 @@ const PasswordReset = ({forgotPasswordWindow, setForgotPasswordWindow, user} : P
 
         const { password } = data;
         const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/reset-password", {
-            user_id: user?.user_id,
+            user: user,
             password: password,
         }, {withCredentials: true});
 

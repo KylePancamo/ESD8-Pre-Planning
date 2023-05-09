@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import GenericModal from "../../../components/Popup/GenericPopup";
 import PasswordReset from "./PasswordReset";
+import { useAuth } from "../../../hooks/AuthProvider";
 
 type User = {
   user_id: number,
@@ -30,6 +31,7 @@ function Users() {
       status: undefined,
       message: ''
     });
+    const { userData } = useAuth();
 
     const [userDeleteWindow, setUserDeleteWindow] = useState<boolean>(false);
     const [user, setUser] = useState<User | undefined>(undefined);
@@ -89,7 +91,6 @@ function Users() {
     );
 
     const updateUser = async (user: User) => {
-      console.log(user);
       try {
         const response = await Axios.post<{status: string, message: string}>(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/update-user-role", user, {withCredentials: true});
         if (response.data.status == 'success') {
@@ -200,19 +201,25 @@ function Users() {
                           ) : null}
                       </td>
                       <td>
-                        <Button onClick={() => {updateUser(user)}}>Update</Button>
+                        {userData?.username !== user.username ? (
+                          <Button onClick={() => {updateUser(user)}}>Update</Button>
+                        ) : null}
                       </td>
+                        <td>
+                        {userData?.username !== user.username ? (
+                          <Button onClick={() => {
+                            setUserDeleteWindow(true);
+                            setUser(user)
+                            }} variant="danger">Delete User</Button>
+                            ) : null}
+                        </td>
                       <td>
-                        <Button onClick={() => {
-                          setUserDeleteWindow(true);
-                          setUser(user)
-                          }} variant="danger">Delete User</Button>
-                      </td>
-                      <td>
-                        <Button variant="danger" onClick={() => {
-                          setForgotPasswordWindow(true);
-                          setUser(user)
-                        }}>Change Password</Button>
+                        {userData?.username !== user.username ? (
+                          <Button variant="danger" onClick={() => {
+                            setForgotPasswordWindow(true);
+                            setUser(user)
+                          }}>Change Password</Button>
+                        ) : null}
                       </td>
                     </tr>
                   ))}

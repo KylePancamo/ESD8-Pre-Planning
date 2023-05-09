@@ -10,9 +10,15 @@ const logger = require("../../logger");
 router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
     const db = getPool(process.env.MYSQL_AUTH_DATABASE);
 
-    const user_id = req.body.user_id;
+    const user = req.body.user;
+    const user_id = user.user_id;
     const password = req.body.password;
+    const requestUser = req.user;
 
+    if (user.username === requestUser.username && user_id === requestUser.id) {
+        res.send({ status: 'error', err: 'You cannot change your own password' });
+        return;
+    }
     
     const saltRounds = 10;
     

@@ -16,7 +16,7 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
     // grab user who sent the request
     const requestUser = req.user;
 
-    if (requestUser.userName === userToDelete.username) {
+    if (requestUser.userName === userToDelete.username || requestUser.id === deleteUserId) {
         logger.warn(`User ${requestUser.username} tried to delete themselves in file`);
         res.status(403).send({status: 'error', message: "You cannot delete yourself."});
         return;

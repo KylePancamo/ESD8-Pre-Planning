@@ -20,7 +20,6 @@ function PreplanningLocationsUI({ setSideBarValue, setOccupancyLocation, setCent
     const [searchedSite, setSearchedSite] = useRecoilState(searchSiteState);
     const [searchTerm, setSearchTerm] = useState<string>('');
 
-    console.log("baslh")
 
     const filteredLocations = useMemo(() => 
         prePlanningLocations?.filter((location) =>

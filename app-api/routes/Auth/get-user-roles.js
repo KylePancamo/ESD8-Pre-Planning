@@ -17,11 +17,11 @@ router.get("/", verifyUserCredentials, (req, res) => {
         FROM accounts a
         LEFT JOIN user_roles ur ON a.id = ur.user_id
         LEFT JOIN roles r ON r.id = ur.role_id
-        WHERE a.username != ? AND a.username != ?
+        WHERE a.username != ?
         GROUP BY a.id, a.username, r.id, r.name;
     `
 
-    db.query(query, [superAdmin, requestUser.username], (err, result) => {
+    db.query(query, [superAdmin], (err, result) => {
         if (err) {
             logger.warn("Error getting user roles", {
                 error: `${err.message, err.stack}`

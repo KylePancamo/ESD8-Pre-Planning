@@ -12,6 +12,14 @@ router.post("/", verifyUserCredentials, isAdmin, (req, res) => {
 
     const user = req.body;
 
+    // grab user who sent the request
+    const requestUser = req.user;
+
+    if (requestUser.username === user.username || requestUser.id === user.user_id) {
+        res.send({ status: 'error', message: 'You cannot change your own role' });
+        return;
+    }
+
     if (user.role_id === 0) {
         res.send({ status: 'error', message: 'Please select an appropriate role' });
         return;

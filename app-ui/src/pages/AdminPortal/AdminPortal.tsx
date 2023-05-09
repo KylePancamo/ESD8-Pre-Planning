@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import Users from "./Users/Users";
 import RoleTypes from "./RoleTypes";
 import RegisterUser from "./RegisterUsers";
+import { useAuth } from "../../hooks/AuthProvider";
 
 type portalTypes = {
     [key: string]: JSX.Element
 }
 
 function AdminPortal() {
-
+    const { userData } = useAuth();
     const [portalType, setPortalType] = useState<string>('users');
     const portalTypes: portalTypes = {
         "users": <Users />,
@@ -50,6 +51,7 @@ function AdminPortal() {
                     </div>
                 </div>
                 <div className="loaded-component">
+                    <h1>Welcome, <b><u><i>{userData?.username}</i></u></b></h1>
                     <div className="loaded-component-container">
                         {
                             portalTypes[portalType]
