@@ -394,11 +394,18 @@ function MapContainer(props : MapContainerProps) {
       </MarkerClustererF>
       
       {/* Marker for occupancy location */}
-      <Marker
-        position={occupancyLocation} 
-        onClick={() => handleOnClick()}
-        icon={"/map-pin.png"}
+      {prePlanningLocations.map((occupancyMarker) => (
+        <Marker
+          position={
+            {
+              lat: occupancyMarker.latitude,
+              lng: occupancyMarker.longitude
+            }
+          } 
+          onClick={() => handleOnClick()}
+          icon={"/occupancy.svg"}
         />
+      ))}
       
       {/* Marker for users location */}
       {currentUserLocation ? (

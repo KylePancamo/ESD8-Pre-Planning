@@ -1,6 +1,6 @@
-const { createLogger, transports, format } = require('winston');
+const{ createLogger, transports, format } = require('winston');
 
-const { combine, timestamp, label, printf, prettyPrint } = format;
+const { combine, timestamp, label, printf, prettyPrint, json } = format;
 require('winston-daily-rotate-file');
 
 const fileRotateTransport = new transports.DailyRotateFile({
@@ -15,6 +15,7 @@ const logger = createLogger({
         format: 'MMM-DD-YYYY HH:mm:ss',
     }),
     prettyPrint(),
+    json(),
   ),
   transports: [
     fileRotateTransport,

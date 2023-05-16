@@ -91,6 +91,7 @@
 .create-role-container,
 .role-types-container,
 .user-container,
+.logs-user-container,
 .register-user-container {
   margin: 50px;
 }
@@ -167,4 +168,31 @@
 .change-password-header .modal-title, 
 .delete-user-header .modal-title {
   left: 0;
+}
+
+.logs-user-container {
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.logs-user-container .logs-tables-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.logs-table-container {
+  flex: 1 0 30%;  /* Grow and shrink at the same rate, don't grow past 30% width */
+  margin: 1rem;   /* Add some space around each table */
+}
+
+.logs-table-container h3 {
+  text-align: center;
+}
+
+.logs-table {
+  flex: 1 0 30%;  /* Grow and shrink at the same rate, don't grow past 30% width */
 }

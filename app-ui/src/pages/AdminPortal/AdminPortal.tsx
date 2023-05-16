@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Users from "./Users/Users";
 import RoleTypes from "./RoleTypes";
 import RegisterUser from "./RegisterUsers";
+import Logs from "./Logs";
 import { useAuth } from "../../hooks/AuthProvider";
 
 type portalTypes = {
@@ -15,7 +16,8 @@ function AdminPortal() {
     const portalTypes: portalTypes = {
         "users": <Users />,
         "roleTypes": <RoleTypes />,
-        "registerUsers": <RegisterUser />
+        "registerUsers": <RegisterUser />,
+        "logs": <Logs />
     }
 
     const isActive = (type: string) => {
@@ -46,6 +48,12 @@ function AdminPortal() {
                                 setPortalType("registerUsers")
                             }}>
                                 <span className="sidebar-item-link">Register Users</span>
+                            </li>
+                            <li className={`sidebar-item ${isActive('logs')}`} onClick={(e) => {
+                                e.preventDefault();
+                                setPortalType("logs")
+                            }}>
+                                <span className="sidebar-item-link">Logs</span>
                             </li>
                         </ul>
                     </div>
