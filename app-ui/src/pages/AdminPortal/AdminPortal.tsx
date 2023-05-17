@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Users from "./Users/Users";
 import RoleTypes from "./RoleTypes";
 import RegisterUser from "./RegisterUsers";
-import Logs from "./Logs";
+import LogViewer from "./LogViewer";
 import { useAuth } from "../../hooks/AuthProvider";
 
 type portalTypes = {
@@ -17,7 +17,7 @@ function AdminPortal() {
         "users": <Users />,
         "roleTypes": <RoleTypes />,
         "registerUsers": <RegisterUser />,
-        "logs": <Logs />
+        "logs": <LogViewer />,
     }
 
     const isActive = (type: string) => {

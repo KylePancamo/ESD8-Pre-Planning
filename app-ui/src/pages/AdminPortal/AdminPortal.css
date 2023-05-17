@@ -78,15 +78,14 @@
 
 .loaded-component { 
   margin-left: 260px;
-  overflow: hidden;
   padding: 70px 12px 65px;
 }
 
 .loaded-component-container {
-    height: 100%;
-    width: 100%;
-    background-color: rgba(75, 91, 106, 0.5);
-    padding: 20px;
+  height: 75vh;
+  background-color: rgba(75, 91, 106, 0.5);
+  padding: 20px;
+  overflow-y: auto;
 }
 .create-role-container,
 .role-types-container,
@@ -176,6 +175,7 @@
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   background-color: #fff;
+
 }
 
 .logs-user-container .logs-tables-container {

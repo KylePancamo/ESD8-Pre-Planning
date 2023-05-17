@@ -8,6 +8,7 @@ import { useRecoilState } from "recoil";
 import { imagesState } from "../../atoms";
 import { Image } from "../../types/atoms-types";
 import { useForm } from "react-hook-form";
+import Loader from "../Loader"
 
 type FileUploadProps = {
   show: boolean;
@@ -27,6 +28,17 @@ function FileUpload(props: FileUploadProps) {
   const [FileUploadStatus, setFileUploadStatus] = useState<boolean | undefined>(undefined);
   const [FileUploadString, setFileUploadString] = useState<string>("");
   const [images, setImages] = useRecoilState<Image[]>(imagesState);
+  const [uploading, setUploading] = useState(false); // Add a new state for the uploading process
+  const controller = new AbortController();
+  const newAbortSignal = (timeroutMs: number) => {
+    setTimeout(() => {
+      controller.abort();
+      setUploading(false);
+    }, timeroutMs || 0);
+
+    return controller.signal;
+  }
+
   const {
     register,
     reset,
@@ -42,19 +54,23 @@ function FileUpload(props: FileUploadProps) {
   //Handles the file selection event by sending the selected file to the server and displaying upload status to the user.
   const handleDisplayFileDetails = () => {
     const iconName = getValues("iconName");
-    console.log(iconName);
     const file: FileList | null | undefined = inputRef.current?.files;
   
   
     if (iconName !== "") {
       if (file?.length !== undefined) {
         if (file?.length > 0) {
+          setUploading(true); 
+
           // create formData object and append file data to it. Then make axios request to backend
           const formData = new FormData();
           formData.append("file", file[0]);
           formData.append('iconName', iconName);
   
-          Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/upload-icon", formData, {withCredentials: true})
+          Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + "/api/upload-icon", formData, {
+            signal: newAbortSignal(20000),
+            withCredentials: true,
+          })
             .then((response) => {
               setFileUploadStatus(true);
               setFileUploadString(response.data.message);
@@ -63,11 +79,18 @@ function FileUpload(props: FileUploadProps) {
                 ...currImages,
                 response.data.payload,
               ]);
+              setUploading(false);
             })
             .catch((error) => {
               console.log(error);
+              if (Axios.isCancel(error)) {
+                console.log('cancelled');
+                setFileUploadString("Upload canceled");
+              } else {
+                setFileUploadString(error.response.data.message);
+              }
               setFileUploadStatus(false);
-              setFileUploadString(error.response.data.message);
+              setUploading(false);
             });
         }
       }
@@ -141,11 +164,16 @@ function FileUpload(props: FileUploadProps) {
               {FileUploadString}
             </Alert>
           ) : null}
+          {/* Add spinner and abort button when uploading */}
+          {uploading && (
+            <Loader/>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => props.onHide()}>Close</Button>
         </Modal.Footer>
       </Modal>
+      
     </>
   );
 }

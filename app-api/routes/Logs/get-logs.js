@@ -4,25 +4,36 @@ const router = express.Router();
 const verifyUserCredentials = require('../middleware/verifyUserCredentials');
 const logger = require("../../logger");
 const fs = require('fs');
-const util = require('util');
+const readline = require('readline');
+const path = require('path');
 
-const readFile = util.promisify(fs.readFile);
+
+const readFileLineByLine = async (filePath) => {
+  const fileStream = fs.createReadStream(filePath);
+
+  const rl = readline.createInterface({
+      input: fileStream,
+      crlfDelay: Infinity
+  });
+
+  const array = [];
+
+  for await (const line of rl) {
+    const fileJSON = JSON.parse(line);
+    // keep only level, message and timestamp in fileJSON object. Remove everything else
+    let { level, message, timestamp } = fileJSON;
+    const newObj = { level, message, timestamp };
+    array.push(newObj);
+  }
+
+  return array;
+};
 
 router.get("/", verifyUserCredentials, async (req, res) => {
   try {
-    const [errorLogs, infoLogs, warnLogs] = await Promise.all([
-        readFile('./logs/error.log', 'utf-8'),
-        readFile('./logs/info.log', 'utf-8'),
-        readFile('./logs/warn.log', 'utf-8')
-    ]);
+    const infoLogs = await readFileLineByLine(path.join(__dirname, "../../logs/info.log"));
 
-
-    const log = JSON.parse(infoLogs);
-    const log2 = JSON.parse(errorLogs);
-    const log3 = JSON.parse(warnLogs);
-    console.log(log2);
-
-    // res.json(logs);
+    res.status(200).send({ status: "success", logs: infoLogs });
   } catch (error) {
     logger.error(error.message);
     res.status(500).json({ error: 'An error occurred while fetching the logs' });
