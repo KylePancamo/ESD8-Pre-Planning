@@ -13,6 +13,7 @@ import { hasPermissions } from '../../helpers';
 import { Link } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import Axios from "axios";
+import Loader from "../Loader";
 
 type AdminPanelProps = {
   flushMarkers: () => void;
@@ -28,15 +29,19 @@ function AdminPanel(props: AdminPanelProps) {
   const [deleteIconWindow, setDeleteIconWindow] = useState<boolean>(false);
   const [iconDeleteStatus, setIconDeleteStatus] = useState<{status: string, message: string}>({status: "", message: ""}); // ["none", "success", "error"
   const icon = React.useRef<any>();
+  const [requesting, setRequesting] = useState<boolean>(false);
+  const controller = new AbortController();
 
   const { userData } = useAuth();
 
   const deleteIcon = async () => {
     if (selectedIcon) {
+      setRequesting(true);
       const response = await Axios.post(import.meta.env.VITE_APP_CLIENT_API_BASE_URL + `/api/delete-icon/`, {
         selectedIcon
       },{
-        withCredentials: true
+        withCredentials: true,
+        signal: controller.signal
       });
 
 
@@ -44,9 +49,11 @@ function AdminPanel(props: AdminPanelProps) {
         setImages(images.filter((image) => image.icon_id !== selectedIcon?.icon_id));
         setDeleteIconWindow(false);
         setIconDeleteStatus({status: "success", message: "Icon deleted successfully!"});
+        setRequesting(false);
       } else if (response.data.status === "error") {
         setDeleteIconWindow(false);
         setIconDeleteStatus({status: "error", message: response.data.message});
+        setRequesting(false);
       }
     }
   }
@@ -101,12 +108,14 @@ function AdminPanel(props: AdminPanelProps) {
               <Button variant="secondary">
                 <Link style={{color: 'white'}} to='/adminportal' target="_blank">Admin Portal</Link>
               </Button>
-              <IconUpload
+              {fileUploadPopup ? (
+                <IconUpload
                 show={fileUploadPopup}
                 onHide={() => {
                   setFileUploadPopup(false);
                 }}
               />
+              ) : null}
             </div>
             <div className="admin-panel-main">
               <h2>List of Images:</h2>
@@ -193,6 +202,9 @@ function AdminPanel(props: AdminPanelProps) {
             contentClassName="modal-edit-icon"
             setImages={setImages}
           />
+        ) : null}
+        {requesting ? (
+          <Loader />
         ) : null}
       </div>
     ) : null}
